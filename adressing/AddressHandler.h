@@ -21,11 +21,11 @@ using namespace std;
 namespace addressing {
 
     class AddressHandler : public BaseObject {
-        mutex lock;
-        map<MacAddress,Reservation> reservations;
-        map<MacAddress,IpAddress> directMapping;
-        AddressPool pool;
-        AddressCollector collector;
+        mutex _lock;
+        map<MacAddress,Reservation> _reservations;
+        map<MacAddress,IpAddress> _directMapping;
+        AddressPool _pool;
+        AddressCollector _collector;
 
     public:
         AddressHandler(IpAddress& first, int prefix,set<IpAddress> & reserved);

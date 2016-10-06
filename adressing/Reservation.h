@@ -15,8 +15,8 @@ namespace addressing{
 
 class Reservation : public BaseObject{
 public:
-    const IpAddress ipAddress;
-    const Timestamp timestamp;
+    const IpAddress _ipAddress;
+    const Timestamp _timestamp;
     Reservation(IpAddress & ipAddress1,Timestamp & timestamp1);
 };
 

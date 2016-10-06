@@ -19,8 +19,8 @@ using namespace std;
 namespace addressing {
 
     class AddressPool : public BaseObject {
-        set<IpAddress> reserved;
-        list<AddressPair> addresses;
+        set<IpAddress> _reserved;
+        list<AddressPair> _addresses;
 
         AddressPool(IpAddress& first, int prefix,set<IpAddress> & reserved);
 

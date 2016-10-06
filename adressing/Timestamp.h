@@ -17,7 +17,7 @@ using namespace std;
 
 namespace addressing {
     class Timestamp : public BaseObject {
-        chrono::system_clock::time_point startTime;
+        const chrono::system_clock::time_point _startTime;
 
     public:
         Timestamp();

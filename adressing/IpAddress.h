@@ -14,7 +14,7 @@ using namespace std;
 
 namespace addressing {
     class IpAddress : public BaseObject {
-        const char parts[ADDRESS_SIZE];
+        const char _parts[ADDRESS_SIZE];
 
     public:
         IpAddress(string address);

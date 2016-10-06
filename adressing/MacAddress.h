@@ -15,7 +15,7 @@ using namespace std;
 namespace addressing {
 
     class MacAddress : public BaseObject{
-        const char parts[MAC_SIZE];
+        const char _parts[MAC_SIZE];
 
     public:
         MacAddress(string address);
