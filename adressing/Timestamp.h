@@ -17,13 +17,20 @@ using namespace std;
 
 namespace addressing {
     class Timestamp : public BaseObject {
+        const string _name = "TimeStamp";
+        static const int LEASE_TIME = 1 * 60 * 60;
         const chrono::system_clock::time_point _startTime;
 
+        int countSecondsSinceStarted();
     public:
         Timestamp();
 
-        inline bool operator==(const Timestamp &lhs, const Timestamp &rhs);
-        static bool isLeaseExpired();
+        bool operator==(const Timestamp &rhs);
+        bool operator!=(const Timestamp &rhs);
+        bool isLeaseExpired();
+
+        virtual string toString();
+        virtual string getLoggableName();
     };
 }
 

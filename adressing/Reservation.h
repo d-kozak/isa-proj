@@ -14,10 +14,14 @@
 namespace addressing{
 
 class Reservation : public BaseObject{
+    const std::string _name = "Reservation";
 public:
-    const IpAddress _ipAddress;
-    const Timestamp _timestamp;
+    IpAddress _ipAddress;
+    Timestamp _timestamp;
     Reservation(IpAddress & ipAddress1,Timestamp & timestamp1);
+
+    virtual string toString();
+    virtual string getLoggableName();
 };
 
 }

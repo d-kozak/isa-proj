@@ -5,7 +5,39 @@
 #include "Timestamp.h"
 
 namespace addressing {
-    Timestamp::Timestamp() {}
-    inline bool Timestamp::operator==(const Timestamp &lhs, const Timestamp &rhs);
-    static bool Timestamp::isLeaseExpired();
+    Timestamp::Timestamp() : _startTime(std::chrono::system_clock::now()) {}
+
+
+    bool Timestamp::operator==(const Timestamp &rhs) {
+        return this->_startTime == rhs._startTime;
+    }
+
+    bool Timestamp::operator!=(const Timestamp &rhs) {
+        return !operator==(rhs);
+    }
+
+    bool Timestamp::isLeaseExpired() {
+        return countSecondsSinceStarted() >= Timestamp::LEASE_TIME;
+    }
+
+    string Timestamp::toString() {
+        string s;
+        s += this->_name + " -> ";
+        s += std::to_string(countSecondsSinceStarted());
+        return s;
+    }
+
+    string Timestamp::getLoggableName() {
+        return this->_name;
+    }
+
+
+    int Timestamp::countSecondsSinceStarted(){
+        auto end = std::chrono::system_clock::now();
+        auto elapsed = (end - this->_startTime);
+        long nanos = elapsed.count();
+        long secs = nanos / 1000000000;
+        return secs;
+    }
+
 }
