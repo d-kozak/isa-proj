@@ -32,6 +32,7 @@ set(TEST_FILES tests/cppUnit.cpp tests/cppUnit.h
         adressing/MacAddress.cpp adressing/MacAddress.h
         adressing/Reservation.cpp adressing/Reservation.h
         adressing/Timestamp.cpp adressing/Timestamp.h
+        adressing/AddressPool.cpp adressing/AddressPool.h
 
         exceptions/BaseException.cpp exceptions/BaseException.h
         exceptions/ParseException.cpp exceptions/ParseException.h
@@ -40,7 +41,8 @@ set(TEST_FILES tests/cppUnit.cpp tests/cppUnit.h
         tests/MacAddrTest.cpp tests/mach.h
         tests/IpAddrTest.cpp tests/iph.h
         tests/TimestampTest.cpp tests/TimestampTest.h
-        tests/reservationTest.cpp tests/reservationTest.h)
+        tests/reservationTest.cpp tests/reservationTest.h
+        tests/AddressPairTest.cpp tests/AddressPairTest.h)
 
 
 add_executable(isa_proj ${SOURCE_FILES})

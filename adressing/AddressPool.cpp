@@ -3,13 +3,35 @@
 //
 
 #include "AddressPool.h"
+#include <sstream>
 
 namespace addressing {
 
-    AddressPool::AddressPool(IpAddress& first, int prefix,set<IpAddress> & reserved){}
+    AddressPool::AddressPool(IpAddress &first, int prefix, set<IpAddress> &reserved) {}
 
-    AddressPair::AddressPair(IpAddress & address){}
-    void AddressPair::setIsFree(bool isFree){}
-    bool AddressPair::isFree(){}
-    IpAddress AddressPair::getAddress(){}
+    IpAddress AddressPool::getAddress() {}
+
+    string AddressPool::toString() {}
+
+    string AddressPool::getLoggableName() { return this->_name; }
+
+
+    AddressPair::AddressPair(IpAddress &address) : _address(address), _isFree(true) {}
+
+    void AddressPair::setIsFree(bool isFree) {
+        this->_isFree = isFree;
+    }
+
+    bool AddressPair::isFree() {
+        return this->_isFree;
+    }
+
+    string AddressPair::toString() {
+        stringstream ss;
+        ss << this->_name << " -> (" << this->_address.toString() << ", " << (this->_isFree ? "free" : "reserved")
+           << ")";
+        return ss.str();
+    }
+
+    string AddressPair::getLoggableName() { return this->_name; }
 }

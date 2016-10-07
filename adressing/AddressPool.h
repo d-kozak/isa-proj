@@ -18,25 +18,33 @@ using namespace std;
 
 namespace addressing {
 
-    class AddressPool : public BaseObject {
-        set<IpAddress> _reserved;
-        list<AddressPair> _addresses;
-
-        AddressPool(IpAddress& first, int prefix,set<IpAddress> & reserved);
-
-    };
-
-
-    static class AddressPair : public BaseObject{
+    /* static */ class AddressPair : public BaseObject{
+        const string _name = "AddressPair";
         bool _isFree;
-        const IpAddress _address;
+        IpAddress _address;
 
     public:
         AddressPair(IpAddress & address);
         void setIsFree(bool isFree);
         bool isFree();
-        IpAddress getAddress();
+
+        virtual string toString();
+        virtual string getLoggableName();
     };
+
+    class AddressPool : public BaseObject {
+        const string _name = "AddressPool";
+        set<IpAddress> _reserved;
+        list<AddressPair> _addresses;
+
+    public:
+        AddressPool(IpAddress& first, int prefix,set<IpAddress> & reserved);
+        IpAddress getAddress();
+
+        virtual string toString();
+        virtual string getLoggableName();
+    };
+
 }
 
 
