@@ -11,7 +11,7 @@ namespace addressing {
     AddressHandler::AddressHandler(IpAddress &net_address, int prefix, list <IpAddress> &reserved,
                                    map<MacAddress, IpAddress> &direct_mapping) :
             _lock(), _reservations(), _directMapping(direct_mapping), _pool(net_address, prefix, reserved),
-            _collector(*this) {}
+            _collector(this) {}
 
 
     IpAddress AddressHandler::getAddressFor(MacAddress &mac) {
@@ -19,21 +19,21 @@ namespace addressing {
 
         // first check if the address is not already there
         auto item = this->_reservations.find(mac);
-        if(item != this->_reservations.end())
+        if (item != this->_reservations.end())
             return (*item).second.getIpAddress();
 
         IpAddress addr = this->_pool.getAddress();
         Timestamp stamp;
-        Reservation reservation(addr,stamp);
+        Reservation reservation(addr, stamp);
 //        this->_reservations[mac] = reservation;
-        this->_reservations.emplace(mac,reservation);
+        this->_reservations.emplace(mac, reservation);
         return addr;
     }
 
     void AddressHandler::releaseAddress(MacAddress &mac) {
         lock_guard<recursive_mutex>(this->_lock);
         auto item = this->_reservations.find(mac);
-        if(item != this->_reservations.end()){
+        if (item != this->_reservations.end()) {
             IpAddress toClean = (*item).second.getIpAddress();
             this->_pool.releaseAddress(toClean);
             this->_reservations.erase(item);
@@ -62,16 +62,17 @@ namespace addressing {
     }
 
 
-    void AddressHandler::start(){
+    void AddressHandler::start() {
         this->_collector.start();
     }
-    void AddressHandler::interrupt(){
+
+    void AddressHandler::interrupt() {
         this->_collector.interrupt();
     }
 
     /////////////////////////////////////////////////////////
 
-    AddressCollector::AddressCollector(AddressHandler &ha) : _handler(ha), _garbageCollector(), isInterrupted(false) {}
+    AddressCollector::AddressCollector(AddressHandler *ha) : _handler(ha), _garbageCollector(), isInterrupted(false) {}
 
     void AddressCollector::start() {
         this->_garbageCollector = thread(
@@ -85,22 +86,28 @@ namespace addressing {
     }
 
     void AddressCollector::run() {
+        cout << "COLLECTOR STARTED" << endl;
         while (!isInterrupted) {
-            cout << "collector running" << endl;
-                lock_guard<recursive_mutex>(this->_handler._lock);
-                for(auto & item : this->_handler._reservations){
-                    if(item.second.getTimestamp().isLeaseExpired()) {
-                        MacAddress tmp = item.first;
-                        this->_handler.releaseAddress(tmp);
-                    }
+            lock_guard<recursive_mutex>(this->_handler->_lock);
+            // It is not possible to iterate a collection and delete its elemetns at once,
+            // thats why we first get the list of items and delete it later
+            list <MacAddress> to_release;
+            for (auto &item : this->_handler->_reservations) {
+                if (item.second.getTimestamp().isLeaseExpired()) {
+                    cout << "COLLECTOR will removing reservation for " << item.second.getIpAddress().toString() << endl;
+                    MacAddress tmp = item.first;
+                    to_release.push_back(tmp);
                 }
-
-            cout << "collector finished" << endl;
+            }
+            for (auto &x: to_release) {
+                this->_handler->releaseAddress(x);
+            }
             sleep(1);
         }
+        cout << "COLLECTOR FINISHED" << endl;
     }
 
-    string AddressCollector::toString(){
+    string AddressCollector::toString() {
         stringstream ss;
         ss << this->_name << " -> " << this->isInterrupted ? "interrupted" : "running";
         return ss.str();

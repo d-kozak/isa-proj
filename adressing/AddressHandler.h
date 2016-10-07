@@ -25,14 +25,14 @@ namespace addressing {
     class AddressCollector  : public BaseObject {
         const string _name = "AddressCollector";
         thread _garbageCollector;
-        AddressHandler & _handler;
+        AddressHandler * _handler;
 
         volatile bool isInterrupted;
 
         void run();
 
     public:
-        AddressCollector(AddressHandler & ha);
+        AddressCollector(AddressHandler * ha);
         void start();
         void interrupt();
 

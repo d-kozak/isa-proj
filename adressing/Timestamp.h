@@ -18,7 +18,7 @@ using namespace std;
 namespace addressing {
     class Timestamp : public BaseObject {
         const string _name = "TimeStamp";
-        static const int LEASE_TIME = 1 * 60 * 60;
+        static const int LEASE_TIME = 3; //1 * 60 * 60;
         chrono::system_clock::time_point _startTime;
 
         int countSecondsSinceStarted();
