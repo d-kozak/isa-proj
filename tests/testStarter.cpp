@@ -9,6 +9,8 @@
 #include "reservationTest.h"
 #include "AddressPairTest.h"
 #include "AddressPoolTest.h"
+#include "AddressCollectorTest.h"
+#include "AddressHandlerTest.h"
 
 int main(int argc, char **argv) {
     TestExecutor exec;
@@ -18,12 +20,16 @@ int main(int argc, char **argv) {
     TestSuite reserSuite = getReservationTestsuite();
     TestSuite s1 = getAddressPairTestsuite();
     TestSuite s2 = getAddressPoolTestsuite();
+    TestSuite s3 = getAddressCollectorTestSuite();
+    TestSuite s4 = getAddressHandlerTestSuite();
     exec.add(ipSuite);
     exec.add(macSuite);
     exec.add(ttSuite);
     exec.add(reserSuite);
     exec.add(s1);
     exec.add(s2);
+    exec.add(s3);
+    exec.add(s4);
 
     exec.run();
 }

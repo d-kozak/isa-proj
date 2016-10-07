@@ -14,16 +14,16 @@
 namespace addressing {
 
 
-    AddressPool::AddressPool(IpAddress &first, int prefix, list <IpAddress> &reserved) : _reserved(reserved),_addresses() {
+    AddressPool::AddressPool(IpAddress &net_address, int prefix, list <IpAddress> &reserved) : _reserved(reserved),_addresses() {
         if(prefix < 0 || prefix > 32)
             throw InvalidArgumentException("Prefix must be a positive number between 0 and 32");
 
         int maxAddrCount = pow(2, 32 - prefix) - 2;
-        IpAddress lastAddr = first.next_addr(maxAddrCount + 1);
+        IpAddress lastAddr = net_address.next_addr(maxAddrCount + 1);
 
-        first = first.next_addr(); //skip the first one <- that one is for the server itself
+        net_address = net_address.next_addr(); //skip the net_address one <- that one is for the server itself
 
-        for (IpAddress addr = first.next_addr(); addr != lastAddr; addr = addr.next_addr()) {
+        for (IpAddress addr = net_address.next_addr(); addr != lastAddr; addr = addr.next_addr()) {
             if(find(this->_reserved.begin(),this->_reserved.end(),addr) != this->_reserved.end())
                 continue;
             AddressPair pair(addr);
@@ -62,7 +62,7 @@ namespace addressing {
             ss << "\t\t" << x.toString() << "," << std::endl;
         }
         ss << "\t}" << endl;
-        ss << ", Reserved: {" << std::endl;
+        ss << ", Reserved -> " << endl << "\t{" << std::endl;
         for (auto &x : this->_reserved) {
             ss << "\t\t" << x.toString() << "," << std::endl;
         }

@@ -25,6 +25,14 @@ namespace addressing {
         return true;
     }
 
+//    bool MacAddress::operator==(const MacAddress &lhs,MacAddress &rhs){
+//        for (int i = 0; i < MAC_SIZE; ++i) {
+//            if(lhs._parts[i] != rhs._parts[i])
+//                return false;
+//        }
+//        return true;
+//    }
+
     bool MacAddress::operator!=(const MacAddress &lhs){
         return !operator==(lhs);
     }

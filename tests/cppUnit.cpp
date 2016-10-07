@@ -12,6 +12,7 @@ bool Test::run() {
     bool res = _f();
     if (!res)
         std::cerr << "\tTest " + _name + " failed" << std::endl;
+    std::cout << "\tTest " + _name + " finished" << std::endl;
     return res;
 }
 

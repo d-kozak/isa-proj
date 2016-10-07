@@ -16,6 +16,10 @@ namespace addressing {
         return !operator==(rhs);
     }
 
+    Timestamp &Timestamp::operator=(Timestamp other){
+        this->_startTime = other._startTime;
+    }
+
     bool Timestamp::isLeaseExpired() {
         return countSecondsSinceStarted() >= Timestamp::LEASE_TIME;
     }

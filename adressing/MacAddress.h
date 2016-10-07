@@ -22,6 +22,7 @@ namespace addressing {
         MacAddress(unsigned char a,unsigned  char b,unsigned  char c,unsigned  char d,unsigned  char e,unsigned char f);
 
         bool operator==(const MacAddress &lhs);
+//        bool operator==(const MacAddress &lhs,MacAddress &rhs);
         bool operator!=(const MacAddress &lhs);
         bool operator<(const MacAddress &other) const;
         bool operator>(const MacAddress &other) const;

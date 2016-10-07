@@ -13,6 +13,8 @@
                         } while(0)
 
 #define TEST_CASE(name,body) bool name(){body;return true;}
+#define FAIL return false
+#define SUCCESS return true
 
 class Test{
     const std::string _name;

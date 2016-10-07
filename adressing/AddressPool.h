@@ -39,7 +39,7 @@ namespace addressing {
         list<AddressPair> _addresses;
 
     public:
-        AddressPool(IpAddress& first, int prefix,list<IpAddress> & reserved);
+        AddressPool(IpAddress& net_address, int prefix,list<IpAddress> & reserved);
         IpAddress getAddress();
         void releaseAddress(IpAddress & addr);
 

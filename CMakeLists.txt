@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.6)
 project(isa_proj)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
 
 set(SOURCE_FILES
         main.cpp
@@ -33,16 +33,23 @@ set(TEST_FILES tests/cppUnit.cpp tests/cppUnit.h
         adressing/Reservation.cpp adressing/Reservation.h
         adressing/Timestamp.cpp adressing/Timestamp.h
         adressing/AddressPool.cpp adressing/AddressPool.h
+        adressing/AddressHandler.cpp adressing/AddressHandler.h
+
 
         exceptions/BaseException.cpp exceptions/BaseException.h
         exceptions/ParseException.cpp exceptions/ParseException.h
+        exceptions/OutOfAddressException.cpp exceptions/OutOfAddressException.h
+        exceptions/InvalidArgumentException.cpp exceptions/InvalidArgumentException.h
 
         tests/testStarter.cpp
         tests/MacAddrTest.cpp tests/mach.h
         tests/IpAddrTest.cpp tests/iph.h
         tests/TimestampTest.cpp tests/TimestampTest.h
         tests/reservationTest.cpp tests/reservationTest.h
-        tests/AddressPairTest.cpp tests/AddressPairTest.h exceptions/OutOfAddressException.cpp exceptions/OutOfAddressException.h exceptions/InvalidArgumentException.cpp exceptions/InvalidArgumentException.h tests/AddressPoolTest.cpp tests/AddressPoolTest.h)
+        tests/AddressPairTest.cpp tests/AddressPairTest.h
+        tests/AddressPoolTest.cpp tests/AddressPoolTest.h
+        tests/AddressCollectorTest.cpp tests/AddressCollectorTest.h
+        tests/AddressHandlerTest.cpp tests/AddressHandlerTest.h)
 
 
 add_executable(isa_proj ${SOURCE_FILES})
