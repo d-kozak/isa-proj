@@ -5,14 +5,29 @@
 #include "AddressPool.h"
 #include "../exceptions/OutOfAddressException.h"
 #include <sstream>
+#include <cmath>
+#include <ctgmath>
+#include <list>
+#include <algorithm>
 
 namespace addressing {
 
-    AddressPool::AddressPool(IpAddress &first, int prefix, list<IpAddress> &reserved) {}
+
+    AddressPool::AddressPool(IpAddress &first, int prefix, list <IpAddress> &reserved) : _reserved(reserved),_addresses() {
+        int maxAddrCount = pow(2, 32 - prefix) - 2;
+        IpAddress lastAddr = first.next_addr(maxAddrCount);
+
+        for (IpAddress addr = first.next_addr(); addr != lastAddr; addr = addr.next_addr()) {
+            if(find(this->_reserved.begin(),this->_reserved.end(),addr) != this->_reserved.end())
+                continue;
+            AddressPair pair(addr);
+            this->_addresses.push_back(pair);
+        }
+    }
 
     IpAddress AddressPool::getAddress() {
-        for(auto & item : this->_addresses){
-            if(item.isFree()){
+        for (auto &item : this->_addresses) {
+            if (item.isFree()) {
                 item.setIsFree(false);
                 return item.getAddress();
             }
@@ -23,12 +38,12 @@ namespace addressing {
     string AddressPool::toString() {
         stringstream ss;
         ss << this->_name << " -> " << "{" << std::endl;
-        for (auto & x : this->_addresses) {
+        for (auto &x : this->_addresses) {
             ss << "\t" << x.toString() << "," << std::endl;
         }
 
         ss << "Reserved: " << std::endl;
-        for (auto & x : this->_reserved) {
+        for (auto &x : this->_reserved) {
             ss << "\t" << x.toString() << "," << std::endl;
         }
         ss << "}";
@@ -58,7 +73,7 @@ namespace addressing {
         return ss.str();
     }
 
-    IpAddress AddressPair::getAddress(){
+    IpAddress AddressPair::getAddress() {
         return this->_address;
     }
 

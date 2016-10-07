@@ -6,6 +6,7 @@
 #include "IpAddress.h"
 #include "../exceptions/ParseException.h"
 #include "../exceptions/OutOfAddressException.h"
+#include "../exceptions/InvalidArgumentException.h"
 
 namespace addressing {
 
@@ -60,6 +61,14 @@ namespace addressing {
     }
 
 
+    IpAddress &IpAddress::operator=(IpAddress other) {
+        std::swap(_parts[0], other._parts[0]);
+        std::swap(_parts[1], other._parts[1]);
+        std::swap(_parts[2], other._parts[2]);
+        std::swap(_parts[3], other._parts[3]);
+        return *this;
+    }
+
     IpAddress IpAddress::next_addr() {
         IpAddress address(_parts[0], _parts[1], _parts[2], _parts[3]);
         if (address._parts[3] < 255)
@@ -85,8 +94,11 @@ namespace addressing {
     }
 
     IpAddress IpAddress::next_addr(int distance) {
+        if(distance < 1)
+            throw InvalidArgumentException("Param distance cannot be less then 1");
+        IpAddress address = *this;
         for (int i = 0; i < distance; ++i) {
-            IpAddress address = this->next_addr();
+            address=address.next_addr();
             if (i == distance - 1)
                 return address;
         }
@@ -96,7 +108,7 @@ namespace addressing {
 
     bool IpAddress::operator<(const IpAddress &other) const {
         for (int i = 0; i < 4; ++i) {
-            if(this->_parts[i] <= other._parts[i])
+            if (this->_parts[i] <= other._parts[i])
                 return true;
         }
         return false;
@@ -104,7 +116,7 @@ namespace addressing {
 
     bool IpAddress::operator>(const IpAddress &other) const {
         for (int i = 0; i < 4; ++i) {
-            if(this->_parts[i] > other._parts[i])
+            if (this->_parts[i] > other._parts[i])
                 return true;
         }
         return false;
