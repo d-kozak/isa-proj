@@ -9,9 +9,10 @@
 #include <list>
 
 #define MY_ASSERT(expr, msg) do {\
-                            if(!expr) { std::cerr << "\t\t" <<msg << std::endl; return false;}\
+                            if(!(expr)) { std::cerr << "\t\t" <<msg << std::endl; return false;}\
                         } while(0)
 
+#define TEST_CASE(name,body) bool name(){body;return true;}
 
 class Test{
     const std::string _name;

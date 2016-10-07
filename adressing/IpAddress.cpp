@@ -75,10 +75,15 @@ namespace addressing {
         string ret;
         ret.append(this->_name);
         ret.append(" -> ");
-        ret.append((char*)this->_parts,4);
+        for (int i = 0; i < 4; ++i) {
+            ret += std::to_string((int) this->_parts[i]);
+            if(i != 3)
+                ret += '.';
+        }
+        return ret;
     }
 
-    string IpAddress::getLoggableName(){
+    string  IpAddress::getLoggableName(){
         return this->_name;
     }
 }
