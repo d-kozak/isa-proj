@@ -41,7 +41,9 @@ namespace addressing {
     public:
         AddressPool(IpAddress& first, int prefix,list<IpAddress> & reserved);
         IpAddress getAddress();
+        void releaseAddress(IpAddress & addr);
 
+        void printCurrentState();
         virtual string toString();
         virtual string getLoggableName();
     };
