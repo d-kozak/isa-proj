@@ -14,12 +14,17 @@ using namespace std;
 
 namespace addressing {
     class IpAddress : public BaseObject {
-        const char _parts[ADDRESS_SIZE];
+        const string _name = "IpAddress";
+        unsigned char _parts[ADDRESS_SIZE];
 
     public:
         IpAddress(string address);
-        IpAddress(char a, char b, char c, char d);
-        inline bool operator==(const IpAddress &lhs, const IpAddress &rhs);
+        IpAddress(unsigned char a,unsigned char b,unsigned char c,unsigned char d);
+        bool operator==(const IpAddress &lhs);
+        bool operator!=(const IpAddress &lhs);
+
+        virtual string toString();
+        virtual string getLoggableName();
     };
 }
 

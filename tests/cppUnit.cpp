@@ -33,6 +33,7 @@ bool TestSuite::run() {
             return false;
         }
     }
+    std::cout << "TestSuite " + _name + " finished" << std::endl;
     return true;
 }
 
