@@ -30,22 +30,13 @@ namespace addressing {
         return addr;
     }
 
-bool AddressHandler::findReservation(MacAddress &mac, MacAddress** ptr) {
-        lock_guard<recursive_mutex>(this->_lock);
-        for (auto x : this->_reservations) {
-            if (mac == x.first) {
-                *ptr = (MacAddress*) &x.first;
-                return true;
-            }
-        }
-        return false;
-    }
-
     void AddressHandler::releaseAddress(MacAddress &mac) {
         lock_guard<recursive_mutex>(this->_lock);
-        MacAddress* tmp;
-        if (this->findReservation(mac,&tmp)) {
-            this->_reservations.erase(*tmp);
+        auto item = this->_reservations.find(mac);
+        if(item != this->_reservations.end()){
+            IpAddress toClean = (*item).second.getIpAddress();
+            this->_pool.releaseAddress(toClean);
+            this->_reservations.erase(item);
         } else {
             throw InvalidArgumentException("Mac address " + mac.toString() + " is not a part of any known reservation");
         }

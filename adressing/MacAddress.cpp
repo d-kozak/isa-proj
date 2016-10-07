@@ -39,8 +39,9 @@ namespace addressing {
 
 
     bool MacAddress::operator<(const MacAddress &other) const{
+        // MUST BE JUST <, not <= !!!!!!!!
         for (int i = 0; i < MAC_SIZE; ++i) {
-            if(this->_parts[i] <= other._parts[i])
+            if(this->_parts[i] < other._parts[i])
                 return true;
         }
         return false;

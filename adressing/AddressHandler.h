@@ -57,8 +57,6 @@ namespace addressing {
         void releaseAddress(MacAddress & mac);
         void printCurrentState();
 
-        bool findReservation(MacAddress &mac, MacAddress** ptr);
-
         virtual string toString();
         virtual string getLoggableName();
 

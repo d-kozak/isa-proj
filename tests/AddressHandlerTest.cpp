@@ -21,8 +21,8 @@ TEST_CASE(address_handler_basic,
               MacAddress mac(5, 5, 5, 5, 5, 5);
               IpAddress result = handler.getAddressFor(mac);
               handler.releaseAddress(mac);
-              handler.getAddressFor(mac);
-              handler.getAddressFor(mac);
+              result = handler.getAddressFor(mac);
+              cout << "&&&" << result.toString() << "&&&" << endl;
           } catch(InvalidArgumentException & e){
             cerr << e.what() << endl;
               FAIL;
