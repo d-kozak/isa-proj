@@ -42,7 +42,7 @@ set(TEST_FILES tests/cppUnit.cpp tests/cppUnit.h
         tests/IpAddrTest.cpp tests/iph.h
         tests/TimestampTest.cpp tests/TimestampTest.h
         tests/reservationTest.cpp tests/reservationTest.h
-        tests/AddressPairTest.cpp tests/AddressPairTest.h)
+        tests/AddressPairTest.cpp tests/AddressPairTest.h exceptions/OutOfAddressException.cpp exceptions/OutOfAddressException.h)
 
 
 add_executable(isa_proj ${SOURCE_FILES})

@@ -3,17 +3,18 @@
 //
 
 #include "BaseException.h"
+#include <sstream>
 
 string BaseException::what() {
     return _msg;
 }
 
 string BaseException::toString(){
-    string ret;
-    ret.append(this->_name);
-    ret.append(" -> ");
-    ret.append(this->_msg);
-    return ret;
+    stringstream ss;
+    ss << this->_name;
+    ss << " -> ";
+    ss<< this->_msg;
+    return ss.str();
 }
 
 string BaseException::getLoggableName(){

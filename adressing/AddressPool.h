@@ -28,17 +28,18 @@ namespace addressing {
         void setIsFree(bool isFree);
         bool isFree();
 
+        IpAddress getAddress();
         virtual string toString();
         virtual string getLoggableName();
     };
 
     class AddressPool : public BaseObject {
         const string _name = "AddressPool";
-        set<IpAddress> _reserved;
+        list<IpAddress> _reserved;
         list<AddressPair> _addresses;
 
     public:
-        AddressPool(IpAddress& first, int prefix,set<IpAddress> & reserved);
+        AddressPool(IpAddress& first, int prefix,list<IpAddress> & reserved);
         IpAddress getAddress();
 
         virtual string toString();

@@ -21,8 +21,16 @@ namespace addressing {
         IpAddress(string address);
         IpAddress(unsigned char a,unsigned char b,unsigned char c,unsigned char d);
 
+
+        IpAddress next_addr();
+        IpAddress next_addr(int distance);
+
+        bool operator<(const IpAddress &other) const;
+        bool operator>(const IpAddress &other) const;
         bool operator==(const IpAddress &lhs);
         bool operator!=(const IpAddress &lhs);
+
+
 
         virtual string toString();
         virtual string getLoggableName();
