@@ -15,15 +15,19 @@ using namespace std;
 namespace addressing {
 
     class MacAddress : public BaseObject{
-        const char _parts[MAC_SIZE];
+        const string _name = "MacAddress";
+        unsigned char _parts[MAC_SIZE];
 
     public:
-        MacAddress(string address);
-        MacAddress(char a, char b, char c, char d, char e, char f);
+        MacAddress(unsigned char a,unsigned  char b,unsigned  char c,unsigned  char d,unsigned  char e,unsigned char f);
 
-        inline bool operator==(const MacAddress &lhs, const MacAddress &rhs);
+        bool operator==(const MacAddress &lhs);
+        bool operator!=(const MacAddress &lhs);
         bool operator<(const MacAddress &other) const;
         bool operator>(const MacAddress &other) const;
+
+        virtual string toString();
+        virtual string getLoggableName();
     };
 
 }

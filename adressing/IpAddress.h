@@ -20,6 +20,7 @@ namespace addressing {
     public:
         IpAddress(string address);
         IpAddress(unsigned char a,unsigned char b,unsigned char c,unsigned char d);
+
         bool operator==(const IpAddress &lhs);
         bool operator!=(const IpAddress &lhs);
 

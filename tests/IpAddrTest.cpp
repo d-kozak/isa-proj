@@ -4,40 +4,41 @@
 
 #include "cppUnit.h"
 #include "../adressing/IpAddress.h"
+#include "iph.h"
 
 using namespace addressing;
 
-TEST_CASE(tests_compare,
+TEST_CASE(ip_compare,
 
     IpAddress addr1(192,168,0,0);
     IpAddress addr2("192.168.0.0");
     MY_ASSERT((addr1 == addr2),"IpAddress operator '==' does not work");
 );
 
-TEST_CASE(tests_compare2,
+TEST_CASE(ip_compare2,
 
     IpAddress addr1(192,168,0,0);
     IpAddress addr2("192.168.1.1");
     MY_ASSERT((addr1 != addr2),"IpAddress operator '!=' does not work");
 );
 
-TEST_CASE(testPrintName,
+TEST_CASE(ipPrintName,
 
     IpAddress addr1(192,168,0,0);
     MY_ASSERT(addr1.getLoggableName() == "IpAddress","getNamefailed comparison failed");
 );
 
-TEST_CASE(testToString,
+TEST_CASE(ipToString,
 
     IpAddress addr1(192,168,0,0);
     MY_ASSERT(addr1.toString() == "IpAddress -> 192.168.0.0","toString comparison failed");
 );
 
-int main(){
-    Test test1("==",tests_compare);
-    Test test2("!=",tests_compare2);
-    Test test3("printName",testPrintName);
-    Test test4("toString",testToString);
+TestSuite getIpTestSuite(){
+    Test test1("==",ip_compare);
+    Test test2("!=",ip_compare2);
+    Test test3("printName",ipPrintName);
+    Test test4("toString",ipToString);
 
 
     TestSuite suite("Ip Address suite");
@@ -46,6 +47,6 @@ int main(){
     suite.add(test3);
     suite.add(test4);
 
-    suite.run();
+    return suite;
 }
 
