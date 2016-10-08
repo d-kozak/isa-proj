@@ -36,7 +36,14 @@ set(TEST_FILES tests/cppUnit.cpp tests/cppUnit.h
         adressing/AddressHandler.cpp adressing/AddressHandler.h
 
 
+        ProtocolParser.cpp ProtocolParser.h
+
         sockets/Socket.cpp sockets/Socket.h
+
+        request/AbstractRequest.cpp request/AbstractRequest.h
+        request/Discover.cpp request/Discover.h
+        request/Release.cpp request/Release.h
+        request/Request.cpp request/Request.h
 
         exceptions/BaseException.cpp exceptions/BaseException.h
         exceptions/ParseException.cpp exceptions/ParseException.h

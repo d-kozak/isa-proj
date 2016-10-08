@@ -3,3 +3,15 @@
 //
 
 #include "Release.h"
+
+void Release::handleRequest(){
+
+}
+
+string Release::toString(){
+
+}
+
+string Release::getLoggableName(){
+
+}

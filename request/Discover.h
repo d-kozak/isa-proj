@@ -9,7 +9,10 @@
 #include "AbstractRequest.h"
 
 class Discover : public AbstractRequest {
-
+public:
+    virtual void handleRequest();
+    virtual string toString();
+    virtual string getLoggableName();
 };
 
 

@@ -5,3 +5,14 @@
 #include "Discover.h"
 
 
+void Discover::handleRequest(){
+
+}
+
+string Discover::toString(){
+
+}
+
+string Discover::getLoggableName(){
+
+}

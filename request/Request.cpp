@@ -3,3 +3,15 @@
 //
 
 #include "Request.h"
+
+virtual void Request::handleRequest(){
+
+}
+
+virtual string Request::toString(){
+
+}
+
+virtual string Request::getLoggableName(){
+
+}

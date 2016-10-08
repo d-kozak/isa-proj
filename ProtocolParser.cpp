@@ -3,3 +3,7 @@
 //
 
 #include "ProtocolParser.h"
+
+AbstractRequest * ProtocolParser::parseRequest(string msg){
+
+}

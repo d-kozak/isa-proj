@@ -12,7 +12,7 @@ using namespace std;
 
 class ProtocolParser {
     public:
-    AbstractRequest * parseRequest(string);
+    AbstractRequest * parseRequest(string msg);
 };
 
 
