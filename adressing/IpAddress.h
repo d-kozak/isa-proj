@@ -18,6 +18,8 @@ namespace addressing {
         const string _name = "IpAddress";
         unsigned char _parts[ADDRESS_SIZE];
     public:
+        static IpAddress BroadcastAddress;
+
         IpAddress(string address);
 
         IpAddress(unsigned char a, unsigned char b, unsigned char c, unsigned char d);
@@ -29,6 +31,9 @@ namespace addressing {
         IpAddress next_addr(int distance);
 
         in_addr_t getAddrForSocket();
+        string asString();
+
+        bool isBroadcastAddr();
 
         bool operator<(const IpAddress &other) const;
 
@@ -43,6 +48,9 @@ namespace addressing {
 
         virtual string getLoggableName();
     };
+
+    // static initializer for broadcast address
+    IpAddress IpAddress::BroadcastAddress = IpAddress(255,255,255,255);
 }
 
 

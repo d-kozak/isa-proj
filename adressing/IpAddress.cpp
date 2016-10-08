@@ -2,6 +2,8 @@
 // Created by david on 5.10.16.
 //
 
+#include <sstream>
+
 #include "ctype.h"
 #include "IpAddress.h"
 #include "../exceptions/ParseException.h"
@@ -73,6 +75,15 @@ namespace addressing {
         return ret;
     }
 
+    string IpAddress::asString(){
+        stringstream ss;
+        ss << std::to_string((int) this->_parts[0]) << ".";
+        ss << std::to_string((int) this->_parts[1]) << ".";
+        ss << std::to_string((int) this->_parts[2]) << ".";
+        ss << std::to_string((int) this->_parts[3]);
+        return ss.str();
+    }
+
 
     IpAddress &IpAddress::operator=(IpAddress other) {
         std::swap(_parts[0], other._parts[0]);
@@ -117,6 +128,10 @@ namespace addressing {
         }
 
         throw OutOfAddressException("IpAddress::next(int) <- executin should never get here");
+    }
+
+    bool IpAddress::isBroadcastAddr(){
+        return this->operator==(IpAddress::BroadcastAddress);
     }
 
     bool IpAddress::operator<(const IpAddress &other) const {

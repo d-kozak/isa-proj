@@ -14,12 +14,18 @@ using namespace addressing;
 
 class Socket : public BaseObject{
     const std::string _name = "Socket";
-    const int PORT_NUM = 1111;
+    const int DHCP_PORT_NUM = 1111;
     IpAddress _addr;
+    int _fd;
+
+    void initSocket();
+    void closeSocket();
+    struct sockaddr_in initsockaddr(uint32_t addr,bool bindImmediately);
+    struct sockaddr_in initsockaddr(string addr, bool bindImmediately)
 public:
     Socket(IpAddress & addr);
     string getMessage();
-    void sendBroadcastMesage(string msg);
+    void setBroadCastFlag();
     void sendMessage(string msg, IpAddress destination);
     ~Socket();
 
