@@ -4,7 +4,11 @@
 
 #include "Release.h"
 
-void Release::handleRequest(){
+void Release::performTask(){
+
+}
+
+void Release::after(){
 
 }
 

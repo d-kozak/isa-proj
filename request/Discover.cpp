@@ -5,7 +5,11 @@
 #include "Discover.h"
 
 
-void Discover::handleRequest(){
+void Discover::performTask(){
+
+}
+
+void Discover::after(){
 
 }
 

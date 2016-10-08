@@ -59,7 +59,7 @@ set(TEST_FILES tests/cppUnit.cpp tests/cppUnit.h
         tests/AddressPairTest.cpp tests/AddressPairTest.h
         tests/AddressPoolTest.cpp tests/AddressPoolTest.h
         tests/AddressCollectorTest.cpp tests/AddressCollectorTest.h
-        tests/AddressHandlerTest.cpp tests/AddressHandlerTest.h )
+        tests/AddressHandlerTest.cpp tests/AddressHandlerTest.h request/DhcpMessage.cpp request/DhcpMessage.h)
 
 
 add_executable(isa_proj ${SOURCE_FILES})

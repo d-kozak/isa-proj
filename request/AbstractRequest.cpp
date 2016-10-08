@@ -3,3 +3,8 @@
 //
 
 #include "AbstractRequest.h"
+
+void AbstractRequest::handlerRequest(){
+    this->performTask();
+    this->after();
+}

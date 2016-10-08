@@ -10,7 +10,8 @@
 
 class Discover : public AbstractRequest {
 public:
-    virtual void handleRequest();
+    virtual void performTask();
+    virtual void after();
     virtual string toString();
     virtual string getLoggableName();
 };

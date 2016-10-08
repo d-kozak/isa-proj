@@ -4,6 +4,15 @@
 
 #include "ProtocolParser.h"
 
+AbstractRequest::RequestType getType(string msg){
+
+}
+
 AbstractRequest * ProtocolParser::parseRequest(string msg){
+
+}
+
+
+string ProtocolParser::createMsg(AbstractRequest * req){
 
 }

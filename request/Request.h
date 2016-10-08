@@ -10,7 +10,8 @@
 
 class Request : public AbstractRequest {
 public:
-    virtual void handleRequest();
+    virtual void after();
+    virtual void performTask();
     virtual string toString();
     virtual string getLoggableName();
 };

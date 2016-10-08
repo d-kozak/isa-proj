@@ -4,14 +4,18 @@
 
 #include "Request.h"
 
-virtual void Request::handleRequest(){
+void Request::performTask(){
 
 }
 
-virtual string Request::toString(){
+void Request::after(){
 
 }
 
-virtual string Request::getLoggableName(){
+string Request::toString(){
+
+}
+
+string Request::getLoggableName(){
 
 }
