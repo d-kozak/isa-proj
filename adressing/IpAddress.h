@@ -6,6 +6,7 @@
 #define ISA_PROJ_IPADDRESS_H
 
 #include <iostream>
+#include <netinet/in.h>
 #include "../BaseObject.h"
 
 #define ADDRESS_SIZE 4
@@ -26,6 +27,8 @@ namespace addressing {
         IpAddress next_addr();
 
         IpAddress next_addr(int distance);
+
+        in_addr_t getAddrForSocket();
 
         bool operator<(const IpAddress &other) const;
 

@@ -5,6 +5,7 @@
 #include "cppUnit.h"
 #include "../adressing/IpAddress.h"
 #include "iph.h"
+#include <bitset>
 
 using namespace addressing;
 
@@ -68,6 +69,30 @@ TEST_CASE(ipnextdist,
 
 );
 
+TEST_CASE(ipToInt,
+    IpAddress addr(255,127,63,31);
+            bitset<32> correct(0b11111111011111110011111100011111);
+          bitset<32> res(addr.getAddrForSocket());
+            MY_ASSERT(res == correct,"Comparison failed");
+);
+
+TEST_CASE(ipToInt2,
+          IpAddress addr(0,0,0,0);
+                  bitset<32> correct(0b00000000000000000000000000000000);
+                  bitset<32> res(addr.getAddrForSocket());
+                  MY_ASSERT(res == correct,"Comparison failed");
+);
+
+TEST_CASE(ipToInt3,
+          IpAddress addr(255,253,128,7);
+                  bitset<32> correct(0b11111111111111011000000000000111);
+                  bitset<32> res(addr.getAddrForSocket());
+                  cout << correct << endl;
+                  cout << res << endl;
+                  MY_ASSERT(res == correct,"Comparison failed");
+);
+
+
 TestSuite getIpTestSuite(){
     Test test1("==",ip_compare);
     Test test2("!=",ip_compare2);
@@ -76,6 +101,9 @@ TestSuite getIpTestSuite(){
     Test test5("next",ipnext);
     Test test6("next(int)",ipnextint);
 //    Test test7("next(int)",ipnextdist);
+    Test test8("toInt",ipToInt);
+    Test test9("toInt2",ipToInt2);
+    Test test10("toInt3",ipToInt3);
 
 
 
@@ -87,6 +115,9 @@ TestSuite getIpTestSuite(){
     suite.add(test5);
     suite.add(test6);
 //    suite.add(test7);
+    suite.add(test8);
+    suite.add(test9);
+    suite.add(test10);
 
     return suite;
 }

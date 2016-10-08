@@ -7,17 +7,24 @@
 
 
 #include "../BaseObject.h"
+#include "../adressing/IpAddress.h"
+#include <sstream>
 
-using namespace std;
+using namespace addressing;
 
 class Socket : public BaseObject{
-    const int _fd;
-
+    const std::string _name = "Socket";
+    const int PORT_NUM = 1111;
+    IpAddress _addr;
 public:
-    Socket(int fd);
+    Socket(IpAddress & addr);
     string getMessage();
-    void sendMessage(string msg);
+    void sendBroadcastMesage(string msg);
+    void sendMessage(string msg, IpAddress destination);
     ~Socket();
+
+    virtual string getLoggableName();
+    virtual string toString();
 };
 
 

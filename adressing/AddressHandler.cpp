@@ -43,7 +43,7 @@ namespace addressing {
     }
 
     void AddressHandler::printCurrentState() {
-        cout << this->toString();
+        cout << this->toString() << endl;
     }
 
     string AddressHandler::toString() {
@@ -52,8 +52,8 @@ namespace addressing {
         ss << "------------------------------" << endl;
         ss << this->_name << " -> " << endl;
         ss << this->_pool.toString() << endl;
-        ss << this->_collector.toString();
-        ss << "------------------------------" << endl;
+        ss << this->_collector.toString() << endl;
+        ss << "------------------------------";
         return ss.str();
     }
 
@@ -109,7 +109,11 @@ namespace addressing {
 
     string AddressCollector::toString() {
         stringstream ss;
-        ss << this->_name << " -> " << this->isInterrupted ? "interrupted" : "running";
+        ss << this->_name << " -> ";
+        if(isInterrupted)
+            ss << "interrupted";
+        else
+            ss << "running";
         return ss.str();
     }
 

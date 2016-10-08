@@ -55,7 +55,9 @@ TEST_CASE(address_handler_advanced,
               sleep(2);
               handler.printCurrentState();
               handler.interrupt();
-
+              cout << "AFTER INTERRUPT" << endl;
+              sleep(1);
+              handler.printCurrentState();
           } catch (InvalidArgumentException &e) {
               cerr << e.what() << endl;
               FAIL;

@@ -36,10 +36,13 @@ set(TEST_FILES tests/cppUnit.cpp tests/cppUnit.h
         adressing/AddressHandler.cpp adressing/AddressHandler.h
 
 
+        sockets/Socket.cpp sockets/Socket.h
+
         exceptions/BaseException.cpp exceptions/BaseException.h
         exceptions/ParseException.cpp exceptions/ParseException.h
         exceptions/OutOfAddressException.cpp exceptions/OutOfAddressException.h
         exceptions/InvalidArgumentException.cpp exceptions/InvalidArgumentException.h
+        exceptions/SocketException.cpp exceptions/SocketException.h
 
         tests/testStarter.cpp
         tests/MacAddrTest.cpp tests/mach.h
@@ -49,7 +52,7 @@ set(TEST_FILES tests/cppUnit.cpp tests/cppUnit.h
         tests/AddressPairTest.cpp tests/AddressPairTest.h
         tests/AddressPoolTest.cpp tests/AddressPoolTest.h
         tests/AddressCollectorTest.cpp tests/AddressCollectorTest.h
-        tests/AddressHandlerTest.cpp tests/AddressHandlerTest.h)
+        tests/AddressHandlerTest.cpp tests/AddressHandlerTest.h )
 
 
 add_executable(isa_proj ${SOURCE_FILES})

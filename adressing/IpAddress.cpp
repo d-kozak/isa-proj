@@ -60,6 +60,19 @@ namespace addressing {
         this->_parts[3] = d;
     }
 
+    in_addr_t IpAddress::getAddrForSocket(){
+        in_addr_t ret;
+
+        in_addr_t first = _parts[0];
+        in_addr_t second = _parts[1];
+        in_addr_t third = _parts[2];
+        in_addr_t fourth = _parts[3];
+
+        ret ^= ret;
+        ret = (first << 24) | (second << 16) | (third << 8) | fourth;
+        return ret;
+    }
+
 
     IpAddress &IpAddress::operator=(IpAddress other) {
         std::swap(_parts[0], other._parts[0]);
