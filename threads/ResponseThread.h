@@ -10,16 +10,16 @@
 #include "../request/AbstractRequest.h"
 #include "../adressing/AddressHandler.h"
 #include "CancellableThread.h"
+#include "../request/DhcpMessage.h"
 
 using namespace addressing;
 
 class ResponseThread : public CancellableThread{
     AbstractRequest* _request;
     AddressHandler & _addressHandler;
-
 public:
     ResponseThread(AddressHandler & handler,AbstractRequest * request);
-    virtual void run();
+    void performTask();
 };
 
 

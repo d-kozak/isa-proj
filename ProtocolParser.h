@@ -12,8 +12,8 @@ using namespace std;
 
 class ProtocolParser {
     public:
-    AbstractRequest * parseRequest(string msg);
-    string createMsg(AbstractRequest * req);
+    AbstractRequest * parseRequest(DhcpMessage &dhcp_msg);
+    vector<char> createMsg(AbstractRequest * req);
 };
 
 

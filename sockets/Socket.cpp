@@ -23,7 +23,7 @@
 
 Socket::Socket(IpAddress &addr) : _addr(addr), _fd(-1) {}
 
-string Socket::getMessage() {
+vector<char> Socket::getMessage() {
     ssize_t msg_size;
     vector<char> data;
     data.resize(BUFFER_SIZE);
@@ -41,9 +41,8 @@ string Socket::getMessage() {
     }
     if (msg_size == -1)
         throw SocketException("recvfrom() failed");
-    string s(data.begin(), data.end());
     this->closeSocket();
-    return s;
+    return data;
 }
 
 struct sockaddr_in Socket::initsockaddr(string addr, bool bindImmediately) {

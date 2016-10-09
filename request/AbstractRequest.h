@@ -9,23 +9,26 @@
 #include "../BaseObject.h"
 #include "../adressing/IpAddress.h"
 #include "../adressing/MacAddress.h"
-
+#include "../request/DhcpMessage.h"
 
 class AbstractRequest : public BaseObject {
     friend class ProtocolParser;
 
+    virtual void performTask() = 0;
+    virtual void after() = 0;
+
+protected:
     addressing::IpAddress _serverIp;
     addressing::IpAddress _clientIP;
     addressing::MacAddress _clientMac;
+    DhcpMessage msg;
 
-    virtual void performTask() = 0;
-    virtual void after() = 0;
 public:
     static enum RequestType {
         DISCOVER=1, OFFER=2, REQUEST=3, ACK=5, NACK=6, RELEASE=7
     };
 
-    void handlerRequest();
+    void handleRequest();
 };
 
 

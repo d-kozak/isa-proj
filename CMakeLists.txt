@@ -45,6 +45,10 @@ set(TEST_FILES tests/cppUnit.cpp tests/cppUnit.h
         request/Release.cpp request/Release.h
         request/Request.cpp request/Request.h
 
+        threads/CancellableThread.cpp threads/CancellableThread.h
+        threads/ResponseThread.cpp threads/ResponseThread.h
+        threads/MainThread.cpp threads/MainThread.h
+
         exceptions/BaseException.cpp exceptions/BaseException.h
         exceptions/ParseException.cpp exceptions/ParseException.h
         exceptions/OutOfAddressException.cpp exceptions/OutOfAddressException.h

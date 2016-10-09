@@ -69,6 +69,9 @@ public:
 
     ////////METHODS/////////
 
+    DhcpMessage(){
+        memset(buffer,'\0',CURRENT_MSG_SIZE + 1);
+    }
 
     DhcpMessage(vector<char>& msg){
         if(msg.size() != CURRENT_MSG_SIZE){

@@ -10,12 +10,22 @@
 #include "../BaseObject.h"
 
 class CancellableThread : public BaseObject{
+    const string _name = "CancellableThread";
     std::thread _thread;
+    volatile bool _isInterrupted;
 public:
+    CancellableThread();
     void start();
     void interrupt();
 
-    virtual void run() = 0;
+    virtual void performTask() = 0;
+
+
+    void run();
+
+    virtual string toString();
+    virtual string getLoggableName();
+
 };
 
 

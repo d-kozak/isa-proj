@@ -8,13 +8,19 @@
 
 #include "../BaseObject.h"
 #include "CancellableThread.h"
+#include "../adressing/AddressHandler.h"
+#include "../sockets/Socket.h"
+#include "../ProtocolParser.h"
 
 class MainThread : public CancellableThread{
+    addressing::AddressHandler _handler;
+    Socket _socket;
+    ProtocolParser _parser;
 
 public:
-    void parseArguments();
+    MainThread(addressing::AddressHandler & hadler,addressing::IpAddress & first);
     void printStatistics();
-    virtual void run();
+    void performTask();
 };
 
 

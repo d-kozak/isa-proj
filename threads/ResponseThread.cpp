@@ -3,3 +3,10 @@
 //
 
 #include "ResponseThread.h"
+
+ResponseThread::ResponseThread(AddressHandler & handler,AbstractRequest * request):_addressHandler(handler),_request(request){}
+
+void ResponseThread::performTask(){
+    this->_request->handleRequest();
+    this->interrupt();
+}

@@ -4,7 +4,7 @@
 
 #include "AbstractRequest.h"
 
-void AbstractRequest::handlerRequest(){
+void AbstractRequest::handleRequest(){
     this->performTask();
     this->after();
 }

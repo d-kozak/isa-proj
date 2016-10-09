@@ -4,15 +4,11 @@
 
 #include "ProtocolParser.h"
 
-AbstractRequest::RequestType getType(string msg){
-
-}
-
-AbstractRequest * ProtocolParser::parseRequest(string msg){
+AbstractRequest * ProtocolParser::parseRequest(DhcpMessage & msg){
 
 }
 
 
-string ProtocolParser::createMsg(AbstractRequest * req){
+vector<char> ProtocolParser::createMsg(AbstractRequest * req){
 
 }
