@@ -13,9 +13,9 @@ void Request::after(){
 }
 
 string Request::toString(){
-
+    return this->_name;
 }
 
 string Request::getLoggableName(){
-
+    return this->_name;
 }

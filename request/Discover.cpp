@@ -14,9 +14,9 @@ void Discover::after(){
 }
 
 string Discover::toString(){
-
+    return this->_name;
 }
 
 string Discover::getLoggableName(){
-
+    return this->_name;
 }

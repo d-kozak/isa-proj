@@ -20,7 +20,7 @@ namespace addressing {
     public:
 
         IpAddress(string address);
-
+        IpAddress(vector<char> address);
         IpAddress(unsigned char a, unsigned char b, unsigned char c, unsigned char d);
 
         IpAddress &operator=(IpAddress other);

@@ -3,6 +3,7 @@
 //
 
 #include <sstream>
+#include <vector>
 
 #include "ctype.h"
 #include "IpAddress.h"
@@ -11,6 +12,11 @@
 #include "../exceptions/InvalidArgumentException.h"
 
 namespace addressing {
+
+    IpAddress::IpAddress(vector<char> address) {
+        string str(address.begin(),address.end());
+        this->IpAddress(str);
+    }
 
     IpAddress::IpAddress(string address) {
         char buf[4];

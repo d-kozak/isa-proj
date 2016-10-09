@@ -23,15 +23,14 @@ class AbstractRequest : public BaseObject {
     virtual void after() = 0;
 
 protected:
-    addressing::IpAddress _serverIp;
-    addressing::IpAddress _clientIP;
-    addressing::MacAddress _clientMac;
     DhcpMessage msg;
 
 public:
 
 
     void handleRequest();
+
+    void setMsg(const DhcpMessage &msg);
 };
 
 

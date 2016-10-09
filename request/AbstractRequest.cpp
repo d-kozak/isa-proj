@@ -8,3 +8,7 @@ void AbstractRequest::handleRequest(){
     this->performTask();
     this->after();
 }
+
+void AbstractRequest::setMsg(const DhcpMessage &msg) {
+    AbstractRequest::msg = msg;
+}

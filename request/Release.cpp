@@ -13,9 +13,9 @@ void Release::after(){
 }
 
 string Release::toString(){
-
+    return this->_name;
 }
 
 string Release::getLoggableName(){
-
+    return this->_name;
 }

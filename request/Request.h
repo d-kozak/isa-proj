@@ -9,6 +9,7 @@
 #include "AbstractRequest.h"
 
 class Request : public AbstractRequest {
+    const string _name = "Request";
 public:
     virtual void after();
     virtual void performTask();
