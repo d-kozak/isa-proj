@@ -13,7 +13,7 @@
 #include "../ProtocolParser.h"
 
 class MainThread : public CancellableThread{
-    addressing::AddressHandler _handler;
+    addressing::AddressHandler &_handler;
     Socket _socket;
     ProtocolParser _parser;
 

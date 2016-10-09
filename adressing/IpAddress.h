@@ -18,7 +18,6 @@ namespace addressing {
         const string _name = "IpAddress";
         unsigned char _parts[ADDRESS_SIZE];
     public:
-        static IpAddress BroadcastAddress;
 
         IpAddress(string address);
 
@@ -47,10 +46,12 @@ namespace addressing {
         virtual string toString();
 
         virtual string getLoggableName();
-    };
 
-    // static initializer for broadcast address
-    IpAddress IpAddress::BroadcastAddress = IpAddress(255,255,255,255);
+        static IpAddress getBroadcastAddr(){
+            IpAddress address(255,255,255,255);
+            return address;
+        }
+    };
 }
 
 

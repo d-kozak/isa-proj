@@ -9,6 +9,7 @@
 #include "../BaseObject.h"
 #include "../adressing/IpAddress.h"
 #include <sstream>
+#include <vector>
 
 using namespace addressing;
 
@@ -21,7 +22,7 @@ class Socket : public BaseObject{
     void initSocket();
     void closeSocket();
     struct sockaddr_in initsockaddr(uint32_t addr,bool bindImmediately);
-    struct sockaddr_in initsockaddr(string addr, bool bindImmediately)
+    struct sockaddr_in initsockaddr(string addr, bool bindImmediately);
 public:
     Socket(IpAddress & addr);
     vector<char> getMessage();

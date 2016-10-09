@@ -11,6 +11,11 @@
 #include "../adressing/MacAddress.h"
 #include "../request/DhcpMessage.h"
 
+
+enum RequestType {
+    DISCOVER=1, OFFER=2, REQUEST=3, ACK=5, NACK=6, RELEASE=7
+};
+
 class AbstractRequest : public BaseObject {
     friend class ProtocolParser;
 
@@ -24,9 +29,7 @@ protected:
     DhcpMessage msg;
 
 public:
-    static enum RequestType {
-        DISCOVER=1, OFFER=2, REQUEST=3, ACK=5, NACK=6, RELEASE=7
-    };
+
 
     void handleRequest();
 };

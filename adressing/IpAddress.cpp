@@ -131,7 +131,7 @@ namespace addressing {
     }
 
     bool IpAddress::isBroadcastAddr(){
-        return this->operator==(IpAddress::BroadcastAddress);
+        return this->operator==(IpAddress::getBroadcastAddr());
     }
 
     bool IpAddress::operator<(const IpAddress &other) const {

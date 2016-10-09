@@ -99,7 +99,7 @@ public:
         check_indexing(index, size);
 
         // prepare the vector
-        std::vector res;
+        std::vector<char> res;
         res.resize(size+1);
         res.data()[size] = '\0';
 
@@ -118,7 +118,10 @@ public:
 
     vector<char> createMessageVector(){
         buffer[CURRENT_MSG_SIZE] = '\0';
-        vector v(buffer);
+        vector<char> v;
+        v.resize(CURRENT_MSG_SIZE + 1);
+        memcpy(v.data(),buffer,CURRENT_MSG_SIZE);
+        v.data()[CURRENT_MSG_SIZE] = '\0';
         return v;
     }
 

@@ -53,7 +53,7 @@ struct sockaddr_in Socket::initsockaddr(uint32_t addr, bool bindImmediately) {
     struct sockaddr_in server;                      // server's address structure
     memset(&server, 0, sizeof(server));
     server.sin_family = AF_INET;                     // set IPv4 addressing
-    server.sin_addr.s_addr = htonl(addr);           // the server listens to any interface
+    server.sin_addr.s_addr = addr;           // the server listens to any interface
     server.sin_port = htons(DHCP_PORT_NUM);              // the server listens on this port
 
     if (bindImmediately) {

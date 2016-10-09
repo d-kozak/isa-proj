@@ -44,6 +44,7 @@ set(TEST_FILES tests/cppUnit.cpp tests/cppUnit.h
         request/Discover.cpp request/Discover.h
         request/Release.cpp request/Release.h
         request/Request.cpp request/Request.h
+        request/DhcpMessage.cpp request/DhcpMessage.h
 
         threads/CancellableThread.cpp threads/CancellableThread.h
         threads/ResponseThread.cpp threads/ResponseThread.h
@@ -63,8 +64,42 @@ set(TEST_FILES tests/cppUnit.cpp tests/cppUnit.h
         tests/AddressPairTest.cpp tests/AddressPairTest.h
         tests/AddressPoolTest.cpp tests/AddressPoolTest.h
         tests/AddressCollectorTest.cpp tests/AddressCollectorTest.h
-        tests/AddressHandlerTest.cpp tests/AddressHandlerTest.h request/DhcpMessage.cpp request/DhcpMessage.h)
+        tests/AddressHandlerTest.cpp tests/AddressHandlerTest.h)
 
 
-add_executable(isa_proj ${SOURCE_FILES})
+set(PROGRAM_FILES
+
+        main.cpp
+
+        adressing/IpAddress.cpp adressing/IpAddress.h
+        adressing/MacAddress.cpp adressing/MacAddress.h
+        adressing/Reservation.cpp adressing/Reservation.h
+        adressing/Timestamp.cpp adressing/Timestamp.h
+        adressing/AddressPool.cpp adressing/AddressPool.h
+        adressing/AddressHandler.cpp adressing/AddressHandler.h
+
+
+        ProtocolParser.cpp ProtocolParser.h
+
+        sockets/Socket.cpp sockets/Socket.h
+
+        request/AbstractRequest.cpp request/AbstractRequest.h
+        request/Discover.cpp request/Discover.h
+        request/Release.cpp request/Release.h
+        request/Request.cpp request/Request.h
+
+        threads/CancellableThread.cpp threads/CancellableThread.h
+        threads/ResponseThread.cpp threads/ResponseThread.h
+        threads/MainThread.cpp threads/MainThread.h
+
+        exceptions/BaseException.cpp exceptions/BaseException.h
+        exceptions/ParseException.cpp exceptions/ParseException.h
+        exceptions/OutOfAddressException.cpp exceptions/OutOfAddressException.h
+        exceptions/InvalidArgumentException.cpp exceptions/InvalidArgumentException.h
+        exceptions/SocketException.cpp exceptions/SocketException.h
+
+        request/DhcpMessage.cpp request/DhcpMessage.h)
+
+
+add_executable(isa_proj ${PROGRAM_FILES})
 add_executable(tests ${TEST_FILES})
