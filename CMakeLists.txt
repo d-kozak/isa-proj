@@ -67,6 +67,8 @@ set(TEST_FILES tests/cppUnit.cpp tests/cppUnit.h
         tests/AddressHandlerTest.cpp tests/AddressHandlerTest.h)
 
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "/home/david/projects/isa-proj/output")
+
 set(PROGRAM_FILES
 
         main.cpp

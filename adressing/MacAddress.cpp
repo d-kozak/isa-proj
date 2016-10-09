@@ -3,10 +3,51 @@
 //
 
 #include "MacAddress.h"
+#include "../exceptions/ParseException.h"
+#include "../exceptions/InvalidArgumentException.h"
 #include <string>
 #include <sstream>
+#include <string.h>
+#include <string>
+#include <cstdio>
+#include <cstdlib>
 
 namespace addressing {
+
+    MacAddress::MacAddress(string addr) {
+        char buf[3];
+        buf[2] = '\0';
+
+        int cell_index = 0;
+        int i  = 0;
+
+        if(addr.size() != MAC_SIZE * 2 + MAC_SIZE -1 ){
+            stringstream ss;
+            ss << "Mac address " << addr << "is either too long or too short";
+            throw ParseException(ss.str());
+        }
+
+        for (char & c : addr){
+            if(i == 2){
+                if(c != ':'){
+                    stringstream ss;
+                    ss << "Mac address "  << addr << " is incorrect";
+                    throw ParseException(ss.str());
+                }
+                // now convert hexadecimal string in buffer into a decimal number
+                _parts[cell_index] = strtoul(buf, NULL, 16);
+
+                cell_index++;
+                i = 0;
+            } else {
+                buf[i] = c;
+                i++;
+            }
+        }
+        _parts[cell_index] = strtoul(buf, NULL, 16);
+    }
+
+
 
     MacAddress::MacAddress(unsigned char a, unsigned char b,unsigned  char c,unsigned  char d,unsigned  char e,unsigned  char f){
         this->_parts[0] = a;
@@ -66,6 +107,26 @@ namespace addressing {
         for (int i = 0; i < MAC_SIZE; ++i) {
             std::stringstream sstream;
             sstream << std::hex << (int) this->_parts[i];
+            ret += sstream.str();
+
+            if(i != MAC_SIZE - 1){
+                ret += ':';
+            }
+        }
+        return ret;
+    }
+
+    unsigned char MacAddress::getPart(int index) const {
+        if(index < 0 || index > MAC_SIZE -1)
+            throw InvalidArgumentException("Invalid index");
+        return this->_parts[index];
+    }
+
+    string constRefToString(const MacAddress & mac){
+        string ret;
+        for (int i = 0; i < MAC_SIZE; ++i) {
+            std::stringstream sstream;
+            sstream << std::hex << (int) mac.getPart(i);
             ret += sstream.str();
 
             if(i != MAC_SIZE - 1){

@@ -52,6 +52,11 @@ namespace addressing {
         ss << "------------------------------" << endl;
         ss << this->_name << " -> " << endl;
         ss << this->_pool.toString() << endl;
+        ss << "Static mapping -> {" << endl;
+        for (auto & elem : this->_directMapping){
+            ss << "\t" << constRefToString(elem.first) << " => " << elem.second.asString() << endl;
+        }
+        ss << "}" << endl;
         ss << this->_collector.toString() << endl;
         ss << "------------------------------";
         return ss.str();

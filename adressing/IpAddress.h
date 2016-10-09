@@ -8,6 +8,7 @@
 #include <iostream>
 #include <netinet/in.h>
 #include "../BaseObject.h"
+#include <vector>
 
 #define ADDRESS_SIZE 4
 
@@ -17,11 +18,15 @@ namespace addressing {
     class IpAddress : public BaseObject {
         const string _name = "IpAddress";
         unsigned char _parts[ADDRESS_SIZE];
-    public:
 
+        void initAddressFromString(string address);
+    public:
         IpAddress(string address);
         IpAddress(vector<char> address);
+        IpAddress(char* address);
         IpAddress(unsigned char a, unsigned char b, unsigned char c, unsigned char d);
+
+
 
         IpAddress &operator=(IpAddress other);
 

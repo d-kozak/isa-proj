@@ -24,8 +24,10 @@ namespace addressing {
         net_address = net_address.next_addr(); //skip the net_address one <- that one is for the server itself
 
         for (IpAddress addr = net_address.next_addr(); addr != lastAddr; addr = addr.next_addr()) {
+            // TODO find out why the hell this does not work 192.198.0.2
             if(find(this->_reserved.begin(),this->_reserved.end(),addr) != this->_reserved.end())
                 continue;
+
             AddressPair pair(addr);
             this->_addresses.push_back(pair);
         }

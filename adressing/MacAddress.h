@@ -19,6 +19,7 @@ namespace addressing {
         unsigned char _parts[MAC_SIZE];
 
     public:
+        MacAddress(string addr);
         MacAddress(unsigned char a,unsigned  char b,unsigned  char c,unsigned  char d,unsigned  char e,unsigned char f);
 
         bool operator==(const MacAddress &lhs);
@@ -27,10 +28,13 @@ namespace addressing {
         bool operator<(const MacAddress &other) const;
         bool operator>(const MacAddress &other) const;
 
+        unsigned char getPart(int index)const ;
+
         virtual string toString();
         virtual string getLoggableName();
     };
 
+    string constRefToString(const MacAddress & mac);
 }
 
 

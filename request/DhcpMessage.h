@@ -137,6 +137,11 @@ public:
         return this->_name;
     }
 
+    DhcpMessage &operator=(DhcpMessage other) {
+        memcpy(this->buffer,other.buffer,CURRENT_MSG_SIZE);
+        return *this;
+    }
+
 };
 
 

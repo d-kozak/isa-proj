@@ -13,12 +13,21 @@
 
 namespace addressing {
 
-    IpAddress::IpAddress(vector<char> address) {
-        string str(address.begin(),address.end());
-        this->IpAddress(str);
+    IpAddress::IpAddress(char* address){
+        string s(address);
+        this->initAddressFromString(s);
+    }
+
+    IpAddress::IpAddress(vector<char> address){
+        string s(address.begin(),address.end());
+        this->initAddressFromString(s);
     }
 
     IpAddress::IpAddress(string address) {
+        this->initAddressFromString(address);
+    }
+
+    void IpAddress::initAddressFromString(string address){
         char buf[4];
         buf[3] = '\0';
         int buf_index = 0;
