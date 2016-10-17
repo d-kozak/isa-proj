@@ -8,9 +8,6 @@ void Request::performTask(){
 
 }
 
-void Request::after(){
-
-}
 
 string Request::toString(){
     return this->_name;

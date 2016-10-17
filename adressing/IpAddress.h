@@ -36,6 +36,7 @@ namespace addressing {
 
         in_addr_t getAddrForSocket();
         string asString();
+        vector<unsigned char> asPrimitiveString();
 
         bool isBroadcastAddr();
 

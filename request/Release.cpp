@@ -8,10 +8,6 @@ void Release::performTask(){
 
 }
 
-void Release::after(){
-
-}
-
 string Release::toString(){
     return this->_name;
 }

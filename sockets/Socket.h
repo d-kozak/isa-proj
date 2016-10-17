@@ -15,7 +15,7 @@ using namespace addressing;
 
 class Socket : public BaseObject{
     const std::string _name = "Socket";
-    const int DHCP_PORT_NUM = 1111;
+    const int DHCP_PORT_NUM = 1111; // correct is 68 :)
     IpAddress _addr;
     int _fd;
 
@@ -27,7 +27,7 @@ public:
     Socket(IpAddress & addr);
     vector<char> getMessage();
     void setBroadCastFlag();
-    void sendMessage(string msg, IpAddress destination);
+    void sendMessage(vector<unsigned char> msg, IpAddress destination);
     ~Socket();
 
     virtual string getLoggableName();

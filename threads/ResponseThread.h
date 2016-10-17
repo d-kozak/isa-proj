@@ -18,6 +18,9 @@ class ResponseThread : public CancellableThread{
     AbstractRequest* _request;
     AddressHandler & _addressHandler;
 public:
+    AddressHandler &get_addressHandler() const;
+
+public:
     ResponseThread(AddressHandler & handler,AbstractRequest * request);
     void performTask();
 };

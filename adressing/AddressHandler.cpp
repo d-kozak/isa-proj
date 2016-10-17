@@ -11,7 +11,7 @@ namespace addressing {
     AddressHandler::AddressHandler(IpAddress &net_address, int prefix, list <IpAddress> &reserved,
                                    map<MacAddress, IpAddress> &direct_mapping) :
             _lock(), _reservations(), _directMapping(direct_mapping), _pool(net_address, prefix, reserved),
-            _collector(this) {}
+            _collector(this),_prefix(prefix) {}
 
 
     IpAddress AddressHandler::getAddressFor(MacAddress &mac) {
@@ -40,6 +40,10 @@ namespace addressing {
         } else {
             throw InvalidArgumentException("Mac address " + mac.toString() + " is not a part of any known reservation");
         }
+    }
+
+    const int AddressHandler::getPrefix() const {
+        return this->_prefix;
     }
 
     void AddressHandler::printCurrentState() {

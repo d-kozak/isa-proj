@@ -48,6 +48,9 @@ namespace addressing {
         AddressPool _pool;
         AddressCollector _collector;
 
+        const int _prefix;
+
+
         friend class AddressCollector;
 
 //        bool findReservation(MacAddress & mac);
@@ -56,6 +59,8 @@ namespace addressing {
         IpAddress getAddressFor(MacAddress & mac);
         void releaseAddress(MacAddress & mac);
         void printCurrentState();
+
+        const int getPrefix() const ;const int getPrefix() const ;
 
         virtual string toString();
         virtual string getLoggableName();

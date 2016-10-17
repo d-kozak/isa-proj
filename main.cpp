@@ -20,6 +20,13 @@ IpAddress parseNetworkInfo(char* net, int & prefix){
         throw InvalidArgumentException("Net is not specified correctly, no '/' character'");
     unsigned long ip_addr_len = lomitko - net;
     prefix = stoi(lomitko + 1);
+    // is the prefix sane?
+    if(prefix <= 0 || prefix > 30){
+        string msg = "Invalid prefix: ";
+        msg += prefix;
+        throw InvalidArgumentException(msg);
+    }
+
     vector<char> tmp;
     tmp.resize(ip_addr_len);
     memcpy(tmp.data(),net,ip_addr_len);

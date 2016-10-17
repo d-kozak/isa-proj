@@ -3,14 +3,22 @@
 //
 
 #include "Discover.h"
+#include "../exceptions/OutOfAddressException.h"
 
 
-void Discover::performTask(){
+using namespace addressing;
 
-}
+void Discover::performTask(ResponseThread & thread){
+    try {
+        vector<unsigned char> mac = this->_msg.getItemAsVector(_msg.chaddr,_msg.size_chaddr);
+        MacAddress macAddr(mac);
+        AddressHandler & addressHandler = thread.get_addressHandler();
+        IpAddress newAddr = addressHandler.getAddressFor(macAddr);
 
-void Discover::after(){
 
+    }catch (OutOfAddressException & e){
+        std::cerr << e.toString() << std::endl;
+    }
 }
 
 string Discover::toString(){

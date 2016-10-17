@@ -99,6 +99,14 @@ namespace addressing {
         return ss.str();
     }
 
+    vector<unsigned char> IpAddress::asPrimitiveString(){
+        vector<unsigned  char> res;
+        for (int i = 0; i < ADDRESS_SIZE; ++i) {
+            res.push_back(this->_parts[i]);
+        }
+        return res;
+    }
+
 
     IpAddress &IpAddress::operator=(IpAddress other) {
         std::swap(_parts[0], other._parts[0]);

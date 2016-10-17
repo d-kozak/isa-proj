@@ -3,9 +3,10 @@
 //
 
 #include "AbstractRequest.h"
+#include "../threads/ResponseThread.h"
 
-void AbstractRequest::handleRequest(){
-    this->performTask();
+void AbstractRequest::handleRequest(ResponseThread & thread){
+    this->performTask(thread);
     this->after();
 }
 

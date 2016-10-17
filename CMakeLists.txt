@@ -100,7 +100,7 @@ set(PROGRAM_FILES
         exceptions/InvalidArgumentException.cpp exceptions/InvalidArgumentException.h
         exceptions/SocketException.cpp exceptions/SocketException.h
 
-        request/DhcpMessage.cpp request/DhcpMessage.h)
+        request/DhcpMessage.cpp request/DhcpMessage.h request/Offer.cpp request/Offer.h)
 
 
 add_executable(isa_proj ${PROGRAM_FILES})

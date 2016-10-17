@@ -39,7 +39,7 @@ public:
 //    char file[128];                   // 128            110
 //    char options[OPT_SIZE];           // undef          238
 //                                                        238 + OPT_SIZE (for now 248)
-    char buffer[CURRENT_MSG_SIZE + 1];
+    unsigned char buffer[CURRENT_MSG_SIZE + 1];
 
     const int op = 0;
     const int htype = 1;
@@ -57,14 +57,22 @@ public:
     const int file = 110;
     const int options = 238;
     const int message_type = options + 0;
+    const int lease_time = options + size_message_type;
+    const int subnestMask = options + size_message_type + size_lease_time;
+    const int end = options + size_message_type + size_lease_time + size_subnet_mask;
 
     const int size_xid = 4;
     const int size_secs = 2;
     const int size_flags = 2;
     const int size_iaddr = 4;
-    const int size_maddr = 16;
+    const int size_chaddr = 16;
     const int size_sname = 64;
     const int size_file = 128;
+
+    const int size_message_type = 1;
+    const int size_lease_time = 4;
+    const int size_subnet_mask = 4;
+    const int size_end = 0;
     const int size_options = OPT_SIZE;
 
     ////////METHODS/////////
@@ -95,11 +103,11 @@ public:
     }
 
     // returns given item in a vector containing its string representation(ends with one additional \0)
-    vector<char> getItemAsVector(int index, int size){
+    vector<unsigned char> getItemAsVector(int index, int size){
         check_indexing(index, size);
 
         // prepare the vector
-        std::vector<char> res;
+        std::vector<unsigned char> res;
         res.resize(size+1);
         res.data()[size] = '\0';
 
@@ -107,7 +115,7 @@ public:
         return res;
     }
 
-    char* getItem(int offset){
+    unsigned char* getItem(int offset){
         return buffer + offset;
     }
 
@@ -116,9 +124,9 @@ public:
         memcpy(buffer+index,source,size);
     }
 
-    vector<char> createMessageVector(){
+    vector<unsigned char> createMessageVector(){
         buffer[CURRENT_MSG_SIZE] = '\0';
-        vector<char> v;
+        vector<unsigned char> v;
         v.resize(CURRENT_MSG_SIZE + 1);
         memcpy(v.data(),buffer,CURRENT_MSG_SIZE);
         v.data()[CURRENT_MSG_SIZE] = '\0';

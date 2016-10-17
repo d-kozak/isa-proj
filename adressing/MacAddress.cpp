@@ -11,6 +11,7 @@
 #include <string>
 #include <cstdio>
 #include <cstdlib>
+#include <vector>
 
 namespace addressing {
 
@@ -56,6 +57,17 @@ namespace addressing {
         this->_parts[3] = d;
         this->_parts[4] = e;
         this->_parts[5] = f;
+    }
+
+    MacAddress::MacAddress(vector<unsigned char> addr) {
+        if(addr.size() != 6){
+            string msg = "Invalid size of MAC addr: ";
+            msg += addr.size();
+            throw InvalidArgumentException(msg);
+        }
+        for (unsigned long i = 0; i < MAC_SIZE; ++i) {
+            this->_parts[i] = addr.at(i);
+        }
     }
 
     bool MacAddress::operator==(const MacAddress &lhs){

@@ -6,6 +6,7 @@
 #define ISA_PROJ_MACADDRESS_H
 
 #include <iostream>
+#include <vector>
 #include "../BaseObject.h"
 
 #define MAC_SIZE 6
@@ -21,6 +22,7 @@ namespace addressing {
     public:
         MacAddress(string addr);
         MacAddress(unsigned char a,unsigned  char b,unsigned  char c,unsigned  char d,unsigned  char e,unsigned char f);
+        MacAddress(vector<unsigned char> addr);
 
         bool operator==(const MacAddress &lhs);
 //        bool operator==(const MacAddress &lhs,MacAddress &rhs);

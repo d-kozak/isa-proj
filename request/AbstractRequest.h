@@ -10,6 +10,7 @@
 #include "../adressing/IpAddress.h"
 #include "../adressing/MacAddress.h"
 #include "../request/DhcpMessage.h"
+#include "../threads/ResponseThread.h"
 
 
 enum RequestType {
@@ -19,16 +20,16 @@ enum RequestType {
 class AbstractRequest : public BaseObject {
     friend class ProtocolParser;
 
-    virtual void performTask() = 0;
+    virtual void performTask(ResponseThread & thread) = 0;
     virtual void after() = 0;
 
 protected:
-    DhcpMessage msg;
+    DhcpMessage _msg;
 
 public:
 
 
-    void handleRequest();
+    void handleRequest(ResponseThread & thread);
 
     void setMsg(const DhcpMessage &msg);
 };

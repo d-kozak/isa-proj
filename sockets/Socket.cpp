@@ -84,7 +84,7 @@ void Socket::setBroadCastFlag() {
         err(1, "setsockopt failed()");
 }
 
-void Socket::sendMessage(string msg, IpAddress destination) {
+void Socket::sendMessage(vector<unsigned char> msg, IpAddress destination) {
     ssize_t count;
     this->initSocket();
     sockaddr_in server = this->initsockaddr(destination.asString(), false);
@@ -92,7 +92,7 @@ void Socket::sendMessage(string msg, IpAddress destination) {
 
     if (destination.isBroadcastAddr())
         this->setBroadCastFlag();
-    count = sendto(_fd, msg.c_str(), msg.size(), 0, (struct sockaddr *) &server, len);  // send data to the server
+    count = sendto(_fd, msg.data(), msg.size(), 0, (struct sockaddr *) &server, len);  // send data to the server
     if (count == -1)                                 // check if data was sent correctly
         throw SocketException("sendto() failed");
     else if (count != msg.size())
