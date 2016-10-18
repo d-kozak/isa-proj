@@ -11,7 +11,7 @@
 class Request : public AbstractRequest {
     const string _name = "Request";
 public:
-    virtual void performTask();
+    virtual void performTask(ResponseThread & thread);
     virtual string toString();
     virtual string getLoggableName();
 };

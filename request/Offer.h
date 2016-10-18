@@ -8,14 +8,10 @@
 
 #include "AbstractRequest.h"
 
-class Offer : public AbstractRequest {
+class Offer : public AbstractReply {
     const string _name = "Offer";
-    IpAddress & _addr;
-    AddressHandler & _handler;
-
 public:
-    Offer(DhcpMessage & msg, IpAddress & addr,AddressHandler & handler);
-    void performTask();
+    virtual void performTask(DhcpMessage & msg, IpAddress & addr,AddressHandler & handler);
 
     virtual string toString();
     virtual string getLoggableName();

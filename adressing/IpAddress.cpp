@@ -18,7 +18,7 @@ namespace addressing {
         this->initAddressFromString(s);
     }
 
-    IpAddress::IpAddress(vector<char> address){
+    IpAddress::IpAddress(vector<unsigned char> address){
         string s(address.begin(),address.end());
         this->initAddressFromString(s);
     }
@@ -99,7 +99,7 @@ namespace addressing {
         return ss.str();
     }
 
-    vector<unsigned char> IpAddress::asPrimitiveString(){
+    vector<unsigned char> IpAddress::asVector(){
         vector<unsigned  char> res;
         for (int i = 0; i < ADDRESS_SIZE; ++i) {
             res.push_back(this->_parts[i]);

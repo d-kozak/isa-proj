@@ -3,13 +3,12 @@
 //
 
 #include "AbstractRequest.h"
-#include "../threads/ResponseThread.h"
 
 void AbstractRequest::handleRequest(ResponseThread & thread){
     this->performTask(thread);
-    this->after();
 }
 
 void AbstractRequest::setMsg(const DhcpMessage &msg) {
-    AbstractRequest::msg = msg;
+    this->_msg = msg;
 }
+

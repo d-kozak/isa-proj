@@ -4,8 +4,10 @@
 
 #include "Request.h"
 
-void Request::performTask(){
-
+void Request::performTask(ResponseThread & thread){
+    AddressHandler handler = thread.get_addressHandler();
+    vector<unsigned char> vec = _msg.getItemAsVector(_msg.ciaddr, _msg.size_iaddr);
+    IpAddress addr(vec);
 }
 
 

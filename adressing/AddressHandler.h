@@ -60,7 +60,7 @@ namespace addressing {
         void releaseAddress(MacAddress & mac);
         void printCurrentState();
 
-        const int getPrefix() const ;const int getPrefix() const ;
+        const int getPrefix() const ;
 
         virtual string toString();
         virtual string getLoggableName();

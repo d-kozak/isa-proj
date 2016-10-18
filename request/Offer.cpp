@@ -5,12 +5,13 @@
 #include "Offer.h"
 #include "../sockets/Socket.h"
 
-Offer::Offer(DhcpMessage & msg, addressing::IpAddress & addr,AddressHandler & handler):_msg(msg),_addr(addr),_handler(handler){}
-
-void Offer::performTask() {
+void Offer::performTask(DhcpMessage & _msg, IpAddress & _addr,AddressHandler & _handler) {
     unsigned char * ptr;
     IpAddress broadcast = IpAddress::getBroadcastAddr();
     Socket socket1(broadcast);
+
+    ptr = _msg.getItem(_msg.op);
+    *ptr = BOOT_REPLY;
 
     ptr = _msg.getItem(_msg.ciaddr);
     memset(ptr,'\0',_msg.size_iaddr);
@@ -20,7 +21,7 @@ void Offer::performTask() {
     ptr = _msg.getItem(_msg.siaddr);
     memcpy(ptr,'\0',_msg.size_iaddr);
 
-    vector<unsigned char> newAddr = _addr.asPrimitiveString();
+    vector<unsigned char> newAddr = _addr.asVector();
     ptr = _msg.getItem(_msg.yiaddr);
     memcpy(ptr,newAddr.data(),ADDRESS_SIZE);
 

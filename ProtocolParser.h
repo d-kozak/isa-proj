@@ -16,5 +16,4 @@ class ProtocolParser {
     vector<char> createMsg(AbstractRequest * req);
 };
 
-
 #endif //ISA_PROJ_PROTOCOLPARSER_H

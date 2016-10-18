@@ -22,7 +22,7 @@ namespace addressing {
         void initAddressFromString(string address);
     public:
         IpAddress(string address);
-        IpAddress(vector<char> address);
+        IpAddress(vector<unsigned char> address);
         IpAddress(char* address);
         IpAddress(unsigned char a, unsigned char b, unsigned char c, unsigned char d);
 
@@ -36,7 +36,7 @@ namespace addressing {
 
         in_addr_t getAddrForSocket();
         string asString();
-        vector<unsigned char> asPrimitiveString();
+        vector<unsigned char> asVector();
 
         bool isBroadcastAddr();
 

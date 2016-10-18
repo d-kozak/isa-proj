@@ -10,7 +10,7 @@ using namespace addressing;
 
 void Discover::performTask(ResponseThread & thread){
     try {
-        vector<unsigned char> mac = this->_msg.getItemAsVector(_msg.chaddr,_msg.size_chaddr);
+        vector<unsigned char> mac = _msg.getItemAsVector(_msg.chaddr,_msg.size_chaddr);
         MacAddress macAddr(mac);
         AddressHandler & addressHandler = thread.get_addressHandler();
         IpAddress newAddr = addressHandler.getAddressFor(macAddr);

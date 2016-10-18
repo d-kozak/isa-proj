@@ -13,6 +13,11 @@
 #include "../threads/ResponseThread.h"
 
 
+enum BOOTPTYPE{
+    BOOT_REQUEST = 1,
+    BOOT_REPLY = 2
+};
+
 enum RequestType {
     DISCOVER=1, OFFER=2, REQUEST=3, ACK=5, NACK=6, RELEASE=7
 };
@@ -21,17 +26,21 @@ class AbstractRequest : public BaseObject {
     friend class ProtocolParser;
 
     virtual void performTask(ResponseThread & thread) = 0;
-    virtual void after() = 0;
 
 protected:
     DhcpMessage _msg;
 
 public:
-
-
     void handleRequest(ResponseThread & thread);
 
     void setMsg(const DhcpMessage &msg);
+};
+
+
+class AbstractReply : public BaseObject {
+    friend class ProtocolParser;
+public:
+    virtual void performTask(DhcpMessage & msg, IpAddress & addr,AddressHandler & handler) = 0;
 };
 
 
