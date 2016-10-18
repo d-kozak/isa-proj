@@ -11,7 +11,7 @@
 class Release : public AbstractRequest {
     const string _name = "Release";
 public:
-    virtual void performTask();
+    virtual void performTask(AddressHandler & handler);
     virtual string toString();
     virtual string getLoggableName();
 };

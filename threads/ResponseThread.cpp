@@ -4,10 +4,14 @@
 
 #include "ResponseThread.h"
 
-ResponseThread::ResponseThread(AddressHandler & handler,AbstractRequest * request):_addressHandler(handler),_request(request){}
+ResponseThread::ResponseThread(AddressHandler & handler,ProtocolParser & protocol,vector<unsigned char>& msg):_addressHandler(handler){
+    DhcpMessage dhcpMessage(msg);
+    AbstractRequest* req = protocol.parseRequest(dhcpMessage);
+    this->_request = req;
+}
 
 void ResponseThread::performTask(){
-    this->_request->handleRequest(*this);
+    this->_request->performTask(_addressHandler);
     this->interrupt();
 }
 

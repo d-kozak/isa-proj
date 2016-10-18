@@ -10,7 +10,7 @@
 #include "CancellableThread.h"
 #include "../adressing/AddressHandler.h"
 #include "../sockets/Socket.h"
-#include "../ProtocolParser.h"
+#include "../request/AbstractRequest.h"
 
 class MainThread : public CancellableThread{
     addressing::AddressHandler &_handler;

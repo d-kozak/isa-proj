@@ -11,7 +11,7 @@
 class Discover : public AbstractRequest {
     const string _name = "Discover";
 public:
-    virtual void performTask(ResponseThread & thread);
+    virtual void performTask(AddressHandler & handler);
     virtual string toString();
     virtual string getLoggableName();
 };

@@ -25,7 +25,7 @@ class Socket : public BaseObject{
     struct sockaddr_in initsockaddr(string addr, bool bindImmediately);
 public:
     Socket(IpAddress & addr);
-    vector<char> getMessage();
+    vector<unsigned char> getMessage();
     void setBroadCastFlag();
     void sendMessage(vector<unsigned char> msg, IpAddress destination);
     ~Socket();

@@ -23,9 +23,9 @@
 
 Socket::Socket(IpAddress &addr) : _addr(addr), _fd(-1) {}
 
-vector<char> Socket::getMessage() {
+vector<unsigned char> Socket::getMessage() {
     ssize_t msg_size;
-    vector<char> data;
+    vector<unsigned char> data;
     data.resize(BUFFER_SIZE);
     struct sockaddr_in client;        // client's address structure
     socklen_t length;

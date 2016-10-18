@@ -8,12 +8,11 @@
 
 using namespace addressing;
 
-void Discover::performTask(ResponseThread & thread){
+void Discover::performTask(AddressHandler & handler){
     try {
         vector<unsigned char> mac = _msg.getItemAsVector(_msg.chaddr,_msg.size_chaddr);
         MacAddress macAddr(mac);
-        AddressHandler & addressHandler = thread.get_addressHandler();
-        IpAddress newAddr = addressHandler.getAddressFor(macAddr);
+        IpAddress newAddr = handler.getAddressFor(macAddr);
 
 
     }catch (OutOfAddressException & e){

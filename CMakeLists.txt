@@ -28,6 +28,8 @@ set(SOURCE_FILES
 
 set(TEST_FILES tests/cppUnit.cpp tests/cppUnit.h
 
+        BaseObject.h
+
         adressing/IpAddress.cpp adressing/IpAddress.h
         adressing/MacAddress.cpp adressing/MacAddress.h
         adressing/Reservation.cpp adressing/Reservation.h
@@ -35,8 +37,6 @@ set(TEST_FILES tests/cppUnit.cpp tests/cppUnit.h
         adressing/AddressPool.cpp adressing/AddressPool.h
         adressing/AddressHandler.cpp adressing/AddressHandler.h
 
-
-        ProtocolParser.cpp ProtocolParser.h
 
         sockets/Socket.cpp sockets/Socket.h
 
@@ -80,8 +80,6 @@ set(PROGRAM_FILES
         adressing/AddressPool.cpp adressing/AddressPool.h
         adressing/AddressHandler.cpp adressing/AddressHandler.h
 
-
-        ProtocolParser.cpp ProtocolParser.h
 
         sockets/Socket.cpp sockets/Socket.h
 

@@ -10,8 +10,9 @@
 #include "../adressing/IpAddress.h"
 #include "../adressing/MacAddress.h"
 #include "../request/DhcpMessage.h"
-#include "../threads/ResponseThread.h"
+#include "../adressing/AddressHandler.h"
 
+using namespace addressing;
 
 enum BOOTPTYPE{
     BOOT_REQUEST = 1,
@@ -25,14 +26,11 @@ enum RequestType {
 class AbstractRequest : public BaseObject {
     friend class ProtocolParser;
 
-    virtual void performTask(ResponseThread & thread) = 0;
-
 protected:
     DhcpMessage _msg;
 
 public:
-    void handleRequest(ResponseThread & thread);
-
+    virtual void performTask(AddressHandler & handler) = 0;
     void setMsg(const DhcpMessage &msg);
 };
 
@@ -43,5 +41,13 @@ public:
     virtual void performTask(DhcpMessage & msg, IpAddress & addr,AddressHandler & handler) = 0;
 };
 
+
+using namespace std;
+
+class ProtocolParser {
+public:
+    AbstractRequest * parseRequest(DhcpMessage &dhcp_msg);
+    vector<unsigned char> createMsg(AbstractRequest * req);
+};
 
 #endif //ISA_PROJ_ABSTRACTREQUEST_H

@@ -4,7 +4,7 @@
 
 #include "Release.h"
 
-void Release::performTask(){
+void Release::performTask(AddressHandler & handler){
 
 }
 

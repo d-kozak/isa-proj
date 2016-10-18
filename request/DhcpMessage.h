@@ -81,7 +81,7 @@ public:
         memset(buffer,'\0',CURRENT_MSG_SIZE + 1);
     }
 
-    DhcpMessage(vector<char>& msg){
+    DhcpMessage(vector<unsigned char>& msg){
         if(msg.size() != CURRENT_MSG_SIZE){
             string x = "Invalid msg size";
             x += to_string(msg.size());

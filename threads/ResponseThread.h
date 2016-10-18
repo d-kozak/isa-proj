@@ -21,7 +21,7 @@ public:
     AddressHandler &get_addressHandler() const;
 
 public:
-    ResponseThread(AddressHandler & handler,AbstractRequest * request);
+    ResponseThread(AddressHandler & handler,ProtocolParser & protocol,vector<unsigned char>& msg);
     void performTask();
 };
 
