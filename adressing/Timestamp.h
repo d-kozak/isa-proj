@@ -22,7 +22,6 @@ namespace addressing {
 
         int countSecondsSinceStarted();
     public:
-        static const int LEASE_TIME = 3; //1 * 60 * 60;
 
         Timestamp();
 

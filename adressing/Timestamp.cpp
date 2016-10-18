@@ -3,6 +3,7 @@
 //
 
 #include "Timestamp.h"
+#include "../constants.h"
 
 namespace addressing {
     Timestamp::Timestamp() : _startTime(std::chrono::system_clock::now()) {}
@@ -21,7 +22,7 @@ namespace addressing {
     }
 
     bool Timestamp::isLeaseExpired() {
-        return countSecondsSinceStarted() >= Timestamp::LEASE_TIME;
+        return countSecondsSinceStarted() >= LEASE_TIME;
     }
 
     string Timestamp::toString() {

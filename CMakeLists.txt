@@ -64,7 +64,7 @@ set(TEST_FILES tests/cppUnit.cpp tests/cppUnit.h
         tests/AddressPairTest.cpp tests/AddressPairTest.h
         tests/AddressPoolTest.cpp tests/AddressPoolTest.h
         tests/AddressCollectorTest.cpp tests/AddressCollectorTest.h
-        tests/AddressHandlerTest.cpp tests/AddressHandlerTest.h)
+        tests/AddressHandlerTest.cpp tests/AddressHandlerTest.h constants.h)
 
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "/home/david/projects/isa-proj/output")
@@ -98,7 +98,7 @@ set(PROGRAM_FILES
         exceptions/InvalidArgumentException.cpp exceptions/InvalidArgumentException.h
         exceptions/SocketException.cpp exceptions/SocketException.h
 
-        request/DhcpMessage.cpp request/DhcpMessage.h request/Offer.cpp request/Offer.h)
+        request/DhcpMessage.cpp request/DhcpMessage.h request/Offer.cpp request/Offer.h constants.h)
 
 
 add_executable(isa_proj ${PROGRAM_FILES})

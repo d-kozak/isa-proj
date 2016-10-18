@@ -27,7 +27,7 @@ IpAddress parseNetworkInfo(char* net, int & prefix){
         throw InvalidArgumentException(msg);
     }
 
-    vector<char> tmp;
+    vector<unsigned char> tmp;
     tmp.resize(ip_addr_len);
     memcpy(tmp.data(),net,ip_addr_len);
     IpAddress ipAddress(tmp);

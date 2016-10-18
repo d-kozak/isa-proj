@@ -4,6 +4,7 @@
 
 #include "Offer.h"
 #include "../sockets/Socket.h"
+#include "../constants.h"
 
 void Offer::performTask(DhcpMessage & _msg, IpAddress & _addr,AddressHandler & _handler) {
     unsigned char * ptr;
@@ -28,8 +29,9 @@ void Offer::performTask(DhcpMessage & _msg, IpAddress & _addr,AddressHandler & _
     ptr = _msg.getItem(_msg.message_type);
     *ptr = OFFER;
 
+    int lease = LEASE_TIME;
     ptr = _msg.getItem(_msg.lease_time);
-    memcpy(ptr,&Timestamp::LEASE_TIME,_msg.size_lease_time);
+    memcpy(ptr,&lease,_msg.size_lease_time);
 
     ptr = _msg.getItem(_msg.subnestMask);
     const int prefix = _handler.getPrefix();
