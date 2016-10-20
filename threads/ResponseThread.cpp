@@ -10,9 +10,8 @@ ResponseThread::ResponseThread(AddressHandler & handler,ProtocolParser & protoco
     this->_request = req;
 }
 
-void ResponseThread::performTask(){
+void ResponseThread::run(){
     this->_request->performTask(_addressHandler);
-    this->interrupt();
 }
 
 AddressHandler &ResponseThread::get_addressHandler() const {

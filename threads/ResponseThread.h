@@ -11,10 +11,11 @@
 #include "../adressing/AddressHandler.h"
 #include "CancellableThread.h"
 #include "../request/DhcpMessage.h"
+#include "ThreadWrapper.h"
 
 using namespace addressing;
 
-class ResponseThread : public CancellableThread{
+class ResponseThread : public ThreadWrapper{
     AbstractRequest* _request;
     AddressHandler & _addressHandler;
 public:
@@ -22,7 +23,7 @@ public:
 
 public:
     ResponseThread(AddressHandler & handler,ProtocolParser & protocol,vector<unsigned char>& msg);
-    void performTask();
+    virtual void run();
 };
 
 

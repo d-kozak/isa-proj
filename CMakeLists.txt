@@ -46,6 +46,7 @@ set(TEST_FILES tests/cppUnit.cpp tests/cppUnit.h
         request/Request.cpp request/Request.h
         request/DhcpMessage.cpp request/DhcpMessage.h
 
+        threads/ThreadWrapper.cpp threads/ThreadWrapper.h
         threads/CancellableThread.cpp threads/CancellableThread.h
         threads/ResponseThread.cpp threads/ResponseThread.h
         threads/MainThread.cpp threads/MainThread.h
@@ -88,6 +89,7 @@ set(PROGRAM_FILES
         request/Release.cpp request/Release.h
         request/Request.cpp request/Request.h
 
+        threads/ThreadWrapper.cpp threads/ThreadWrapper.h
         threads/CancellableThread.cpp threads/CancellableThread.h
         threads/ResponseThread.cpp threads/ResponseThread.h
         threads/MainThread.cpp threads/MainThread.h
