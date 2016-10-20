@@ -25,7 +25,7 @@ namespace addressing {
         IpAddress(vector<unsigned char> address);
         IpAddress(char* address);
         IpAddress(unsigned char a, unsigned char b, unsigned char c, unsigned char d);
-
+        IpAddress(unsigned char* mem);
 
 
         IpAddress &operator=(IpAddress other);

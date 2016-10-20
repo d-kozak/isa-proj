@@ -27,6 +27,12 @@ namespace addressing {
         this->initAddressFromString(address);
     }
 
+    IpAddress::IpAddress(unsigned char *mem) {
+        for (int i = 0; i < ADDRESS_SIZE; ++i) {
+            this->_parts[i] = mem[i];
+        }
+    }
+
     void IpAddress::initAddressFromString(string address){
         char buf[4];
         buf[3] = '\0';
@@ -99,6 +105,7 @@ namespace addressing {
         return ss.str();
     }
 
+
     vector<unsigned char> IpAddress::asVector(){
         vector<unsigned  char> res;
         for (int i = 0; i < ADDRESS_SIZE; ++i) {
@@ -106,7 +113,6 @@ namespace addressing {
         }
         return res;
     }
-
 
     IpAddress &IpAddress::operator=(IpAddress other) {
         std::swap(_parts[0], other._parts[0]);
@@ -165,6 +171,7 @@ namespace addressing {
         return false;
     }
 
+
     bool IpAddress::operator>(const IpAddress &other) const {
         for (int i = 0; i < 4; ++i) {
             if (this->_parts[i] > other._parts[i])
@@ -172,7 +179,6 @@ namespace addressing {
         }
         return false;
     }
-
 
     bool IpAddress::operator==(const IpAddress &lhs) {
         for (int i = 0; i < ADDRESS_SIZE; ++i) {

@@ -13,6 +13,8 @@
 #include <string.h>
 #include "../BaseObject.h"
 #include "../exceptions/InvalidArgumentException.h"
+#include "../adressing/IpAddress.h"
+#include "../adressing/MacAddress.h"
 
 #define OPT_SIZE 10
 #define CURRENT_MSG_SIZE 248
@@ -21,7 +23,7 @@ using namespace std;
 
 class DhcpMessage : public BaseObject {
     const string _name = "DHCP message";
-public:
+
                                       // Bytes        Offset
 //    char op;                          // 1              0
 //    char htype;                       // 1              1
@@ -39,99 +41,138 @@ public:
 //    char file[128];                   // 128            110
 //    char options[OPT_SIZE];           // undef          238
 //                                                        238 + OPT_SIZE (for now 248)
-    unsigned char buffer[CURRENT_MSG_SIZE + 1];
 
-    const int op = 0;
-    const int htype = 1;
-    const int hlen = 2;
-    const int hops = 3;
-    const int xid = 4;
-    const int secs = 8;
-    const int flags = 10;
-    const int ciaddr = 12;
-    const int yiaddr = 16;
-    const int siaddr = 20;
-    const int giaddr = 24;
-    const int chaddr = 28;
-    const int sname = 44;
-    const int file = 110;
-    const int options = 238;
-    const int message_type = options + 0;
-    const int lease_time = options + size_message_type;
-    const int subnestMask = options + size_message_type + size_lease_time;
-    const int end = options + size_message_type + size_lease_time + size_subnet_mask;
 
-    const int size_xid = 4;
-    const int size_secs = 2;
-    const int size_flags = 2;
-    const int size_iaddr = 4;
-    const int size_chaddr = 16;
-    const int size_sname = 64;
-    const int size_file = 128;
+    const int _op = 0;
+    const int _htype = 1;
+    const int _hlen = 2;
+    const int _hops = 3;
+    const int _xid = 4;
+    const int _secs = 8;
+    const int _flags = 10;
+    const int _ciaddr = 12;
+    const int _yiaddr = 16;
+    const int _siaddr = 20;
+    const int _giaddr = 24;
+    const int _chaddr = 28;
+    const int _sname = 44;
+    const int _file = 110;
+    const int _options = 238;
+    const int _message_type = _options + 0;
+    const int _lease_time = _options + _size_message_type;
+    const int _subnestMask = _options + _size_message_type + _size_lease_time;
+    const int _end = _options + _size_message_type + _size_lease_time + _size_subnet_mask;
 
-    const int size_message_type = 1;
-    const int size_lease_time = 4;
-    const int size_subnet_mask = 4;
-    const int size_end = 0;
-    const int size_options = OPT_SIZE;
+    const int _size_xid = 4;
+    const int _size_secs = 2;
+    const int _size_flags = 2;
+    const int _size_iaddr = 4;
+    const int _size_chaddr = 16;
+    const int _size_sname = 64;
+    const int _size_file = 128;
+
+    const int _size_message_type = 1;
+    const int _size_lease_time = 4;
+    const int _size_subnet_mask = 4;
+    const int _size_end = 0;
+    const int _size_options = OPT_SIZE;
+
+    //////////////////////////actual content of msg/////////////////////////////////////
+    unsigned char op;
+    unsigned char htype;
+    unsigned char hlen;
+    unsigned char hops;
+    unsigned int xid;
+    unsigned char secs[_size_secs];
+    unsigned char flags[_size_flags];
+    addressing::IpAddress ciaddr;
+    addressing::IpAddress yiaddr;
+    addressing::IpAddress siaddr;
+    addressing::IpAddress giaddr;
+    addressing::MacAddress chaddr;
+    unsigned char sname[_size_sname];
+    unsigned char file[_size_file];
+    unsigned char meesageType;
+
+    int leaseTime;
+    addressing::IpAddress subnetMask;
+    unsigned char end;
+    //////////////////////////actual content of msg/////////////////////////////////////
+
+
+    void appendToVec(vector<unsigned char>& vec, unsigned char* source,int size){
+        for (int i = 0; i < size; ++i) {
+            vec.push_back(source[i]);
+        }
+    }
+
+    void appendToVec(vector<unsigned char>& destination,addressing::IpAddress& addr){
+        vector<unsigned char> from = addr.asVector();
+        destination.insert(destination.end(),from.begin(),from.end());
+    }
+
+
+public:
 
     ////////METHODS/////////
 
-    DhcpMessage(){
-        memset(buffer,'\0',CURRENT_MSG_SIZE + 1);
-    }
+
 
     DhcpMessage(vector<unsigned char>& msg){
-        if(msg.size() != CURRENT_MSG_SIZE){
-            string x = "Invalid msg size";
-            x += to_string(msg.size());
-            throw InvalidArgumentException(x);
-        }
+        initFromMsg(msg);
+    }
 
-        memcpy(buffer,msg.data(),CURRENT_MSG_SIZE);
-        buffer[CURRENT_MSG_SIZE] = '\0';
+    DhcpMessage initFromMsg(vector<unsigned char>& msg){
+
     }
 
 
-    void check_indexing(int index, int size){
-        if(index + size >= CURRENT_MSG_SIZE){
-            stringstream ss;
-            ss << "index and size are bigger than the underlying buffer" << endl;
-            ss << index << "  + " << size << " = " << index + size << "is bigger than " << CURRENT_MSG_SIZE << endl;
-            throw InvalidArgumentException(ss.str());
-        }
-    }
 
-    // returns given item in a vector containing its string representation(ends with one additional \0)
-    vector<unsigned char> getItemAsVector(int index, int size){
-        check_indexing(index, size);
-
-        // prepare the vector
-        std::vector<unsigned char> res;
-        res.resize(size+1);
-        res.data()[size] = '\0';
-
-        memcpy(res.data(),buffer + index,size);
-        return res;
-    }
-
-    unsigned char* getItem(int offset){
-        return buffer + offset;
-    }
-
-    void setPartOfBuffer(int index, int size,void* source){
-        check_indexing(index,size);
-        memcpy(buffer+index,source,size);
+    DhcpMessage &operator=(DhcpMessage other) {
+        this->setOp(other.getOP());
+        this->setHType(other.getHtype());
+        this->setHLen(other.getHlen());
+        this->setHOps(other.getHOps());
+        this->setXid(other.getXid());
+        this->setSecs(other.getSecs());
+        this->setFlags(other.getFlags());
+        this->setCiaddr(other.getCiaddr());
+        this->setYiaddr(other.getYiaddr());
+        this->setSiaddr(other.getSiaddr());
+        this->setGiaddr(other.getGiaddr());
+        this->setChaddr(other.getChaddr());
+        this->setSname(other.getSname());
+        this->setFile(other.getFile());
+        this->setMeesageType(other.getMeesageType());
+        this->setLeaseTime(other.getLeaseTime());
+        this->setSubnetMask(other.getSubnetMask());
+        this->setEnd(other.getEnd());
+        return *this;
     }
 
     vector<unsigned char> createMessageVector(){
-        buffer[CURRENT_MSG_SIZE] = '\0';
-        vector<unsigned char> v;
-        v.resize(CURRENT_MSG_SIZE + 1);
-        memcpy(v.data(),buffer,CURRENT_MSG_SIZE);
-        v.data()[CURRENT_MSG_SIZE] = '\0';
-        return v;
+        vector<unsigned char> ret;
+        ret.push_back(op);
+        ret.push_back(htype);
+        ret.push_back(hlen);
+        ret.push_back(hops);
+        appendToVec(ret,(unsigned char*) &xid,ADDRESS_SIZE);
+        appendToVec(ret,secs,_size_secs);
+        appendToVec(ret,flags,_size_flags);
+        appendToVec(ret,ciaddr);
+        appendToVec(ret,yiaddr);
+        appendToVec(ret,siaddr);
+        appendToVec(ret,giaddr);
+        appendToVec(ret,sname,_size_sname);
+        appendToVec(ret,file,_size_file);
+        ret.push_back(meesageType);
+        appendToVec(ret,(unsigned char*) &leaseTime,_size_lease_time);
+        appendToVec(ret,subnetMask);
+        ret.push_back(end);
+        return ret;
     }
+
+
 
     virtual string toString(){
         stringstream ss;
@@ -145,9 +186,151 @@ public:
         return this->_name;
     }
 
-    DhcpMessage &operator=(DhcpMessage other) {
-        memcpy(this->buffer,other.buffer,CURRENT_MSG_SIZE);
-        return *this;
+
+
+    const addressing::MacAddress &getChaddr() const {
+        return chaddr;
+    }
+
+    void setChaddr(const addressing::MacAddress &chaddr) {
+        DhcpMessage::chaddr = chaddr;
+    }
+
+
+    const addressing::IpAddress &getCiaddr() const {
+        return ciaddr;
+    }
+
+    void setCiaddr(const addressing::IpAddress &ciaddr) {
+        DhcpMessage::ciaddr = ciaddr;
+    }
+
+    const addressing::IpAddress &getYiaddr() const {
+        return yiaddr;
+    }
+
+    void setYiaddr(const addressing::IpAddress &yiaddr) {
+        DhcpMessage::yiaddr = yiaddr;
+    }
+
+    const addressing::IpAddress &getSiaddr() const {
+        return siaddr;
+    }
+
+    void setSiaddr(const addressing::IpAddress &siaddr) {
+        DhcpMessage::siaddr = siaddr;
+    }
+
+    const addressing::IpAddress &getGiaddr() const {
+        return giaddr;
+    }
+
+    void setGiaddr(const addressing::IpAddress &giaddr) {
+        DhcpMessage::giaddr = giaddr;
+    }
+
+    const addressing::IpAddress &getSubnetMask() const {
+        return subnetMask;
+    }
+
+    void setSubnetMask(const addressing::IpAddress &subnetMask) {
+        DhcpMessage::subnetMask = subnetMask;
+    }
+
+    unsigned char* getSecs(){
+        return secs;
+    }
+
+    void setSecs(unsigned char* secs){
+        memcpy(this->secs,secs,_size_secs);
+    }
+
+    unsigned char* getFlags(){
+        return flags;
+    }
+
+    void setFlags(unsigned char* flags){
+        memcpy(this->flags,flags,_size_flags);
+    }
+
+    unsigned char getOP(){
+        return op;
+    }
+
+    void setOp(unsigned char op){
+        this->op = op;
+    }
+
+    unsigned char getHtype(){
+        return htype;
+    }
+
+    void setHType(unsigned char htype){
+        this->htype= htype;
+    }
+
+    unsigned char getHlen(){
+        return hlen;
+    }
+
+    void setHLen(unsigned char hlen){
+        this->hlen= hlen;
+    }
+
+    unsigned char getHOps(){
+        return hops;
+    }
+
+    void setHOps(unsigned char hops){
+        this->hops = hops;
+    }
+
+    unsigned int getXid(){
+        return xid;
+    }
+
+    void setXid(unsigned int xid){
+        this->xid = xid;
+    }
+
+    unsigned char *getSname() const {
+        return sname;
+    }
+
+    void setSname(unsigned char* from){
+        memcpy(this->sname,from,_size_sname);
+    }
+
+    unsigned char *getFile() const {
+        return file;
+    }
+
+    void setFile(unsigned char* from){
+        memcpy(this->file,from,_size_file);
+    }
+
+    int getLeaseTime() const {
+        return leaseTime;
+    }
+
+    void setLeaseTime(int leaseTime) {
+        DhcpMessage::leaseTime = leaseTime;
+    }
+
+    unsigned char getMeesageType() const {
+        return meesageType;
+    }
+
+    void setMeesageType(unsigned char meesageType) {
+        DhcpMessage::meesageType = meesageType;
+    }
+
+    unsigned char getEnd() const {
+        return end;
+    }
+
+    void setEnd(unsigned char end) {
+        DhcpMessage::end = end;
     }
 
 };
