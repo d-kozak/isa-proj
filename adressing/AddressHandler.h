@@ -49,6 +49,7 @@ namespace addressing {
         AddressCollector _collector;
 
         const int _prefix;
+        const IpAddress serverAddress;
 
 
         friend class AddressCollector;
@@ -68,6 +69,10 @@ namespace addressing {
         void start();
         void interrupt();
 
+
+        const int get_prefix() const;
+
+        const IpAddress &getServerAddress() const;
     };
 }
 

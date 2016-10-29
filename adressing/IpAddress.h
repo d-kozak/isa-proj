@@ -24,6 +24,7 @@ namespace addressing {
         IpAddress(string address);
         IpAddress(vector<unsigned char> address);
         IpAddress(char* address);
+        IpAddress(int address);
         IpAddress(unsigned char a, unsigned char b, unsigned char c, unsigned char d);
         IpAddress(unsigned char* mem);
 
@@ -56,6 +57,13 @@ namespace addressing {
         static IpAddress getBroadcastAddr(){
             IpAddress address(255,255,255,255);
             return address;
+        }
+
+        static IpAddress getNetMaskFor(int prefix){
+            int address = INT32_MAX;
+            int zeroBytes = 32 - prefix;
+            address <<= zeroBytes;
+            return IpAddress (address);
         }
     };
 }

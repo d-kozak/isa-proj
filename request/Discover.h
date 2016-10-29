@@ -11,6 +11,7 @@
 class Discover : public AbstractRequest {
     const string _name = "Discover";
 public:
+    Discover(DhcpMessage msg):AbstractRequest(msg){}
     virtual void performTask(AddressHandler & handler);
     virtual string toString();
     virtual string getLoggableName();

@@ -4,20 +4,25 @@
 
 #include "Discover.h"
 #include "../exceptions/OutOfAddressException.h"
+#include "../constants.h"
+#include "Offer.h"
 
 
 using namespace addressing;
 
 void Discover::performTask(AddressHandler & handler){
     try {
-        vector<unsigned char> mac = _msg.getItemAsVector(_msg.chaddr,_msg.size_chaddr);
-        MacAddress macAddr(mac);
+        MacAddress macAddr = _msg.getChaddr();
         IpAddress newAddr = handler.getAddressFor(macAddr);
 
+        AbstractReply * reply = new Offer();
+        reply->performTask(_msg,newAddr,handler);
+        delete (Offer *)reply;
 
     }catch (OutOfAddressException & e){
         std::cerr << e.toString() << std::endl;
     }
+
 }
 
 string Discover::toString(){

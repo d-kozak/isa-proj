@@ -5,8 +5,13 @@
 #include "Request.h"
 
 void Request::performTask(AddressHandler & handler){
-    vector<unsigned char> vec = _msg.getItemAsVector(_msg.ciaddr, _msg.size_iaddr);
-    IpAddress addr(vec);
+    IpAddress serverAddres = handler.getServerAddress();
+    if(serverAddres == _msg.getServerIdentifier()){
+        // nothing for now, address is already assigned
+    } else {
+        MacAddress address = _msg.getChaddr();
+        handler.releaseAddress(address);
+    }
 }
 
 

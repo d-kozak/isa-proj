@@ -11,6 +11,7 @@
 class Request : public AbstractRequest {
     const string _name = "Request";
 public:
+    Request(DhcpMessage msg):AbstractRequest(msg){}
     virtual void performTask(AddressHandler & handler);
     virtual string toString();
     virtual string getLoggableName();

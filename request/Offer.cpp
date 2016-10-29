@@ -7,37 +7,13 @@
 #include "../constants.h"
 
 void Offer::performTask(DhcpMessage & _msg, IpAddress & _addr,AddressHandler & _handler) {
-    unsigned char * ptr;
     IpAddress broadcast = IpAddress::getBroadcastAddr();
     Socket socket1(broadcast);
 
-    ptr = _msg.getItem(_msg.op);
-    *ptr = BOOT_REPLY;
-
-    ptr = _msg.getItem(_msg.ciaddr);
-    memset(ptr,'\0',_msg.size_iaddr);
-
-    // do not know any other server, set zero for now
-    // TODO maybe collect info about other servers as well?
-    ptr = _msg.getItem(_msg.siaddr);
-    memcpy(ptr,'\0',_msg.size_iaddr);
-
-    vector<unsigned char> newAddr = _addr.asVector();
-    ptr = _msg.getItem(_msg.yiaddr);
-    memcpy(ptr,newAddr.data(),ADDRESS_SIZE);
-
-    ptr = _msg.getItem(_msg.message_type);
-    *ptr = OFFER;
-
-    int lease = LEASE_TIME;
-    ptr = _msg.getItem(_msg.lease_time);
-    memcpy(ptr,&lease,_msg.size_lease_time);
-
-    ptr = _msg.getItem(_msg.subnestMask);
-    const int prefix = _handler.getPrefix();
-    memcpy(ptr,&prefix,_msg.size_subnet_mask);
-
-    // TODO set end option ? (what is that? )
+    _msg.setYiaddr(_addr);
+    _msg.setLeaseTime(LEASE_TIME);
+    _msg.setServerIdentifier(_handler.getServerAddress());
+    _msg.setSubnetMask(IpAddress::getNetMaskFor(_handler.get_prefix()));
 
     vector<unsigned char> msg = _msg.createMessageVector();
     socket1.sendMessage(msg,broadcast);

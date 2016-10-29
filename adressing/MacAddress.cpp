@@ -76,6 +76,17 @@ namespace addressing {
         }
     }
 
+    MacAddress &MacAddress::operator=(MacAddress other) {
+//        std::swap(_parts[0], other._parts[0]);
+//        std::swap(_parts[1], other._parts[1]);
+//        std::swap(_parts[2], other._parts[2]);
+//        std::swap(_parts[3], other._parts[3]);
+        for (int i = 0; i < MAC_SIZE; ++i) {
+            this->_parts[i] = other._parts[i];
+        }
+        return *this;
+    }
+
     bool MacAddress::operator==(const MacAddress &lhs){
         for (int i = 0; i < MAC_SIZE; ++i) {
             if(this->_parts[i] != lhs._parts[i])

@@ -8,4 +8,9 @@
 #define LEASE_TIME 3
 //1 * 60 * 60;
 
+enum retVals {
+    EOK,
+    ERR_PARAMS
+};
+
 #endif //ISA_PROJ_CONSTANTS_H

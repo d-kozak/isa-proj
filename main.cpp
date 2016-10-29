@@ -7,6 +7,7 @@
 #include "exceptions/InvalidArgumentException.h"
 #include "adressing/AddressHandler.h"
 #include "exceptions/ParseException.h"
+#include "constants.h"
 #include <string.h>
 #include <fstream>
 #include <iostream>
@@ -15,23 +16,28 @@
 using namespace addressing;
 
 IpAddress parseNetworkInfo(char* net, int & prefix){
-    char* lomitko = strchr(net,'/');
-    if(net == NULL)
-        throw InvalidArgumentException("Net is not specified correctly, no '/' character'");
-    unsigned long ip_addr_len = lomitko - net;
-    prefix = stoi(lomitko + 1);
-    // is the prefix sane?
-    if(prefix <= 0 || prefix > 30){
-        string msg = "Invalid prefix: ";
-        msg += prefix;
-        throw InvalidArgumentException(msg);
-    }
+    try {
+        char *lomitko = strchr(net, '/');
+        if (lomitko == NULL)
+            throw InvalidArgumentException("Net is not specified correctly, no '/' character'");
+        unsigned long ip_addr_len = lomitko - net;
+        prefix = stoi(lomitko + 1);
+        // is the prefix sane?
+        if (prefix <= 0 || prefix > 30) {
+            string msg = "Invalid prefix: ";
+            msg += prefix;
+            throw InvalidArgumentException(msg);
+        }
 
-    vector<unsigned char> tmp;
-    tmp.resize(ip_addr_len);
-    memcpy(tmp.data(),net,ip_addr_len);
-    IpAddress ipAddress(tmp);
-    return ipAddress;
+        vector<unsigned char> tmp;
+        tmp.resize(ip_addr_len);
+        memcpy(tmp.data(), net, ip_addr_len);
+        IpAddress ipAddress(tmp);
+        return ipAddress;
+
+    }catch (std::invalid_argument & e){}
+    catch (std::out_of_range & e){}
+    throw InvalidArgumentException("Wrong net/prefix format");
 }
 
 void parseReservedAddress(list<IpAddress> &reserved,char* string1){
@@ -103,6 +109,13 @@ void parseArguments(int argc, char** argv,IpAddress * networkAddress,int & prefi
     }
 }
 
+void printHelp(){
+    static const string txt = "Usage: ./dserver -p <netAddr>/<prefix> [-e <exluded1>,<exluded12>,...] [-f <file>]\n"
+                                                "-e allow excluded addresses\n"
+                                                "-d allow direct mapping\n";
+    cout << txt;
+}
+
 int main(int argc, char ** argv) {
     IpAddress networkAddress("0.0.0.0");
     int prefix;
@@ -113,8 +126,12 @@ int main(int argc, char ** argv) {
         parseArguments(argc,argv,&networkAddress,prefix,reserved,direct_mapping);
     }catch (InvalidArgumentException & e){
         std::cerr << e.toString() << std::endl;
+        printHelp();
+        return ERR_PARAMS;
     } catch(ParseException & e){
         std::cerr << e.toString() << std::endl;
+        printHelp();
+        return ERR_PARAMS;
     }
     AddressHandler handler(networkAddress,prefix,reserved,direct_mapping);
     std::cout << handler.toString() << std::endl;

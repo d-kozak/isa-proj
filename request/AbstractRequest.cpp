@@ -8,22 +8,18 @@
 #include "Request.h"
 #include "Release.h"
 
-void AbstractRequest::setMsg(const DhcpMessage &msg) {
-    this->_msg = msg;
-}
-
 AbstractRequest * ProtocolParser::parseRequest(DhcpMessage & msg){
     AbstractRequest * ret;
-    int type = (int)(*msg.getItem(msg.message_type));
+    char type = msg.getMeesageType();
     switch(type){
         case DISCOVER:
-            ret = new Discover();
+            ret = new Discover(msg);
             break;
         case REQUEST:
-            ret = new Request();
+            ret = new Request(msg);
             break;
         case RELEASE:
-            ret = new Release();
+            ret = new Release(msg);
             break;
         default:
             string res = "Mesage type not recoqnized : ";
@@ -31,12 +27,6 @@ AbstractRequest * ProtocolParser::parseRequest(DhcpMessage & msg){
             throw ParseException(res);
 
     }
-    ret->setMsg(msg);
     return ret;
 }
 
-
-vector<unsigned char> ProtocolParser::createMsg(AbstractRequest * req){
-    DhcpMessage msg;
-    return msg.createMessageVector();
-}

@@ -4,6 +4,7 @@
 
 #include <sstream>
 #include <vector>
+#include <algorithm>
 
 #include "ctype.h"
 #include "IpAddress.h"
@@ -17,6 +18,8 @@ namespace addressing {
         string s(address);
         this->initAddressFromString(s);
     }
+
+    IpAddress::IpAddress(int address):IpAddress((unsigned char *)&address){}
 
     IpAddress::IpAddress(vector<unsigned char> address){
         string s(address.begin(),address.end());
@@ -41,6 +44,14 @@ namespace addressing {
 
         int index = 0;
         int item;
+
+
+        if(std::count(address.begin(), address.end(),'.') != 3){
+            stringstream ss;
+            ss << "This address " << address << " is  a not correct ip address";
+            throw ParseException(ss.str());
+        }
+
         for (unsigned long i = 0; i < address.size(); i++) {
             item = address.at(i);
             if (buf_index == 3 && item != '.')
@@ -115,10 +126,13 @@ namespace addressing {
     }
 
     IpAddress &IpAddress::operator=(IpAddress other) {
-        std::swap(_parts[0], other._parts[0]);
-        std::swap(_parts[1], other._parts[1]);
-        std::swap(_parts[2], other._parts[2]);
-        std::swap(_parts[3], other._parts[3]);
+//        std::swap(_parts[0], other._parts[0]);
+//        std::swap(_parts[1], other._parts[1]);
+//        std::swap(_parts[2], other._parts[2]);
+//        std::swap(_parts[3], other._parts[3]);
+        for (int i = 0; i < ADDRESS_SIZE; ++i) {
+            this->_parts[i] = other._parts[i];
+        }
         return *this;
     }
 

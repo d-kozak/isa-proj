@@ -30,8 +30,8 @@ protected:
     DhcpMessage _msg;
 
 public:
+    AbstractRequest(DhcpMessage &msg):_msg(msg){}
     virtual void performTask(AddressHandler & handler) = 0;
-    void setMsg(const DhcpMessage &msg);
 };
 
 
