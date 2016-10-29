@@ -63,7 +63,7 @@ void parseReservedAddress(list<IpAddress> &reserved,char* string1){
 void parseDirectMapping(map<MacAddress,IpAddress>& direct_mapping,char* file){
     ifstream infile;
     infile.open(file);
-    if(!file){
+    if(!infile){
         stringstream ss;
         ss << "File " << file << " not found";
         throw InvalidArgumentException(ss.str());

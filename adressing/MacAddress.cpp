@@ -59,6 +59,12 @@ namespace addressing {
         this->_parts[5] = f;
     }
 
+    MacAddress::MacAddress(unsigned char * addr) {
+        for (int i = 0; i < MAC_SIZE; ++i) {
+            this->_parts[i] = addr[i];
+        }
+    }
+
     MacAddress::MacAddress(vector<unsigned char> addr) {
         if(addr.size() != 6){
             string msg = "Invalid size of MAC addr: ";

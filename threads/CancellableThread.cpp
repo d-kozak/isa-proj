@@ -5,11 +5,7 @@
 #include <sstream>
 #include "CancellableThread.h"
 
-CancellableThread::CancellableThread():_thread(),_isInterrupted(false){}
-
-void CancellableThread::start(){
-    this->_thread = thread([this] { this->run();});
-}
+CancellableThread::CancellableThread():_isInterrupted(false){}
 
 void CancellableThread::interrupt(){
     this->_isInterrupted = true;

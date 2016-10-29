@@ -15,6 +15,7 @@
 #include "../exceptions/InvalidArgumentException.h"
 #include "../adressing/IpAddress.h"
 #include "../adressing/MacAddress.h"
+#include "../exceptions/ParseException.h"
 
 #define OPT_SIZE 10
 #define CURRENT_MSG_SIZE 248
@@ -58,10 +59,6 @@ class DhcpMessage : public BaseObject {
     const int _sname = 44;
     const int _file = 110;
     const int _options = 238;
-    const int _message_type = _options + 0;
-    const int _lease_time = _options + _size_message_type;
-    const int _subnestMask = _options + _size_message_type + _size_lease_time;
-    const int _end = _options + _size_message_type + _size_lease_time + _size_subnet_mask;
 
     const int _size_xid = 4;
     const int _size_secs = 2;
@@ -74,8 +71,8 @@ class DhcpMessage : public BaseObject {
     const int _size_message_type = 1;
     const int _size_lease_time = 4;
     const int _size_subnet_mask = 4;
+    const int _size_server_identifier = 4;
     const int _size_end = 0;
-    const int _size_options = OPT_SIZE;
 
     //////////////////////////actual content of msg/////////////////////////////////////
     unsigned char op;
@@ -92,11 +89,21 @@ class DhcpMessage : public BaseObject {
     addressing::MacAddress chaddr;
     unsigned char sname[_size_sname];
     unsigned char file[_size_file];
-    unsigned char meesageType;
+
+
+    unsigned char messageType;
+    const unsigned char messageTypeID = 53;
 
     int leaseTime;
+    const unsigned char leaseTimeID = 51;
+
     addressing::IpAddress subnetMask;
-    unsigned char end;
+    const unsigned char subnetMaskID = 1;
+
+    addressing::IpAddress serverIdentifier;
+    const unsigned char serverIdentifierID = 54;
+
+    const unsigned char end = 255;
     //////////////////////////actual content of msg/////////////////////////////////////
 
 
@@ -111,6 +118,14 @@ class DhcpMessage : public BaseObject {
         destination.insert(destination.end(),from.begin(),from.end());
     }
 
+    void check_size_of_option(unsigned char real_size,unsigned char expected_size){
+        if(real_size != expected_size) {
+            stringstream ss;
+            ss << "Wrong size of option... " << real_size << " vs " << expected_size;
+            throw ParseException(ss.str());
+        }
+    }
+
 
 public:
 
@@ -119,11 +134,70 @@ public:
 
 
     DhcpMessage(vector<unsigned char>& msg){
-        initFromMsg(msg);
-    }
+        this->op = msg[_op];
+        this->htype = msg[_htype];
+        this->hlen = msg[_hlen];
+        this->hops = msg[_hops];
 
-    DhcpMessage initFromMsg(vector<unsigned char>& msg){
+        // todo check little x big endian
+        unsigned char* xid = (unsigned char*)&this->xid;
+        for (int i = 0; i < _size_xid; ++i) {
+            xid[i] = msg[_xid+i];
+        }
 
+        for (int j = 0; j < _size_secs; ++j) {
+            this->secs[j] = msg[_secs + j];
+        }
+
+        for (int j = 0; j < _size_flags; ++j) {
+            this->flags[j] = msg[_flags + j];
+        }
+
+        this->ciaddr = addressing::IpAddress(msg.data() + _ciaddr);
+        this->yiaddr = addressing::IpAddress(msg.data() + _yiaddr);
+        this->siaddr = addressing::IpAddress(msg.data() + _siaddr);
+        this->giaddr = addressing::IpAddress(msg.data() + _giaddr);
+        this->chaddr = addressing::MacAddress(msg.data() + _chaddr);
+        memcpy(this->sname,msg.data() + _sname,_size_sname);
+        memcpy(this->file,msg.data() + _file,_size_file);
+
+
+        // now parse options
+        int index = _options;
+        unsigned char opId;
+        while((opId = msg[index]) != end){
+            switch(opId){
+                case subnetMaskID:
+                    check_size_of_option(msg[index+1],_size_subnet_mask);
+                    index += 2;
+                    this->subnetMask = addressing::IpAddress(msg.data() + index);
+                    break;
+                case leaseTimeID:
+                    check_size_of_option(msg[index+1],_size_lease_time);
+                    index += 2;
+                    unsigned char* ptr = (unsigned char*) &leaseTime;
+                    for (int j = 0; j < _size_lease_time; ++j) {
+                        ptr[j] = msg[index + j];
+                    }
+                    break;
+                case messageTypeID:
+                    check_size_of_option(msg[index+1],_size_message_type);
+                    index += 2;
+                    this->messageType = msg[index];
+                    break;
+                case serverIdentifierID:
+                    check_size_of_option(msg[index+1],_size_server_identifier);
+                    index += 2;
+                    this->serverIdentifier = addressing::IpAddress(msg.data() + index);
+                    break;
+                default:
+                    stringstream ss;
+                    ss << "Unknown option id" << opId;
+                    throw ParseException(ss.str());
+
+            }
+            index++;
+        }
     }
 
 
@@ -146,7 +220,6 @@ public:
         this->setMeesageType(other.getMeesageType());
         this->setLeaseTime(other.getLeaseTime());
         this->setSubnetMask(other.getSubnetMask());
-        this->setEnd(other.getEnd());
         return *this;
     }
 
@@ -165,10 +238,25 @@ public:
         appendToVec(ret,giaddr);
         appendToVec(ret,sname,_size_sname);
         appendToVec(ret,file,_size_file);
-        ret.push_back(meesageType);
-        appendToVec(ret,(unsigned char*) &leaseTime,_size_lease_time);
+
+        ret.push_back(subnetMaskID);
+        ret.push_back(_size_subnet_mask);
         appendToVec(ret,subnetMask);
+
+        ret.push_back(leaseTimeID);
+        ret.push_back(_size_lease_time);
+        appendToVec(ret,(unsigned char *) leaseTime,4);
+
+        ret.push_back(messageTypeID);
+        ret.push_back(_size_message_type);
+        ret.push_back(messageType);
+
+        ret.push_back(serverIdentifierID);
+        ret.push_back(_size_server_identifier);
+        appendToVec(ret,serverIdentifier);
+
         ret.push_back(end);
+        ret.push_back(_size_end);
         return ret;
     }
 
@@ -318,19 +406,23 @@ public:
     }
 
     unsigned char getMeesageType() const {
-        return meesageType;
+        return messageType;
     }
 
     void setMeesageType(unsigned char meesageType) {
-        DhcpMessage::meesageType = meesageType;
+        DhcpMessage::messageType = meesageType;
     }
 
     unsigned char getEnd() const {
         return end;
     }
 
-    void setEnd(unsigned char end) {
-        DhcpMessage::end = end;
+    const addressing::IpAddress &getServerIdentifier() const {
+        return serverIdentifier;
+    }
+
+    void setServerIdentifier(const addressing::IpAddress &serverIdentifier) {
+        DhcpMessage::serverIdentifier = serverIdentifier;
     }
 
 };

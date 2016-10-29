@@ -13,15 +13,14 @@
 using namespace std;
 
 class ThreadWrapper: public BaseObject{
-    const string _name = "CancellableThread";
+    const string _name = "ThreadWrapper";
     std::thread _thread;
 
-    virtual void start() = 0;
+    virtual void run() = 0;
 public:
     ThreadWrapper();
     void start();
     void join();
-    virtual void run() = 0;
 
     virtual string toString();
     virtual string getLoggableName();

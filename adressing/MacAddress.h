@@ -23,6 +23,7 @@ namespace addressing {
         MacAddress(string addr);
         MacAddress(unsigned char a,unsigned  char b,unsigned  char c,unsigned  char d,unsigned  char e,unsigned char f);
         MacAddress(vector<unsigned char> addr);
+        MacAddress(unsigned char * addr);
 
         bool operator==(const MacAddress &lhs);
 //        bool operator==(const MacAddress &lhs,MacAddress &rhs);
