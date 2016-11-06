@@ -3,7 +3,7 @@
 //
 
 #include "cppUnit.h"
-#include "../adressing/IpAddress.h"
+#include "../../adressing/IpAddress.h"
 #include "iph.h"
 #include <bitset>
 

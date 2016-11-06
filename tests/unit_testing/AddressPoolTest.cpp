@@ -4,8 +4,8 @@
 
 #include "AddressPoolTest.h"
 
-#include "../adressing/IpAddress.h"
-#include "../adressing/AddressPool.h"
+#include "../../adressing/IpAddress.h"
+#include "../../adressing/AddressPool.h"
 
 using namespace addressing;
 

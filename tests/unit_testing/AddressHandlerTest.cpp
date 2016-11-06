@@ -4,8 +4,8 @@
 
 #include "AddressHandlerTest.h"
 #include <unistd.h>
-#include "../adressing/AddressHandler.h"
-#include "../exceptions/InvalidArgumentException.h"
+#include "../../adressing/AddressHandler.h"
+#include "../../exceptions/InvalidArgumentException.h"
 
 using namespace addressing;
 

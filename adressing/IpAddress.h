@@ -35,7 +35,7 @@ namespace addressing {
 
         IpAddress next_addr(int distance);
 
-        in_addr_t getAddrForSocket();
+        uint32_t getAddrForSocket();
         string asString();
         vector<unsigned char> asVector();
 

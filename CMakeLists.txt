@@ -26,7 +26,7 @@ set(SOURCE_FILES
 #        exceptions/BaseException.cpp exceptions/BaseException.h
         )
 
-set(TEST_FILES tests/cppUnit.cpp tests/cppUnit.h
+set(TEST_FILES tests/unit_testing/cppUnit.cpp tests/unit_testing/cppUnit.h
         constants.h
 
         BaseObject.h
@@ -60,15 +60,15 @@ set(TEST_FILES tests/cppUnit.cpp tests/cppUnit.h
         exceptions/InvalidArgumentException.cpp exceptions/InvalidArgumentException.h
         exceptions/SocketException.cpp exceptions/SocketException.h
 
-        tests/testStarter.cpp
-        tests/MacAddrTest.cpp tests/mach.h
-        tests/IpAddrTest.cpp tests/iph.h
-        tests/TimestampTest.cpp tests/TimestampTest.h
-        tests/reservationTest.cpp tests/reservationTest.h
-        tests/AddressPairTest.cpp tests/AddressPairTest.h
-        tests/AddressPoolTest.cpp tests/AddressPoolTest.h
-        tests/AddressCollectorTest.cpp tests/AddressCollectorTest.h
-        tests/AddressHandlerTest.cpp tests/AddressHandlerTest.h)
+        tests/unit_testing/testStarter.cpp
+        tests/unit_testing/MacAddrTest.cpp tests/unit_testing/mach.h
+        tests/unit_testing/IpAddrTest.cpp tests/unit_testing/iph.h
+        tests/unit_testing/TimestampTest.cpp tests/unit_testing/TimestampTest.h
+        tests/unit_testing/reservationTest.cpp tests/unit_testing/reservationTest.h
+        tests/unit_testing/AddressPairTest.cpp tests/unit_testing/AddressPairTest.h
+        tests/unit_testing/AddressPoolTest.cpp tests/unit_testing/AddressPoolTest.h
+        tests/unit_testing/AddressCollectorTest.cpp tests/unit_testing/AddressCollectorTest.h
+        tests/unit_testing/AddressHandlerTest.cpp tests/unit_testing/AddressHandlerTest.h)
 
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "/home/david/projects/isa-proj/output")

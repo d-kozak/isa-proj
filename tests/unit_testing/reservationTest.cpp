@@ -4,9 +4,9 @@
 
 #include "reservationTest.h"
 #include "cppUnit.h"
-#include "../adressing/IpAddress.h"
-#include "../adressing/Timestamp.h"
-#include "../adressing/Reservation.h"
+#include "../../adressing/IpAddress.h"
+#include "../../adressing/Timestamp.h"
+#include "../../adressing/Reservation.h"
 
 using namespace addressing;
 

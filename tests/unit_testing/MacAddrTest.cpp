@@ -3,7 +3,7 @@
 //
 
 #include "cppUnit.h"
-#include "../adressing/MacAddress.h"
+#include "../../adressing/MacAddress.h"
 #include "mach.h"
 
 using namespace addressing;

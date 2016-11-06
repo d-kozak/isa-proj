@@ -94,15 +94,14 @@ namespace addressing {
         this->_parts[3] = d;
     }
 
-    in_addr_t IpAddress::getAddrForSocket(){
-        in_addr_t ret;
+    uint32_t IpAddress::getAddrForSocket(){
+        uint32_t ret = 0;
 
-        in_addr_t first = _parts[0];
-        in_addr_t second = _parts[1];
-        in_addr_t third = _parts[2];
-        in_addr_t fourth = _parts[3];
+        uint32_t first = _parts[0];
+        uint32_t second = _parts[1];
+        uint32_t third = _parts[2];
+        uint32_t fourth = _parts[3];
 
-        ret ^= ret;
         ret = (first << 24) | (second << 16) | (third << 8) | fourth;
         return ret;
     }

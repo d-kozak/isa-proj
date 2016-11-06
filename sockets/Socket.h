@@ -16,13 +16,13 @@ using namespace addressing;
 class Socket : public BaseObject{
     const std::string _name = "Socket";
     const int DHCP_PORT_LISTEN = 1024; // correct is 68 :)
-    const int DHCP_PORT_SEND = 67; // correct is 67 :)
+    const int DHCP_PORT_SEND = 1023; // correct is 67 :)
     IpAddress _addr;
     int _fd;
 
     void initSocket();
     void closeSocket();
-    struct sockaddr_in initsockaddr(uint32_t addr,bool bindImmediately);
+    struct sockaddr_in initsockaddr(uint32_t addr,bool forListening);
     struct sockaddr_in initsockaddr(string addr, bool bindImmediately);
 public:
     Socket(const IpAddress & addr);

@@ -6,4 +6,5 @@
 
 InvalidArgumentException::InvalidArgumentException(string msg){
     this->_msg = msg;
+    this->_name = "InvalidArgumentException";
 }

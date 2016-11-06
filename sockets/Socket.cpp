@@ -35,14 +35,15 @@ vector<unsigned char> Socket::getMessage() {
 
     length = sizeof(client);
 
-    while ((msg_size = recvfrom(_fd, data.data(), BUFFER_SIZE, 0, (struct sockaddr *) &client, &length)) >= 0) {
-        printf("Request received from %s, port %d\n", inet_ntoa(client.sin_addr), ntohs(client.sin_port));
-        cout << data.data() << endl;
-    }
+    msg_size = recvfrom(_fd, data.data(), BUFFER_SIZE, 0, (struct sockaddr *) &client, &length);
     if (msg_size == -1) {
         perror("Socket");
         throw SocketException("recvfrom() failed");
     }
+
+
+    printf("Request received from %s, port %d\n", inet_ntoa(client.sin_addr), ntohs(client.sin_port));
+    cout << data.data() << endl;
     this->closeSocket();
     return data;
 }
@@ -51,14 +52,14 @@ struct sockaddr_in Socket::initsockaddr(string addr, bool bindImmediately) {
     return this->initsockaddr(inet_addr(addr.c_str()), bindImmediately);
 }
 
-struct sockaddr_in Socket::initsockaddr(uint32_t addr, bool bindImmediately) {
+struct sockaddr_in Socket::initsockaddr(uint32_t addr, bool forListening) {
     struct sockaddr_in server;                      // server's address structure
     memset(&server, 0, sizeof(server));
     server.sin_family = AF_INET;                     // set IPv4 addressing
     server.sin_addr.s_addr = addr;           // the server listens to any interface
-    server.sin_port = htons(DHCP_PORT_LISTEN);              // the server listens on this port
+    server.sin_port = htons(forListening ? DHCP_PORT_LISTEN : DHCP_PORT_SEND);              // the server listens on this port
 
-    if (bindImmediately) {
+    if (forListening) {
         printf("binding to the port %d (%d)\n", DHCP_PORT_LISTEN, server.sin_port);
         if (bind(this->_fd, (struct sockaddr *) &server, sizeof(server)) == -1) { // binding with the port
             perror("Socket");

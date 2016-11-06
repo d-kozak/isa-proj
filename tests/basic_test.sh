@@ -1,0 +1,1 @@
+socat - UDP-DATAGRAM:255.255.255.255:1024,broadcast

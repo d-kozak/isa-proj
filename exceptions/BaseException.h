@@ -11,8 +11,8 @@
 using namespace std;
 
 class BaseException : BaseObject {
-    const string _name = "BaseException";
 protected:
+    string _name = "BaseException";
     string _msg;
 public:
     BaseException():_msg("NULL"){}
