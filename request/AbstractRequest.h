@@ -32,6 +32,9 @@ protected:
 public:
     AbstractRequest(DhcpMessage &msg):_msg(msg){}
     virtual void performTask(AddressHandler & handler) = 0;
+
+    void sendAck();
+    void sendNack();
 };
 
 
@@ -39,15 +42,24 @@ class AbstractReply : public BaseObject {
     friend class ProtocolParser;
 public:
     virtual void performTask(DhcpMessage & msg, IpAddress & addr,AddressHandler & handler) = 0;
+
 };
 
 
 using namespace std;
 
 class ProtocolParser {
+    // pointer to created request so that it will be deleted automatically when protocol parser's destructor is called
+    AbstractRequest * req;
+    void cleanPtrIfSet();
 public:
+    ProtocolParser():req(nullptr){}
     AbstractRequest * parseRequest(DhcpMessage &dhcp_msg);
-    vector<unsigned char> createMsg(AbstractRequest * req);
+
+    ~ProtocolParser(){
+        cleanPtrIfSet();
+    }
 };
+
 
 #endif //ISA_PROJ_ABSTRACTREQUEST_H

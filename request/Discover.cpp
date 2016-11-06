@@ -14,11 +14,8 @@ void Discover::performTask(AddressHandler & handler){
     try {
         MacAddress macAddr = _msg.getChaddr();
         IpAddress newAddr = handler.getAddressFor(macAddr);
-
-        AbstractReply * reply = new Offer();
-        reply->performTask(_msg,newAddr,handler);
-        delete (Offer *)reply;
-
+        Offer offer;
+        offer.performTask(_msg,newAddr,handler);
     }catch (OutOfAddressException & e){
         std::cerr << e.toString() << std::endl;
     }

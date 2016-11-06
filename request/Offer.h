@@ -11,11 +11,12 @@
 class Offer : public AbstractReply {
     const string _name = "Offer";
 public:
+    Offer(){}
     virtual void performTask(DhcpMessage & msg, IpAddress & addr,AddressHandler & handler);
 
     virtual string toString();
     virtual string getLoggableName();
-
+    ~Offer(){}
 };
 
 

@@ -27,8 +27,10 @@ set(SOURCE_FILES
         )
 
 set(TEST_FILES tests/cppUnit.cpp tests/cppUnit.h
+        constants.h
 
         BaseObject.h
+
 
         adressing/IpAddress.cpp adressing/IpAddress.h
         adressing/MacAddress.cpp adressing/MacAddress.h
@@ -44,6 +46,7 @@ set(TEST_FILES tests/cppUnit.cpp tests/cppUnit.h
         request/Discover.cpp request/Discover.h
         request/Release.cpp request/Release.h
         request/Request.cpp request/Request.h
+        request/Offer.cpp request/Offer.h
         request/DhcpMessage.cpp request/DhcpMessage.h
 
         threads/ThreadWrapper.cpp threads/ThreadWrapper.h
@@ -65,7 +68,7 @@ set(TEST_FILES tests/cppUnit.cpp tests/cppUnit.h
         tests/AddressPairTest.cpp tests/AddressPairTest.h
         tests/AddressPoolTest.cpp tests/AddressPoolTest.h
         tests/AddressCollectorTest.cpp tests/AddressCollectorTest.h
-        tests/AddressHandlerTest.cpp tests/AddressHandlerTest.h constants.h)
+        tests/AddressHandlerTest.cpp tests/AddressHandlerTest.h)
 
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "/home/david/projects/isa-proj/output")
@@ -73,6 +76,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "/home/david/projects/isa-proj/output")
 set(PROGRAM_FILES
 
         main.cpp
+        constants.h
 
         adressing/IpAddress.cpp adressing/IpAddress.h
         adressing/MacAddress.cpp adressing/MacAddress.h
@@ -88,6 +92,9 @@ set(PROGRAM_FILES
         request/Discover.cpp request/Discover.h
         request/Release.cpp request/Release.h
         request/Request.cpp request/Request.h
+        request/Offer.cpp request/Offer.h
+
+        request/DhcpMessage.cpp request/DhcpMessage.h
 
         threads/ThreadWrapper.cpp threads/ThreadWrapper.h
         threads/CancellableThread.cpp threads/CancellableThread.h
@@ -99,8 +106,7 @@ set(PROGRAM_FILES
         exceptions/OutOfAddressException.cpp exceptions/OutOfAddressException.h
         exceptions/InvalidArgumentException.cpp exceptions/InvalidArgumentException.h
         exceptions/SocketException.cpp exceptions/SocketException.h
-
-        request/DhcpMessage.cpp request/DhcpMessage.h request/Offer.cpp request/Offer.h constants.h)
+        )
 
 
 add_executable(isa_proj ${PROGRAM_FILES})

@@ -27,6 +27,24 @@ AbstractRequest * ProtocolParser::parseRequest(DhcpMessage & msg){
             throw ParseException(res);
 
     }
+    cleanPtrIfSet();
+    this->req = ret;
     return ret;
+}
+
+
+void AbstractRequest::sendAck(){
+
+}
+
+
+void AbstractRequest::sendNack(){
+
+}
+
+
+void ProtocolParser::cleanPtrIfSet(){
+    if(req != nullptr)
+        delete req;
 }
 
