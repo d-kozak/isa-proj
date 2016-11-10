@@ -131,52 +131,52 @@ public:
     }
 
 
-    const addressing::MacAddress &getChaddr() const {
+    addressing::MacAddress &getChaddr() {
         return chaddr;
     }
 
-    void setChaddr(const addressing::MacAddress &chaddr) {
+    void setChaddr(addressing::MacAddress &chaddr) {
         DhcpMessage::chaddr = chaddr;
     }
 
 
-    const addressing::IpAddress &getCiaddr() const {
+    addressing::IpAddress &getCiaddr() {
         return ciaddr;
     }
 
-    void setCiaddr(const addressing::IpAddress &ciaddr) {
+    void setCiaddr(addressing::IpAddress &ciaddr) {
         DhcpMessage::ciaddr = ciaddr;
     }
 
-    const addressing::IpAddress &getYiaddr() const {
+    addressing::IpAddress &getYiaddr() {
         return yiaddr;
     }
 
-    void setYiaddr(const addressing::IpAddress &yiaddr) {
+    void setYiaddr(addressing::IpAddress &yiaddr) {
         DhcpMessage::yiaddr = yiaddr;
     }
 
-    const addressing::IpAddress &getSiaddr() const {
+    addressing::IpAddress &getSiaddr() {
         return siaddr;
     }
 
-    void setSiaddr(const addressing::IpAddress &siaddr) {
+    void setSiaddr(addressing::IpAddress &siaddr) {
         DhcpMessage::siaddr = siaddr;
     }
 
-    const addressing::IpAddress &getGiaddr() const {
+    addressing::IpAddress &getGiaddr() {
         return giaddr;
     }
 
-    void setGiaddr(const addressing::IpAddress &giaddr) {
+    void setGiaddr(addressing::IpAddress &giaddr) {
         DhcpMessage::giaddr = giaddr;
     }
 
-    const addressing::IpAddress &getSubnetMask() const {
+    addressing::IpAddress &getSubnetMask()  {
         return subnetMask;
     }
 
-    void setSubnetMask(const addressing::IpAddress &subnetMask) {
+    void setSubnetMask( addressing::IpAddress &subnetMask) {
         DhcpMessage::subnetMask = subnetMask;
     }
 

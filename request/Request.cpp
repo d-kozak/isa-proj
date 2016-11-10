@@ -5,12 +5,11 @@
 #include "Request.h"
 
 void Request::performTask(AddressHandler & handler){
-    IpAddress serverAddres = handler.getServerAddress();
-    if(serverAddres == _msg.getServerIdentifier()){
-        // nothing for now, address is already assigned
-    } else {
-        MacAddress address = _msg.getChaddr();
-        handler.releaseAddress(address);
+    IpAddress serverAddress = handler.getServerAddress();
+    if(serverAddress == _msg.getServerIdentifier()){
+        MacAddress & mac = _msg.getChaddr();
+        IpAddress & ciaddr = _msg.getCiaddr();
+        handler.confirmBindingFor(ciaddr,mac);
     }
 }
 

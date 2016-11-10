@@ -25,11 +25,8 @@ namespace addressing {
         net_address = net_address.next_addr(); //skip the net_address one <- that one is for the server itself
 
         for (IpAddress addr = net_address.next_addr(); addr != lastAddr; addr = addr.next_addr()) {
-            // TODO find out why the hell this does not work 192.198.0.2
-            if(find(this->_reserved.begin(),this->_reserved.end(),addr) != this->_reserved.end())
-                continue;
-
-            AddressInfo pair(addr);
+            bool isReserved = find(this->_reserved.begin(),this->_reserved.end(),addr) != this->_reserved.end();
+            AddressInfo pair(addr, isReserved ? DISABLED : FREE);
             this->_addresses.push_back(pair);
         }
     }
@@ -62,13 +59,30 @@ namespace addressing {
     }
 
     void AddressPool::confirmBindigFor(addressing::IpAddress & addr, addressing::MacAddress & mac){
-        for (auto &item : this->_addresses) {
-            if (item.getAddress() == addr) {
-                if(item.getState() == TO_BE_BINDED){
-                    item.bindTheAddress(mac);
-                    return;
-                } else {
-                    throw InvalidArgumentException("Given address is in invalid state");
+        //check whether ip was specified
+        if(addr.getAddrForSocket() == 0){
+            for (auto &item : this->_addresses) {
+                if (item.getMac() != NULL) {
+                    if (*item.getMac() == mac) {
+                        if (item.getState() == TO_BE_BINDED) {
+                            item.bindTheAddress(mac);
+                            return;
+                        } else {
+                            throw InvalidArgumentException("Given address is in invalid state");
+                        }
+                    }
+                }
+            }
+
+        } else {
+            for (auto &item : this->_addresses) {
+                if (item.getAddress() == addr) {
+                    if (item.getState() == TO_BE_BINDED) {
+                        item.bindTheAddress(mac);
+                        return;
+                    } else {
+                        throw InvalidArgumentException("Given address is in invalid state");
+                    }
                 }
             }
         }

@@ -14,7 +14,8 @@ void Offer::performTask(DhcpMessage & _msg, IpAddress & _addr,AddressHandler & _
     _msg.setYiaddr(_addr);
     _msg.setLeaseTime(LEASE_TIME);
     _msg.setServerIdentifier(_handler.getServerAddress());
-    _msg.setSubnetMask(IpAddress::getNetMaskFor(_handler.get_prefix()));
+    IpAddress addr = IpAddress::getNetMaskFor(_handler.get_prefix());
+    _msg.setSubnetMask(addr);
 
     vector<unsigned char> msg = _msg.createMessageVector();
     socket1.sendMessage(msg,broadcast);
