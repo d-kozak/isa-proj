@@ -43,8 +43,6 @@ namespace addressing {
     class AddressHandler : public BaseObject {
         const string _name = "AddressHandler";
         recursive_mutex _lock;
-        map<MacAddress,Reservation> _reservations;
-        map<MacAddress,IpAddress> _directMapping;
         AddressPool _pool;
         AddressCollector _collector;
 
@@ -61,14 +59,15 @@ namespace addressing {
         void releaseAddress(MacAddress & mac);
         void printCurrentState();
 
-        const int getPrefix() const ;
+        void confirmBindingFor(IpAddress & addr,MacAddress & mac);
+
+        const int getPrefix() const;
 
         virtual string toString();
         virtual string getLoggableName();
 
         void start();
         void interrupt();
-
 
         const int get_prefix() const;
 

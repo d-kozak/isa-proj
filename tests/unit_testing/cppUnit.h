@@ -12,7 +12,7 @@
                             if(!(expr)) { std::cerr << "\t\t" <<msg << std::endl; return false;}\
                         } while(0)
 
-#define TEST_CASE(name,body) bool name(){body;return true;}
+#define TEST_CASE(name,body) bool name(){{body;} return true;}
 #define FAIL return false
 #define SUCCESS return true
 

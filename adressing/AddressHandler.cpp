@@ -10,37 +10,26 @@
 namespace addressing {
     AddressHandler::AddressHandler(IpAddress &net_address, int prefix, list <IpAddress> &reserved,
                                    map<MacAddress, IpAddress> &direct_mapping) :
-            _lock(), _reservations(), _directMapping(direct_mapping), _pool(net_address, prefix, reserved),
+            _lock(), _pool(net_address, prefix, reserved,direct_mapping),
             _collector(this),_prefix(prefix),serverAddress(net_address.next_addr()) {}
 
 
     IpAddress AddressHandler::getAddressFor(MacAddress &mac) {
         lock_guard<recursive_mutex>(this->_lock);
-
-        // first check if the address is not already there
-        auto item = this->_reservations.find(mac);
-        if (item != this->_reservations.end())
-            return (*item).second.getIpAddress();
-
-        IpAddress addr = this->_pool.getAddress();
-        Timestamp stamp;
-        Reservation reservation(addr, stamp);
-//        this->_reservations[mac] = reservation;
-        this->_reservations.emplace(mac, reservation);
+        IpAddress addr = this->_pool.getAddress(mac);
         return addr;
+    }
+
+    void AddressHandler::confirmBindingFor(IpAddress & addr,MacAddress & mac){
+        lock_guard<recursive_mutex>(this->_lock);
+        this->_pool.confirmBindigFor(addr,mac);
     }
 
     void AddressHandler::releaseAddress(MacAddress &mac) {
         lock_guard<recursive_mutex>(this->_lock);
-        auto item = this->_reservations.find(mac);
-        if (item != this->_reservations.end()) {
-            IpAddress toClean = (*item).second.getIpAddress();
-            this->_pool.releaseAddress(toClean);
-            this->_reservations.erase(item);
-        } else {
-            throw InvalidArgumentException("Mac address " + mac.toString() + " is not a part of any known reservation");
-        }
+        this->_pool.releaseAddress(mac);
     }
+
 
     const int AddressHandler::getPrefix() const {
         return this->_prefix;
@@ -56,10 +45,6 @@ namespace addressing {
         ss << "------------------------------" << endl;
         ss << this->_name << " -> " << endl;
         ss << this->_pool.toString() << endl;
-        ss << "Static mapping -> {" << endl;
-        for (auto & elem : this->_directMapping){
-            ss << "\t" << constRefToString(elem.first) << " => " << elem.second.asString() << endl;
-        }
         ss << "}" << endl;
         ss << this->_collector.toString() << endl;
         ss << "------------------------------";
@@ -108,16 +93,16 @@ namespace addressing {
             lock_guard<recursive_mutex>(this->_handler->_lock);
             // It is not possible to iterate a collection and delete its elemetns at once,
             // thats why we first get the list of items and delete it later
-            list <MacAddress> to_release;
-            for (auto &item : this->_handler->_reservations) {
-                if (item.second.getTimestamp().isLeaseExpired()) {
-                    cout << "COLLECTOR will removing reservation for " << item.second.getIpAddress().toString() << endl;
-                    MacAddress tmp = item.first;
-                    to_release.push_back(tmp);
-                }
+            list <IpAddress> to_expire;
+            for (auto &item : this->_handler->_pool.getAddresses()) {
+                if (item.getState() == BINDED) {
+                    if(item.getTimestamp()->isLeaseExpired()){
+                    cout << "COLLECTOR will removing reservation for " << item.getAddress().toString() << endl;
+                    to_expire.push_back(item.getAddress());
+                }}
             }
-            for (auto &x: to_release) {
-                this->_handler->releaseAddress(x);
+            for (auto &x: to_expire) {
+                this->_handler->_pool.addressExpired(x);
             }
             sleep(1);
         }

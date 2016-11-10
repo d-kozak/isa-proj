@@ -9,16 +9,16 @@ using namespace addressing;
 
 TEST_CASE(AddressPairToString,
           IpAddress addr(192,168,0,1);
-        AddressPair pair(addr);
-                  MY_ASSERT(pair.toString() == "AddressPair -> (IpAddress -> 192.168.0.1, free)","toStringfailed");
-                  pair.setIsFree(false);
-                  MY_ASSERT(pair.toString() == "AddressPair -> (IpAddress -> 192.168.0.1, reserved)","toStringfailed2");
+        AddressInfo pair(addr);
+                  MY_ASSERT(pair.toString() == "AddressInfo -> (IpAddress -> 192.168.0.1, FREE)","toStringfailed");
+                  pair.setState(addressing::BINDED);
+                  MY_ASSERT(pair.toString() == "AddressInfo -> (IpAddress -> 192.168.0.1, BINDED)","toStringfailed2");
 );
 
 TestSuite getAddressPairTestsuite(){
     Test t1("toString",AddressPairToString);
 
-    TestSuite suite("AddressPair");
+    TestSuite suite("AddressInfo");
     suite.add(t1);
     return suite;
 }

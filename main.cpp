@@ -114,7 +114,7 @@ void parseArguments(int argc, char **argv, IpAddress *networkAddress, int &prefi
 }
 
 void printHelp() {
-    static const string txt = "Usage: ./dserver -p <netAddr>/<prefix> [-e <exluded1>,<exluded12>,...] [-f <file>]\n"
+    static const string txt = "Usage: ./dserver -p <netAddr>/<prefix> [-e <exluded1>,<exluded12>,...] [-d <file>]\n"
             "-e allow excluded addresses\n"
             "-d allow direct mapping\n";
     cout << txt;

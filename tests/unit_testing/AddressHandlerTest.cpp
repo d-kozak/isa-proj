@@ -18,14 +18,22 @@ TEST_CASE(address_handler_basic,
               list <IpAddress> reserved;
               AddressHandler handler(first, prefix, reserved, direct_mapping);
 
+              handler.start();
+
               MacAddress mac1(5, 5, 5, 5, 5, 5);
               MacAddress mac2(1, 1, 1, 1, 1, 1);
               MacAddress mac3(2, 2,2, 2, 2, 2);
-              IpAddress result = handler.getAddressFor(mac1);
-              handler.getAddressFor(mac2);
-              handler.getAddressFor(mac3);
+              IpAddress result1 = handler.getAddressFor(mac1);
+              handler.confirmBindingFor(result1,mac1);
+              IpAddress result2 = handler.getAddressFor(mac2);
+              handler.confirmBindingFor(result2,mac2);
+              IpAddress result3 = handler.getAddressFor(mac3);
+              handler.confirmBindingFor(result3,mac3);
               handler.releaseAddress(mac1);
-              result = handler.getAddressFor(mac1);
+              result3 = handler.getAddressFor(mac1);
+
+
+              handler.interrupt();
 
           } catch (InvalidArgumentException &e) {
               cerr << e.what() << endl;
@@ -46,6 +54,7 @@ TEST_CASE(address_handler_advanced,
               handler.start();
 
               IpAddress result = handler.getAddressFor(mac);
+              handler.confirmBindingFor(result,mac);
               handler.printCurrentState();
               // now wait for the address to expire :)
               sleep(2);

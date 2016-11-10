@@ -19,6 +19,7 @@ namespace addressing {
 
     Timestamp &Timestamp::operator=(Timestamp other){
         this->_startTime = other._startTime;
+        return *this;
     }
 
     bool Timestamp::isLeaseExpired() {
