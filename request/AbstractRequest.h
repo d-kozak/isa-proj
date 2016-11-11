@@ -32,9 +32,7 @@ protected:
 public:
     AbstractRequest(DhcpMessage &msg):_msg(msg){}
     virtual void performTask(AddressHandler & handler) = 0;
-
-    void sendAck();
-    void sendNack();
+    virtual ~AbstractRequest() = 0;
 };
 
 
@@ -42,6 +40,8 @@ class AbstractReply : public BaseObject {
     friend class ProtocolParser;
 public:
     virtual void performTask(DhcpMessage & msg, IpAddress & addr,AddressHandler & handler) = 0;
+
+    virtual ~AbstractReply() = 0;
 
 };
 

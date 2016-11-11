@@ -11,7 +11,7 @@ namespace addressing {
     AddressHandler::AddressHandler(IpAddress &net_address, int prefix, list <IpAddress> &reserved,
                                    map<MacAddress, IpAddress> &direct_mapping) :
             _lock(), _pool(net_address, prefix, reserved,direct_mapping),
-            _collector(this),_prefix(prefix),serverAddress(net_address.next_addr()) {}
+            _collector(this),_prefix(prefix),_serverAddress(net_address.next_addr()) {}
 
 
     IpAddress AddressHandler::getAddressFor(MacAddress &mac) {
@@ -69,7 +69,7 @@ namespace addressing {
     }
 
     const IpAddress &AddressHandler::getServerAddress() const {
-        return serverAddress;
+        return _serverAddress;
     }
 
     /////////////////////////////////////////////////////////

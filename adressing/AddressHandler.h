@@ -47,7 +47,7 @@ namespace addressing {
         AddressCollector _collector;
 
         const int _prefix;
-        const IpAddress serverAddress;
+        const IpAddress _serverAddress;
 
 
         friend class AddressCollector;
@@ -72,6 +72,7 @@ namespace addressing {
         const int get_prefix() const;
 
         const IpAddress &getServerAddress() const;
+        const IpAddress &getSubnetMask() const;
     };
 }
 

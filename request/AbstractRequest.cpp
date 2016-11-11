@@ -7,6 +7,7 @@
 #include "Discover.h"
 #include "Request.h"
 #include "Release.h"
+#include "../constants.h"
 
 AbstractRequest * ProtocolParser::parseRequest(DhcpMessage & msg){
     AbstractRequest * ret;
@@ -32,14 +33,11 @@ AbstractRequest * ProtocolParser::parseRequest(DhcpMessage & msg){
     return ret;
 }
 
-
-void AbstractRequest::sendAck(){
-
-}
-
-
-void AbstractRequest::sendNack(){
-
+void AbstractReply::performTask(DhcpMessage & msg, IpAddress & addr,AddressHandler & handler){
+    msg.setServerIdentifier(handler.getServerAddress());
+    IpAddress netmask = IpAddress::getNetMaskFor(handler.get_prefix());
+    msg.setSubnetMask(netmask);
+    msg.setLeaseTime(LEASE_TIME);
 }
 
 
@@ -48,3 +46,12 @@ void ProtocolParser::cleanPtrIfSet(){
         delete req;
 }
 
+
+
+AbstractRequest::~AbstractRequest(){
+
+}
+
+AbstractReply::~AbstractReply(){
+
+}

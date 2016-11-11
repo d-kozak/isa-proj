@@ -8,6 +8,8 @@ void Release::performTask(AddressHandler & handler){
     IpAddress addressToRelease = _msg.getCiaddr();
     MacAddress address = _msg.getChaddr();
     handler.releaseAddress(address);
+
+
 }
 
 string Release::toString(){

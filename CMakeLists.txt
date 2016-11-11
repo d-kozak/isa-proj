@@ -68,7 +68,7 @@ set(TEST_FILES tests/unit_testing/cppUnit.cpp tests/unit_testing/cppUnit.h
         tests/unit_testing/AddressPairTest.cpp tests/unit_testing/AddressPairTest.h
         tests/unit_testing/AddressPoolTest.cpp tests/unit_testing/AddressPoolTest.h
         tests/unit_testing/AddressCollectorTest.cpp tests/unit_testing/AddressCollectorTest.h
-        tests/unit_testing/AddressHandlerTest.cpp tests/unit_testing/AddressHandlerTest.h)
+        tests/unit_testing/AddressHandlerTest.cpp tests/unit_testing/AddressHandlerTest.h request/Ack.cpp request/Ack.h request/Nack.cpp request/Nack.h)
 
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "/home/david/projects/isa-proj/output")
@@ -106,7 +106,7 @@ set(PROGRAM_FILES
         exceptions/OutOfAddressException.cpp exceptions/OutOfAddressException.h
         exceptions/InvalidArgumentException.cpp exceptions/InvalidArgumentException.h
         exceptions/SocketException.cpp exceptions/SocketException.h
-        )
+        request/Ack.cpp request/Ack.h request/Nack.cpp request/Nack.h)
 
 
 add_executable(isa_proj ${PROGRAM_FILES})

@@ -7,15 +7,14 @@
 #include "../constants.h"
 
 void Offer::performTask(DhcpMessage & _msg, IpAddress & _addr,AddressHandler & _handler) {
+    AbstractReply::performTask(_msg,_addr,_handler);
     IpAddress broadcast = IpAddress::getBroadcastAddr();
     Socket socket1(broadcast);
 
     _msg.setOp(BOOT_REPLY);
     _msg.setYiaddr(_addr);
-    _msg.setLeaseTime(LEASE_TIME);
-    _msg.setServerIdentifier(_handler.getServerAddress());
-    IpAddress addr = IpAddress::getNetMaskFor(_handler.get_prefix());
-    _msg.setSubnetMask(addr);
+    _msg.setMeesageType(OFFER);
+
 
     vector<unsigned char> msg = _msg.createMessageVector();
     socket1.sendMessage(msg,broadcast);
