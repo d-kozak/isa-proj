@@ -67,7 +67,9 @@ static const int _size_sname = 64;
 static const int _size_file = 128;
 static const int _size_options = 64;
 
-#define MSG_SIZE_WITH_OPTIONS 240 + 64
+static const int MSG_SIZE  = 236;
+static const int MAGIC_COOKIES_SIZE  = 4;
+static const int MSG_SIZE_WITH_OPTIONS  = 240 + 64;
 
 static const int _size_message_type = 1;
 static const int _size_lease_time = 4;
@@ -76,6 +78,7 @@ static const int _size_server_identifier = 4;
 static const int _size_end = 0;
 
 enum optionType {
+    pad = 0,
     messageTypeID = 53,
     leaseTimeID = 51,
     subnetMaskID = 1,
@@ -105,7 +108,7 @@ class DhcpMessage : public BaseObject {
 
     //options
     unsigned char messageType;
-    int leaseTime;
+    unsigned int leaseTime;
     addressing::IpAddress subnetMask;
     addressing::IpAddress serverIdentifier;
     const unsigned char end = 255;
@@ -252,11 +255,11 @@ public:
         memcpy(this->file, from, _size_file);
     }
 
-    int getLeaseTime() const {
+    unsigned int getLeaseTime() const {
         return leaseTime;
     }
 
-    void setLeaseTime(int leaseTime) {
+    void setLeaseTime( unsigned int leaseTime) {
         DhcpMessage::leaseTime = leaseTime;
     }
 

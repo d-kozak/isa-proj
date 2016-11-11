@@ -9,21 +9,18 @@
 #define getDataTypeFromCharVec(dataType, charVec, index) (*((dataType *) (&charVec[index])))
 #define getElemAsType(type, vec, index) *((type *)(&vec[index]))
 
-void appendToVec(vector<unsigned char> &vec, unsigned char *source, int size) {
-    for (int i = 0; i < size; ++i) {
-        vec.push_back(source[i]);
-    }
-}
 
-void appendToVec(vector<unsigned char> &destination, addressing::IpAddress &addr) {
-    vector<unsigned char> from = addr.asVector();
-    destination.insert(destination.end(), from.begin(), from.end());
-}
-
-void check_size_of_option(unsigned char real_size, unsigned char expected_size) {
-    if (real_size != expected_size) {
+void check_size_of_option(unsigned char realSize, unsigned char expectedSize, unsigned long currentIndex,
+                          unsigned long sizeOfMsg) {
+    if (realSize != expectedSize) {
         stringstream ss;
-        ss << "Wrong size of option... " << real_size << " vs " << expected_size;
+        ss << "Wrong size of option... " << realSize << " vs " << expectedSize;
+        throw ParseException(ss.str());
+    }
+    unsigned long minimalPossibleSize = currentIndex + 1 + 1 + expectedSize;
+    if (minimalPossibleSize < sizeOfMsg) {
+        stringstream ss;
+        ss << "Wrong size of message " << realSize << " vs at least " << minimalPossibleSize;
         throw ParseException(ss.str());
     }
 }
@@ -34,7 +31,7 @@ DhcpMessage::DhcpMessage(vector<unsigned char> &msg) : ciaddr(0, 0, 0, 0), yiadd
                                                        subnetMask(0, 0, 0, 0),
                                                        serverIdentifier(0, 0, 0, 0) {
 
-    if (msg.size() < MSG_SIZE_WITH_OPTIONS) {
+    if (msg.size() < MSG_SIZE) {
         stringstream ss;
         ss << "Message is too short" << msg.data();
         throw ParseException(ss.str());
@@ -62,8 +59,13 @@ DhcpMessage::DhcpMessage(vector<unsigned char> &msg) : ciaddr(0, 0, 0, 0), yiadd
 
 
 // now parse options
-    int index = _options;
+    unsigned long index = _options;
     unsigned char opId;
+
+    if (msg.size() < MSG_SIZE + MAGIC_COOKIES_SIZE) {
+        // message does not contain any options...
+        return;
+    }
 
 //first check magic cookies 99, 130, 83 and 99
     if (msg[index] != 99 || msg[index + 1] != 130 || msg[index + 2] != 83 || msg[index + 3] != 99) {
@@ -80,15 +82,18 @@ DhcpMessage::DhcpMessage(vector<unsigned char> &msg) : ciaddr(0, 0, 0, 0), yiadd
 
 
     while ((opId = msg[index]) != end) {
+        if (msg[index] == pad) // skip pads
+            continue;
+
         switch (opId) {
             case subnetMaskID: {
-                check_size_of_option(msg[index + 1], _size_subnet_mask);
+                check_size_of_option(msg[index + 1], _size_subnet_mask, index, msg.size());
                 index += 2;
                 this->subnetMask = addressing::IpAddress(msg.data() + index);
                 break;
             }
             case leaseTimeID: {
-                check_size_of_option(msg[index + 1], _size_lease_time);
+                check_size_of_option(msg[index + 1], _size_lease_time, index, msg.size());
                 index += 2;
                 unsigned char *ptr = (unsigned char *) &leaseTime;
                 for (int j = 0; j < _size_lease_time; ++j) {
@@ -97,13 +102,13 @@ DhcpMessage::DhcpMessage(vector<unsigned char> &msg) : ciaddr(0, 0, 0, 0), yiadd
                 break;
             }
             case messageTypeID: {
-                check_size_of_option(msg[index + 1], _size_message_type);
+                check_size_of_option(msg[index + 1], _size_message_type, index, msg.size());
                 index += 2;
                 this->messageType = msg[index];
                 break;
             }
             case serverIdentifierID: {
-                check_size_of_option(msg[index + 1], _size_server_identifier);
+                check_size_of_option(msg[index + 1], _size_server_identifier, index, msg.size());
                 index += 2;
                 this->serverIdentifier = addressing::IpAddress(msg.data() + index);
                 break;
@@ -140,6 +145,7 @@ DhcpMessage &DhcpMessage::operator=(DhcpMessage other) {
     this->setMeesageType(other.getMeesageType());
     this->setLeaseTime(other.getLeaseTime());
     this->setSubnetMask(other.getSubnetMask());
+    this->setServerIdentifier(other.getServerIdentifier());
     return *this;
 }
 
@@ -159,36 +165,41 @@ vector<unsigned char> DhcpMessage::createMessageVector() {
     getElemAsType(uint32_t, ret, _siaddr) = htonl(siaddr.getAddrForSocket());
     getElemAsType(uint32_t, ret, _giaddr) = htonl(giaddr.getAddrForSocket());
 
-    appendToVec(ret, sname, _size_sname);
-    appendToVec(ret, file, _size_file);
+
+    memcpy(ret.data() + _sname,sname,_size_sname);
+    memcpy(ret.data() + _file,file,_size_file);
+
+    int index = _options;
+    // magic cookies
+    ret[index++] = 99;
+    ret[index++] = 130;
+    ret[index++] = 83;
+    ret[index++] = 99;
 
 
-    ret[_options] = 99;
-    ret[_options] = 130;
-    ret[_options] = 83;
-    ret[_options] = 99;
+    // now options
+    ret[index++] = subnetMaskID;
+    ret[index++] = _size_subnet_mask;
+    getElemAsType(uint32_t,ret,index) = htonl(subnetMask.getAddrForSocket());
+    index += _size_subnet_mask;
 
-    // todo finish the rest of this method
+    ret[index++] = leaseTimeID;
+    ret[index++] = _size_lease_time;
+    getElemAsType(uint32_t,ret,index) = htonl(leaseTime);
+    index += _size_lease_time;
 
+    ret[index++] = messageTypeID;
+    ret[index++] = _size_message_type;
+    ret[index++] = messageType;
 
-    ret.push_back(subnetMaskID);
-    ret.push_back(_size_subnet_mask);
-    appendToVec(ret, subnetMask);
+    ret[index++] = serverIdentifierID;
+    ret[index++] = _size_server_identifier;
+    getElemAsType(uint32_t,ret,index) = htonl(serverIdentifier.getAddrForSocket());
+    index += _size_server_identifier;
 
-    ret.push_back(leaseTimeID);
-    ret.push_back(_size_lease_time);
-    appendToVec(ret, (unsigned char *) &leaseTime, 4);
+    ret[index++] = end; // type
+    ret[index++] = end; // size  TODO probably not neccessary
 
-    ret.push_back(messageTypeID);
-    ret.push_back(_size_message_type);
-    ret.push_back(messageType);
-
-    ret.push_back(serverIdentifierID);
-    ret.push_back(_size_server_identifier);
-    appendToVec(ret, serverIdentifier);
-
-    ret.push_back(end);
-    ret.push_back(_size_end);
     return ret;
 }
 
