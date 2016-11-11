@@ -86,7 +86,7 @@ void Socket::closeSocket() {
     _fd = -1;
 }
 
-void Socket::setBroadCastFlag() {
+void Socket::setBroadcastFlag() {
     int on = 1;                                   // set socket to send broadcast messages
     if ((setsockopt(_fd, SOL_SOCKET, SO_BROADCAST, &on, sizeof(on))) == -1) {
         perror("Socket");
@@ -101,7 +101,7 @@ void Socket::sendMessage(vector<unsigned char> msg, IpAddress destination) {
     socklen_t len = sizeof(server);
 
     if (destination.isBroadcastAddr())
-        this->setBroadCastFlag();
+        this->setBroadcastFlag();
     count = sendto(_fd, msg.data(), msg.size(), 0, (struct sockaddr *) &server, len);  // send data to the server
     if (count == -1) {                      // check if data was sent correctly
         perror("Socket");

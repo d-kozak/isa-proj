@@ -27,7 +27,7 @@ class Socket : public BaseObject{
 public:
     Socket(const IpAddress & addr);
     vector<unsigned char> getMessage();
-    void setBroadCastFlag();
+    void setBroadcastFlag();
     void sendMessage(vector<unsigned char> msg, IpAddress destination);
     ~Socket();
 

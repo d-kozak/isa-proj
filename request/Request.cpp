@@ -3,6 +3,7 @@
 //
 
 #include "Request.h"
+#include "Ack.h"
 
 void Request::performTask(AddressHandler & handler){
     IpAddress serverAddress = handler.getServerAddress();
@@ -10,6 +11,10 @@ void Request::performTask(AddressHandler & handler){
         MacAddress & mac = _msg.getChaddr();
         IpAddress & ciaddr = _msg.getCiaddr();
         handler.confirmBindingFor(ciaddr,mac);
+
+
+        Ack ack;
+        ack.performTask(_msg,ciaddr,handler);
     }
 }
 
