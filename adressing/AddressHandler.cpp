@@ -20,9 +20,9 @@ namespace addressing {
         return addr;
     }
 
-    void AddressHandler::confirmBindingFor(IpAddress & addr,MacAddress & mac){
+    const AddressInfo &  AddressHandler::confirmBindingFor(IpAddress & addr,MacAddress & mac){
         lock_guard<recursive_mutex>(this->_lock);
-        this->_pool.confirmBindigFor(addr,mac);
+        return this->_pool.confirmBindigFor(addr,mac);
     }
 
     void AddressHandler::releaseAddress(MacAddress &mac) {

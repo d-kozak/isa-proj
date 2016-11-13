@@ -11,7 +11,7 @@
 
 AbstractRequest * ProtocolParser::parseRequest(DhcpMessage & msg){
     AbstractRequest * ret;
-    char type = msg.getMeesageType();
+    unsigned char type = msg.getMeesageType();
     switch(type){
         case DISCOVER:
             ret = new Discover(msg);
@@ -34,12 +34,17 @@ AbstractRequest * ProtocolParser::parseRequest(DhcpMessage & msg){
 }
 
 void AbstractReply::performTask(DhcpMessage & msg, IpAddress & addr,AddressHandler & handler){
+    msg.setOp(BOOT_REPLY);
     msg.setServerIdentifier(handler.getServerAddress());
     IpAddress netmask = IpAddress::getNetMaskFor(handler.get_prefix());
     msg.setSubnetMask(netmask);
     msg.setLeaseTime(LEASE_TIME);
 }
 
+
+ProtocolParser::~ProtocolParser(){
+    cleanPtrIfSet();
+}
 
 void ProtocolParser::cleanPtrIfSet(){
     if(req != nullptr)

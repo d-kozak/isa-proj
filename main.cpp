@@ -134,10 +134,14 @@ void serverLoop(AddressHandler & handler) {
     ProtocolParser parser;
     cout << "Started running" << endl;
     while(!isInterrupted){
-        vector<unsigned  char> msg = socket1.getMessage();
-        DhcpMessage dhcpMessage(msg);
-        AbstractRequest* req = parser.parseRequest(dhcpMessage);
-        req->performTask(handler);
+        try {
+            vector<unsigned char> msg = socket1.getMessage();
+            DhcpMessage dhcpMessage(msg);
+            AbstractRequest *req = parser.parseRequest(dhcpMessage);
+            req->performTask(handler);
+        } catch (BaseException & e){
+            std::cerr << e.toString() << std::endl;
+        }
     }
     cout << "Finishing" << endl;
 }

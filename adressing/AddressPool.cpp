@@ -58,7 +58,7 @@ namespace addressing {
         throw OutOfAddressException("No address is available");
     }
 
-    void AddressPool::confirmBindigFor(addressing::IpAddress & addr, addressing::MacAddress & mac){
+    const AddressInfo & AddressPool::confirmBindigFor(addressing::IpAddress & addr, addressing::MacAddress & mac){
         //check whether ip was specified
         if(addr.getAddrForSocket() == 0){
             for (auto &item : this->_addresses) {
@@ -66,7 +66,7 @@ namespace addressing {
                     if (*item.getMac() == mac) {
                         if (item.getState() == TO_BE_BINDED) {
                             item.bindTheAddress(mac);
-                            return;
+                            return item;
                         } else {
                             throw InvalidArgumentException("Given address is in invalid state");
                         }
@@ -79,7 +79,7 @@ namespace addressing {
                 if (item.getAddress() == addr) {
                     if (item.getState() == TO_BE_BINDED) {
                         item.bindTheAddress(mac);
-                        return;
+                        return item;
                     } else {
                         throw InvalidArgumentException("Given address is in invalid state");
                     }
@@ -204,7 +204,7 @@ namespace addressing {
         return _mac;
     }
 
-    Timestamp *AddressInfo::getTimestamp() {
+    Timestamp *AddressInfo::getTimestamp()const {
         return _timestamp;
     }
 }

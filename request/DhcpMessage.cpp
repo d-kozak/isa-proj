@@ -18,7 +18,7 @@ void check_size_of_option(unsigned char realSize, unsigned char expectedSize, un
         throw ParseException(ss.str());
     }
     unsigned long minimalPossibleSize = currentIndex + 1 + 1 + expectedSize;
-    if (minimalPossibleSize < sizeOfMsg) {
+    if (minimalPossibleSize > sizeOfMsg) {
         stringstream ss;
         ss << "Wrong size of message " << realSize << " vs at least " << minimalPossibleSize;
         throw ParseException(ss.str());

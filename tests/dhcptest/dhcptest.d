@@ -411,8 +411,8 @@ void printPacket(File f, DHCPPacket packet)
 	f.flush();
 }
 
-enum SERVER_PORT =  1024;//67;
-enum CLIENT_PORT =  1023; //68;
+enum SERVER_PORT = 67; //1024;
+enum CLIENT_PORT = 68;  //1023;
 
 ubyte[] requestedOptions;
 string[] sentOptions;

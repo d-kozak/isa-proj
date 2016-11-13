@@ -56,9 +56,7 @@ public:
     ProtocolParser():req(nullptr){}
     AbstractRequest * parseRequest(DhcpMessage &dhcp_msg);
 
-    ~ProtocolParser(){
-        cleanPtrIfSet();
-    }
+    ~ProtocolParser();
 };
 
 

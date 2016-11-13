@@ -59,7 +59,7 @@ namespace addressing {
         void releaseAddress(MacAddress & mac);
         void printCurrentState();
 
-        void confirmBindingFor(IpAddress & addr,MacAddress & mac);
+        const AddressInfo & confirmBindingFor(IpAddress & addr,MacAddress & mac);
 
         const int getPrefix() const;
 

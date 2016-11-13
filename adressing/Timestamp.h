@@ -12,24 +12,30 @@
 #include <chrono>
 
 #include "../BaseObject.h"
+#include "../constants.h"
+#include <iostream>
+#include <iomanip>
+#include <ctime>
+#include <chrono>
 
 using namespace std;
 
 namespace addressing {
     class Timestamp : public BaseObject {
         const string _name = "TimeStamp";
+        const char* TIME_FORMAT = "%Y-%m-%d_%H:%M";
         chrono::system_clock::time_point _startTime;
 
-        int countSecondsSinceStarted();
-    public:
 
+    public:
         Timestamp();
 
         Timestamp &operator=(Timestamp other);
         bool operator==(const Timestamp &rhs);
         bool operator!=(const Timestamp &rhs);
         bool isLeaseExpired();
-
+        int countSecondsSinceStarted();
+        void printTimeInfo();
         virtual string toString();
         virtual string getLoggableName();
     };

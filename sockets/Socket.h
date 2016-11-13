@@ -15,8 +15,8 @@ using namespace addressing;
 
 class Socket : public BaseObject{
     const std::string _name = "Socket";
-    const int DHCP_PORT_LISTEN = 1024; // correct is 68 :)
-    const int DHCP_PORT_SEND = 1023; // correct is 67 :)
+    const int DHCP_PORT_LISTEN = 67; // correct is 67 :)
+    const int DHCP_PORT_SEND = 68; // correct is 68 :)
     IpAddress _addr;
     int _fd;
 

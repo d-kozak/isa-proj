@@ -60,7 +60,7 @@ namespace addressing {
         IpAddress getAddress();
 
         MacAddress *getMac() ;
-        Timestamp *getTimestamp();
+        Timestamp *getTimestamp() const;
 
         void bindTheAddress(MacAddress & mac);
         void markAsToBeBinded(MacAddress & mac);
@@ -83,7 +83,7 @@ namespace addressing {
                     map<MacAddress, IpAddress> &direct_mapping);
 
         IpAddress getAddress(MacAddress & mac);
-        void confirmBindigFor(IpAddress & addr,MacAddress & mac);
+        const AddressInfo & confirmBindigFor(IpAddress & addr,MacAddress & mac);
 
         void releaseAddress(IpAddress &addr);
         void releaseAddress(MacAddress &mac);
