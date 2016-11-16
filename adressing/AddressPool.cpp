@@ -25,6 +25,16 @@ namespace addressing {
         net_address = net_address.next_addr(); //skip the net_address one <- that one is for the server itself
 
         for (IpAddress addr = net_address.next_addr(); addr != lastAddr; addr = addr.next_addr()) {
+            for(auto & item: direct_mapping){
+                if(item.second == addr){
+                    // we found direct mapping
+                    AddressInfo pair(addr,DIRECT_MAPPING);
+                    pair.setMac(new MacAddress(item.first));
+                    this->_addresses.push_back(pair);
+                    continue;
+                }
+            }
+
             bool isReserved = find(this->_reserved.begin(),this->_reserved.end(),addr) != this->_reserved.end();
             AddressInfo pair(addr, isReserved ? DISABLED : FREE);
             this->_addresses.push_back(pair);
@@ -32,6 +42,12 @@ namespace addressing {
     }
 
     IpAddress AddressPool::getAddress(MacAddress & mac) {
+        // check direct mapping first
+        auto direct = this->_directMapping.find(mac);
+        if(direct != this->_directMapping.end()){
+            return direct->second;
+        }
+
         for (auto &item : this->_addresses) {
             if (item.getState() == FREE) {
                 item.markAsToBeBinded(mac);
@@ -47,6 +63,7 @@ namespace addressing {
             }
         }
 
+        // try to find expired address that can be reassigned
         for (auto &item : this->_addresses) {
             if (item.getState() == EXPIRED) {
                 item.markAsToBeBinded(mac);

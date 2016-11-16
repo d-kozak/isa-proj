@@ -31,7 +31,7 @@ using namespace std;
 namespace addressing {
 
     typedef enum {
-        FREE, TO_BE_BINDED, BINDED, EXPIRED, DISABLED
+        FREE, TO_BE_BINDED, BINDED, EXPIRED, DISABLED,DIRECT_MAPPING
     } addressState;
 
     class AddressInfo : public BaseObject {
@@ -60,6 +60,7 @@ namespace addressing {
         IpAddress getAddress();
 
         MacAddress *getMac() ;
+        void setMac(MacAddress * mac);
         Timestamp *getTimestamp() const;
 
         void bindTheAddress(MacAddress & mac);
