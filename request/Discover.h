@@ -13,8 +13,8 @@ class Discover : public AbstractRequest {
 public:
     Discover(DhcpMessage msg):AbstractRequest(msg){}
     virtual void performTask(AddressHandler & handler);
-    virtual string toString();
-    virtual string getLoggableName();
+    virtual string toString() const;
+    virtual string getLoggableName() const;
 };
 
 

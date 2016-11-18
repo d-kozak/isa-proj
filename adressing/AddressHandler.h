@@ -12,7 +12,6 @@
 
 #include "MacAddress.h"
 #include "IpAddress.h"
-#include "Reservation.h"
 #include "AddressPool.h"
 #include "../BaseObject.h"
 
@@ -36,8 +35,8 @@ namespace addressing {
         void start();
         void interrupt();
 
-        virtual string toString();
-        virtual string getLoggableName();
+        virtual string toString() const ;
+        virtual string getLoggableName() const ;
     };
 
     class AddressHandler : public BaseObject {
@@ -63,8 +62,8 @@ namespace addressing {
 
         const int getPrefix() const;
 
-        virtual string toString();
-        virtual string getLoggableName();
+        virtual string toString() const ;
+        virtual string getLoggableName() const ;
 
         void start();
         void interrupt();

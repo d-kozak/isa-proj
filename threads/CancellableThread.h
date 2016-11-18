@@ -20,8 +20,8 @@ public:
     virtual void performTask() = 0;
     virtual void run();
 
-    virtual string toString();
-    virtual string getLoggableName();
+    virtual string toString() const ;
+    virtual string getLoggableName() const ;
 
 };
 

@@ -39,8 +39,14 @@ namespace addressing {
         cout << this->toString() << endl;
     }
 
-    string AddressHandler::toString() {
-        lock_guard<recursive_mutex>(this->_lock);
+    /**
+     * @warning This method is not thread safe
+     * the information may be stale
+     * @return
+     */
+    string AddressHandler::toString() const{
+        //lock_guard<recursive_mutex>(this->_lock);
+        //
         stringstream ss;
         ss << "------------------------------" << endl;
         ss << this->_name << " -> " << endl;
@@ -51,7 +57,7 @@ namespace addressing {
         return ss.str();
     }
 
-    string AddressHandler::getLoggableName() {
+    string AddressHandler::getLoggableName() const {
         return this->_name;
     }
 
@@ -109,7 +115,7 @@ namespace addressing {
         cout << "COLLECTOR FINISHED" << endl;
     }
 
-    string AddressCollector::toString() {
+    string AddressCollector::toString() const {
         stringstream ss;
         ss << this->_name << " -> ";
         if(isInterrupted)
@@ -119,7 +125,7 @@ namespace addressing {
         return ss.str();
     }
 
-    string AddressCollector::getLoggableName() {
+    string AddressCollector::getLoggableName() const  {
         return this->_name;
     }
 }

@@ -34,10 +34,10 @@ namespace addressing {
         bool operator==(const Timestamp &rhs);
         bool operator!=(const Timestamp &rhs);
         bool isLeaseExpired();
-        int countSecondsSinceStarted();
+        int countSecondsSinceStarted() const ;
         void printTimeInfo();
-        virtual string toString();
-        virtual string getLoggableName();
+        virtual string toString() const ;
+        virtual string getLoggableName() const ;
     };
 }
 

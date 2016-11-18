@@ -26,19 +26,19 @@ namespace addressing {
         return countSecondsSinceStarted() >= LEASE_TIME;
     }
 
-    string Timestamp::toString() {
+    string Timestamp::toString() const {
         string s;
         s += this->_name + " -> ";
         s += std::to_string(countSecondsSinceStarted());
         return s;
     }
 
-    string Timestamp::getLoggableName() {
+    string Timestamp::getLoggableName() const  {
         return this->_name;
     }
 
 
-    int Timestamp::countSecondsSinceStarted() {
+    int Timestamp::countSecondsSinceStarted() const {
         auto end = std::chrono::system_clock::now();
         auto elapsed = (end - this->_startTime);
         long nanos = elapsed.count();

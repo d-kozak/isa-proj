@@ -17,8 +17,8 @@ protected:
 public:
     BaseException():_msg("NULL"){}
     virtual string what();
-    virtual string toString();
-    virtual string getLoggableName();
+    virtual string toString() const ;
+    virtual string getLoggableName() const ;
 };
 
 

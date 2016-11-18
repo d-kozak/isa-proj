@@ -34,7 +34,6 @@ set(TEST_FILES tests/unit_testing/cppUnit.cpp tests/unit_testing/cppUnit.h
 
         adressing/IpAddress.cpp adressing/IpAddress.h
         adressing/MacAddress.cpp adressing/MacAddress.h
-        adressing/Reservation.cpp adressing/Reservation.h
         adressing/Timestamp.cpp adressing/Timestamp.h
         adressing/AddressPool.cpp adressing/AddressPool.h
         adressing/AddressHandler.cpp adressing/AddressHandler.h
@@ -80,7 +79,6 @@ set(PROGRAM_FILES
 
         adressing/IpAddress.cpp adressing/IpAddress.h
         adressing/MacAddress.cpp adressing/MacAddress.h
-        adressing/Reservation.cpp adressing/Reservation.h
         adressing/Timestamp.cpp adressing/Timestamp.h
         adressing/AddressPool.cpp adressing/AddressPool.h
         adressing/AddressHandler.cpp adressing/AddressHandler.h

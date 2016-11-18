@@ -147,7 +147,7 @@ namespace addressing {
         cout << this->toString();
     }
 
-    string AddressPool::toString() {
+    string AddressPool::toString() const  {
         stringstream ss;
         ss << this->_name << " -> " << "(" << endl <<  "\t{" << std::endl;
         for (auto &x : this->_addresses) {
@@ -167,7 +167,7 @@ namespace addressing {
         return ss.str();
     }
 
-    string AddressPool::getLoggableName() { return this->_name; }
+    string AddressPool::getLoggableName() const { return this->_name; }
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////
@@ -189,7 +189,7 @@ namespace addressing {
     }
 
 
-    string AddressInfo::toString() {
+    string AddressInfo::toString() const {
         stringstream ss;
         ss << this->_name << " -> (" << this->_address.toString() << ", ";
         switch (_state){
@@ -208,7 +208,7 @@ namespace addressing {
         return this->_address;
     }
 
-    string AddressInfo::getLoggableName() { return this->_name; }
+    string AddressInfo::getLoggableName() const { return this->_name; }
 
     AddressInfo::~AddressInfo() {
         if(_timestamp != NULL)

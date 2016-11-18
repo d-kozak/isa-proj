@@ -125,11 +125,11 @@ namespace addressing {
     }
 
 
-    string MacAddress::getLoggableName(){
+    string MacAddress::getLoggableName() const{
         return this->_name;
     }
 
-    string MacAddress::toString(){
+    string MacAddress::toString() const{
         string ret;
         ret.append(this->_name);
         ret.append(" -> ");

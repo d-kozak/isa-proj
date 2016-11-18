@@ -9,7 +9,7 @@ string BaseException::what() {
     return _msg;
 }
 
-string BaseException::toString(){
+string BaseException::toString() const {
     stringstream ss;
     ss << this->_name;
     ss << " -> ";
@@ -17,6 +17,6 @@ string BaseException::toString(){
     return ss.str();
 }
 
-string BaseException::getLoggableName(){
+string BaseException::getLoggableName() const {
     return this->_name;
 }

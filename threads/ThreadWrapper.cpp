@@ -11,11 +11,11 @@ void ThreadWrapper::start() {
     this->_thread = thread([this] { this->run(); });
 }
 
-string ThreadWrapper::toString(){
+string ThreadWrapper::toString() const {
     return this->_name;
 }
 
-string ThreadWrapper::getLoggableName(){
+string ThreadWrapper::getLoggableName() const  {
     return this->_name;
 }
 

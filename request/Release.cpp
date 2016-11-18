@@ -14,10 +14,10 @@ void Release::performTask(AddressHandler & handler){
     ack.performTask(_msg,addressToRelease,handler);
 }
 
-string Release::toString(){
+string Release::toString() const{
     return this->_name;
 }
 
-string Release::getLoggableName(){
+string Release::getLoggableName() const{
     return this->_name;
 }

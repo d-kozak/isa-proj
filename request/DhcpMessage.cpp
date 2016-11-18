@@ -85,44 +85,49 @@ DhcpMessage::DhcpMessage(vector<unsigned char> &msg) : ciaddr(0, 0, 0, 0), yiadd
         if (msg[index] == pad) // skip pads
             continue;
 
+        // check if we can read at leat option id and option size
+        if (index + 1 >= msg.size()) {
+            throw ParseException("Invalid size of dhcp message");
+        }
+
         switch (opId) {
             case subnetMaskID: {
                 check_size_of_option(msg[index + 1], _size_subnet_mask, index, msg.size());
                 index += 2;
                 this->subnetMask = addressing::IpAddress(msg.data() + index);
+                index += _size_subnet_mask;
                 break;
             }
             case leaseTimeID: {
                 check_size_of_option(msg[index + 1], _size_lease_time, index, msg.size());
                 index += 2;
-                unsigned char *ptr = (unsigned char *) &leaseTime;
-                for (int j = 0; j < _size_lease_time; ++j) {
-                    ptr[j] = msg[index + j];
-                }
+                this->leaseTime = ntohl(getDataTypeFromCharVec(uint32_t,msg,index));
+                index += _size_lease_time;
                 break;
             }
             case messageTypeID: {
                 check_size_of_option(msg[index + 1], _size_message_type, index, msg.size());
                 index += 2;
                 this->messageType = msg[index];
+                index += _size_message_type;
                 break;
             }
             case serverIdentifierID: {
                 check_size_of_option(msg[index + 1], _size_server_identifier, index, msg.size());
                 index += 2;
                 this->serverIdentifier = addressing::IpAddress(msg.data() + index);
+                index += _size_server_identifier;
                 break;
             }
             default: {
                 stringstream ss;
                 ss << "Unknown option id: " << (int) opId;
-                throw ParseException(ss.str());
+                index += 2 + msg[index+1]; // 2 for option
             }
         }
         if (index >= msg.size()) {
             throw ParseException("Invalid size of dhcp message");
         }
-        index++;
     }
 
 }
@@ -149,7 +154,7 @@ DhcpMessage &DhcpMessage::operator=(DhcpMessage other) {
     return *this;
 }
 
-vector<unsigned char> DhcpMessage::createMessageVector() {
+vector<unsigned char> DhcpMessage::createMessageVector() const {
     vector<unsigned char> ret;
     ret.resize(MSG_SIZE_WITH_OPTIONS);
     ret[_op] = op;
@@ -204,7 +209,7 @@ vector<unsigned char> DhcpMessage::createMessageVector() {
 }
 
 
-string DhcpMessage::toString() {
+string DhcpMessage::toString()  const {
     stringstream ss;
     ss << this->_name + " -> " << "{" << endl;
     ss << this->createMessageVector().data() << endl;

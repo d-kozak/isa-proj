@@ -94,7 +94,7 @@ namespace addressing {
         this->_parts[3] = d;
     }
 
-    uint32_t IpAddress::getAddrForSocket(){
+    uint32_t IpAddress::getAddrForSocket() const {
         uint32_t ret = 0;
 
         uint32_t first = _parts[0];
@@ -106,7 +106,7 @@ namespace addressing {
         return ret;
     }
 
-    string IpAddress::asString(){
+    string IpAddress::asString() const{
         stringstream ss;
         ss << std::to_string((int) this->_parts[0]) << ".";
         ss << std::to_string((int) this->_parts[1]) << ".";
@@ -205,7 +205,7 @@ namespace addressing {
         return !operator==(lhs);
     }
 
-    string IpAddress::toString() {
+    string IpAddress::toString() const {
         string ret;
         ret.append(this->_name);
         ret.append(" -> ");
@@ -217,7 +217,7 @@ namespace addressing {
         return ret;
     }
 
-    string IpAddress::getLoggableName() {
+    string IpAddress::getLoggableName() const {
         return this->_name;
     }
 }

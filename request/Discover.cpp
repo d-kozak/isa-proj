@@ -22,10 +22,10 @@ void Discover::performTask(AddressHandler & handler){
 
 }
 
-string Discover::toString(){
+string Discover::toString() const {
     return this->_name;
 }
 
-string Discover::getLoggableName(){
+string Discover::getLoggableName() const {
     return this->_name;
 }

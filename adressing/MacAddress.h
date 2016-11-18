@@ -35,8 +35,8 @@ namespace addressing {
 
         unsigned char getPart(int index)const ;
 
-        virtual string toString();
-        virtual string getLoggableName();
+        virtual string toString() const ;
+        virtual string getLoggableName() const;
     };
 
     string constRefToString(const MacAddress & mac);

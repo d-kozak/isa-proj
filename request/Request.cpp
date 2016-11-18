@@ -20,6 +20,11 @@ void Request::performTask(AddressHandler &handler) {
 
             Ack ack;
             ack.performTask(_msg, ciaddr, handler);
+        } else {
+            std::stringstream ss;
+            std::string serverIdOption = _msg.getServerIdentifier().toString();
+            ss << "Request for somebody else " << serverIdOption << std::endl;
+            std:: cout << ss.str();
         }
     } catch (BaseException &e) {
         cerr << e.toString() << endl;
@@ -29,10 +34,10 @@ void Request::performTask(AddressHandler &handler) {
 }
 
 
-string Request::toString() {
+string Request::toString() const {
     return this->_name;
 }
 
-string Request::getLoggableName() {
+string Request::getLoggableName() const {
     return this->_name;
 }

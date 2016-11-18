@@ -14,8 +14,8 @@ public:
     Offer(){}
     virtual void performTask(DhcpMessage & msg, IpAddress & addr,AddressHandler & handler);
 
-    virtual string toString();
-    virtual string getLoggableName();
+    virtual string toString() const ;
+    virtual string getLoggableName() const ;
     ~Offer(){}
 };
 

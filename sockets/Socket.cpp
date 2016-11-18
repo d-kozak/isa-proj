@@ -125,11 +125,11 @@ Socket::~Socket() {
     }
 }
 
-string Socket::getLoggableName() {
+string Socket::getLoggableName() const {
     return this->_name;
 }
 
-string Socket::toString() {
+string Socket::toString() const {
     stringstream ss;
     ss << this->_name << " -> " << "{" << endl;
     ss << "\t" << this->_addr.toString() << endl;

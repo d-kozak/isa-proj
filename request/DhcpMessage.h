@@ -125,11 +125,11 @@ public:
 
     DhcpMessage &operator=(DhcpMessage other);
 
-    vector<unsigned char> createMessageVector();
+    vector<unsigned char> createMessageVector() const ;
 
-    virtual string toString();
+    virtual string toString() const ;
 
-    virtual string getLoggableName() {
+    virtual string getLoggableName() const  {
         return this->_name;
     }
 

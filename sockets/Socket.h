@@ -31,8 +31,8 @@ public:
     void sendMessage(vector<unsigned char> msg, IpAddress destination);
     ~Socket();
 
-    virtual string getLoggableName();
-    virtual string toString();
+    virtual string getLoggableName() const ;
+    virtual string toString() const;
 };
 
 

@@ -19,10 +19,10 @@ void Offer::performTask(DhcpMessage &_msg, IpAddress &_addr, AddressHandler &_ha
     socket1.sendMessage(msg, broadcast);
 }
 
-string Offer::toString() {
+string Offer::toString() const {
     return this->_name;
 }
 
-string Offer::getLoggableName() {
+string Offer::getLoggableName() const {
     return this->_name;
 }

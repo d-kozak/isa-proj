@@ -35,8 +35,8 @@ namespace addressing {
 
         IpAddress next_addr(int distance);
 
-        uint32_t getAddrForSocket();
-        string asString();
+        uint32_t getAddrForSocket() const ;
+        string asString() const ;
         vector<unsigned char> asVector();
 
         bool isBroadcastAddr();
@@ -50,9 +50,9 @@ namespace addressing {
         bool operator!=(const IpAddress &lhs);
 
 
-        virtual string toString();
+        virtual string toString() const ;
 
-        virtual string getLoggableName();
+        virtual string getLoggableName() const ;
 
         static IpAddress getBroadcastAddr(){
             IpAddress address(255,255,255,255);

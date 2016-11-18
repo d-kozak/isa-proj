@@ -11,11 +11,11 @@ class Ack : public AbstractReply{
     const string _name = "Ack";
 public:
     virtual void performTask(DhcpMessage & msg, IpAddress & addr,AddressHandler & handler);
-    virtual string toString(){
+    virtual string toString() const {
         return this->_name;
     }
 
-    virtual string getLoggableName(){
+    virtual string getLoggableName() const{
         return this->_name;
     }
 };

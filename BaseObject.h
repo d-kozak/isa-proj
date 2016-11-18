@@ -11,8 +11,9 @@ using namespace std;
 
 class BaseObject {
 public:
-    virtual string toString() = 0;
-    virtual string getLoggableName() = 0;
+    virtual string toString() const = 0;
+
+    virtual string getLoggableName() const = 0;
 };
 
 

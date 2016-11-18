@@ -12,9 +12,10 @@
 #include <sstream>
 #include <map>
 #include "MacAddress.h"
-#include "Reservation.h"
 #include "../BaseObject.h"
 #include "../exceptions/InvalidArgumentException.h"
+#include "Timestamp.h"
+#include "IpAddress.h"
 
 
 using namespace std;
@@ -68,9 +69,9 @@ namespace addressing {
         void bindTheAddress(MacAddress & mac);
         void markAsToBeBinded(MacAddress & mac);
 
-        virtual string toString();
+        virtual string toString()const ;
 
-        virtual string getLoggableName();
+        virtual string getLoggableName() const ;
 
         virtual ~AddressInfo();
     };
@@ -99,9 +100,9 @@ namespace addressing {
 
         void printCurrentState();
 
-        virtual string toString();
+        virtual string toString() const;
 
-        virtual string getLoggableName();
+        virtual string getLoggableName() const;
     };
 
 }

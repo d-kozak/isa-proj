@@ -17,7 +17,7 @@ void CancellableThread::run(){
     }
 }
 
-string CancellableThread::toString(){
+string CancellableThread::toString() const {
     stringstream ss;
     ss << this->_name << " -> {" << endl;
     ss << "\t";
@@ -30,6 +30,6 @@ string CancellableThread::toString(){
     return ss.str();
 }
 
-string CancellableThread::getLoggableName(){
+string CancellableThread::getLoggableName() const {
     return this->_name;
 }
