@@ -127,19 +127,22 @@ void intHandler(int dummy) {
     isInterrupted = 1;
 }
 
-void serverLoop(AddressHandler & handler) {
+void serverLoop(AddressHandler &handler) {
     signal(SIGINT, intHandler);
 
     Socket socket1(handler.getServerAddress());
     ProtocolParser parser;
     cout << "Started running" << endl;
-    while(!isInterrupted){
+    while (!isInterrupted) {
         try {
             vector<unsigned char> msg = socket1.getMessage();
             DhcpMessage dhcpMessage(msg);
             AbstractRequest *req = parser.parseRequest(dhcpMessage);
             req->performTask(handler);
-        } catch (BaseException & e){
+        } catch (SocketException &e) {
+            std::cerr << e.toString() << std::endl;
+            isInterrupted = true;
+        } catch (BaseException &e) {
             std::cerr << e.toString() << std::endl;
         }
     }
@@ -165,13 +168,13 @@ int main(int argc, char **argv) {
         printHelp();
         return ERR_PARAMS;
     }
-    catch(SocketException & e){
+    catch (SocketException &e) {
         std::cerr << e.toString() << std::endl;
         printHelp();
         return ERR_PARAMS;
     }
     AddressHandler handler(networkAddress, prefix, reserved, direct_mapping);
-    std::cout << handler.toString() << std::endl;
+//    std::cout << handler.toString() << std::endl;
 
 //    IpAddress address(127,0,0,1);
 //    Socket socket1(address);

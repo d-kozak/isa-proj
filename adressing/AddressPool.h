@@ -60,7 +60,9 @@ namespace addressing {
         IpAddress getAddress();
 
         MacAddress *getMac() ;
-        void setMac(MacAddress * mac);
+        void setMac(MacAddress * mac){
+            this->_mac = mac;
+        }
         Timestamp *getTimestamp() const;
 
         void bindTheAddress(MacAddress & mac);
