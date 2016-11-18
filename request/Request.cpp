@@ -12,7 +12,8 @@ void Request::performTask(AddressHandler &handler) {
     IpAddress &ciaddr = _msg.getCiaddr();
     try {
         IpAddress serverAddress = handler.getServerAddress();
-        if (serverAddress == _msg.getServerIdentifier()) {
+        IpAddress serverIdentifier = _msg.getServerIdentifier(); // server idenfier = client specifies which server he wants to use
+        if (serverAddress ==  serverIdentifier || serverIdentifier == NULL_IP) {
             const AddressInfo &info = handler.confirmBindingFor(ciaddr, mac);
             //<mac_adresa> <ip_addresa> <cas_prideleni_ip_adresy> <cas_vyprseni_prirazeni_adresy>
             std::cout << mac.toString() << " " << ciaddr.toString() << " ";

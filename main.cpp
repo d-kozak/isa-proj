@@ -125,6 +125,8 @@ static volatile int isInterrupted = 0;
 void intHandler(int dummy) {
     cout << "Interrupting" << endl;
     isInterrupted = 1;
+    // TODO clean everything before exit
+    exit(0);
 }
 
 void serverLoop(AddressHandler &handler) {
@@ -132,7 +134,7 @@ void serverLoop(AddressHandler &handler) {
 
     Socket socket1(handler.getServerAddress());
     ProtocolParser parser;
-    cout << "Started running" << endl;
+    cout << "Starting" << endl;
     while (!isInterrupted) {
         try {
             vector<unsigned char> msg = socket1.getMessage();
@@ -173,7 +175,7 @@ int main(int argc, char **argv) {
         printHelp();
         return ERR_PARAMS;
     }
-    AddressHandler handler(networkAddress, prefix, reserved, direct_mapping);
+//    AddressHandler handler(networkAddress, prefix, reserved, direct_mapping);
 //    std::cout << handler.toString() << std::endl;
 
 //    IpAddress address(127,0,0,1);

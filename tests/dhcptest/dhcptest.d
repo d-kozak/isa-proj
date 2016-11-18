@@ -418,7 +418,7 @@ ubyte[] requestedOptions;
 string[] sentOptions;
 ushort requestSecs = 0;
 
-DHCPPacket generatePacket(ubyte[] mac)
+DHCPPacket generateDiscover(ubyte[] mac)
 {
 	DHCPPacket packet;
 	packet.header.op = 1; // BOOTREQUEST
@@ -675,7 +675,7 @@ int main(string[] args)
 				case "discover":
 				{
 					string mac = line.length > 1 ? line[1] : defaultMac;
-					socket.sendPacket(generatePacket(parseMac(mac)));
+					socket.sendPacket(generateDiscover(parseMac(mac)));
 					break;
 				}
 
@@ -712,7 +712,7 @@ int main(string[] args)
 			timeout = (tries == 1 && !wait) ? forever : 10.seconds;
 
 		bindSocket();
-		auto sentPacket = generatePacket(parseMac(defaultMac));
+		auto sentPacket = generateDiscover(parseMac(defaultMac));
 
 		int count = 0;
 		

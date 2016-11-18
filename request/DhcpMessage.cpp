@@ -170,6 +170,10 @@ vector<unsigned char> DhcpMessage::createMessageVector() const {
     getElemAsType(uint32_t, ret, _siaddr) = htonl(siaddr.getAddrForSocket());
     getElemAsType(uint32_t, ret, _giaddr) = htonl(giaddr.getAddrForSocket());
 
+    // mac address
+    for(int i = 0 ; i < MAC_SIZE ; i++){
+        ret[_chaddr + i] = this->chaddr.getPart(i);
+    }
 
     memcpy(ret.data() + _sname,sname,_size_sname);
     memcpy(ret.data() + _file,file,_size_file);

@@ -77,7 +77,8 @@ namespace addressing {
 
     const AddressInfo & AddressPool::confirmBindigFor(addressing::IpAddress & addr, addressing::MacAddress & mac){
         //check whether ip was specified
-        if(addr.getAddrForSocket() == 0){
+        if(addr == NULL_IP){
+            // if no ip was specified, try looking for the mac address
             for (auto &item : this->_addresses) {
                 if (item.getMac() != NULL) {
                     if (*item.getMac() == mac) {
@@ -129,7 +130,7 @@ namespace addressing {
                 }
             }
         }
-        throw InvalidArgumentException("This address " + mac.toString() + "is not in the pool");
+        // if the address is not found, the operation is empty
     }
 
     void AddressPool::addressExpired(IpAddress &addr){

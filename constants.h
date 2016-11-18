@@ -5,12 +5,16 @@
 #ifndef ISA_PROJ_CONSTANTS_H
 #define ISA_PROJ_CONSTANTS_H
 
-#define LEASE_TIME 3
+#include "adressing/IpAddress.h"
+
+#define LEASE_TIME 6
 //1 * 60 * 60;
 
 enum retVals {
     EOK,
     ERR_PARAMS
 };
+
+const addressing::IpAddress NULL_IP(0,0,0,0);
 
 #endif //ISA_PROJ_CONSTANTS_H
