@@ -6,12 +6,8 @@
 #include "Ack.h"
 
 void Release::performTask(AddressHandler & handler){
-    IpAddress addressToRelease = _msg.getCiaddr();
     MacAddress address = _msg.getChaddr();
     handler.releaseAddress(address);
-
-    Ack ack;
-    ack.performTask(_msg,addressToRelease,handler);
 }
 
 string Release::toString() const{

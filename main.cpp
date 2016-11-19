@@ -30,7 +30,7 @@ using namespace addressing;
 static std::mutex mainLock;
 static volatile Socket* sock = NULL;
 static volatile int isInterrupted = 0;
-static volatile int retVal = 0;
+static volatile int retVal = EOK;
 
 IpAddress parseNetworkInfo(char *net, int &prefix) {
     try {

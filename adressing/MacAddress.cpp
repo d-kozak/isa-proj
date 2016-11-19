@@ -1,5 +1,5 @@
 //
-// Created by david on 5.10.16.
+// see header for comments
 //
 
 #include "MacAddress.h"
@@ -17,6 +17,8 @@ namespace addressing {
 
     MacAddress::MacAddress(string addr) {
         char buf[3];
+        char *endPtr = NULL;
+
         buf[2] = '\0';
 
         int cell_index = 0;
@@ -36,7 +38,10 @@ namespace addressing {
                     throw ParseException(ss.str());
                 }
                 // now convert hexadecimal string in buffer into a decimal number
-                _parts[cell_index] = strtoul(buf, NULL, 16);
+                _parts[cell_index] = strtoul(buf, &endPtr, 16);
+                if(*endPtr != '\0'){
+                    throw ParseException("Invalid mac address, cannot conver hex to decimal");
+                }
 
                 cell_index++;
                 i = 0;
@@ -45,7 +50,10 @@ namespace addressing {
                 i++;
             }
         }
-        _parts[cell_index] = strtoul(buf, NULL, 16);
+        _parts[cell_index] = strtoul(buf, &endPtr, 16);
+        if(*endPtr != '\0'){
+            throw ParseException("Invalid mac address, cannot conver hex to decimal");
+        }
     }
 
 
@@ -77,10 +85,6 @@ namespace addressing {
     }
 
     MacAddress &MacAddress::operator=(MacAddress other) {
-//        std::swap(_parts[0], other._parts[0]);
-//        std::swap(_parts[1], other._parts[1]);
-//        std::swap(_parts[2], other._parts[2]);
-//        std::swap(_parts[3], other._parts[3]);
         for (int i = 0; i < MAC_SIZE; ++i) {
             this->_parts[i] = other._parts[i];
         }
@@ -94,14 +98,6 @@ namespace addressing {
         }
         return true;
     }
-
-//    bool MacAddress::operator==(const MacAddress &lhs,MacAddress &rhs){
-//        for (int i = 0; i < MAC_SIZE; ++i) {
-//            if(lhs._parts[i] != rhs._parts[i])
-//                return false;
-//        }
-//        return true;
-//    }
 
     bool MacAddress::operator!=(const MacAddress &lhs){
         return !operator==(lhs);

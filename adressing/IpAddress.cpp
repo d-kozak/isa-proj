@@ -1,5 +1,5 @@
 //
-// Created by david on 5.10.16.
+// see header for comments
 //
 
 #include <sstream>
@@ -125,10 +125,6 @@ namespace addressing {
     }
 
     IpAddress &IpAddress::operator=(IpAddress other) {
-//        std::swap(_parts[0], other._parts[0]);
-//        std::swap(_parts[1], other._parts[1]);
-//        std::swap(_parts[2], other._parts[2]);
-//        std::swap(_parts[3], other._parts[3]);
         for (int i = 0; i < ADDRESS_SIZE; ++i) {
             this->_parts[i] = other._parts[i];
         }

@@ -1,5 +1,5 @@
 //
-// Created by david on 5.10.16.
+// see header file for comments
 //
 
 #include "AddressHandler.h"
@@ -70,10 +70,6 @@ namespace addressing {
         this->_collector.interrupt();
     }
 
-    const int AddressHandler::get_prefix() const {
-        return _prefix;
-    }
-
     const IpAddress &AddressHandler::getServerAddress() const {
         return _serverAddress;
     }
@@ -94,6 +90,8 @@ namespace addressing {
     }
 
     void AddressCollector::interrupt() {
+        if(this->isInterrupted) // if the thread is already interrupted, just return
+            return;
         this->isInterrupted = true;
         this->_garbageCollector.join();
     }

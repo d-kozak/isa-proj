@@ -36,7 +36,7 @@ AbstractRequest * ProtocolParser::parseRequest(DhcpMessage & msg){
 void AbstractReply::performTask(DhcpMessage & msg, IpAddress & addr,AddressHandler & handler){
     msg.setOp(BOOT_REPLY);
     msg.setServerIdentifier(handler.getServerAddress());
-    IpAddress netmask = IpAddress::getNetMaskFor(handler.get_prefix());
+    IpAddress netmask = IpAddress::getNetMaskFor(handler.getPrefix());
     msg.setSubnetMask(netmask);
     msg.setLeaseTime(LEASE_TIME);
 }
