@@ -158,14 +158,14 @@ namespace addressing {
     IpAddress IpAddress::next_addr(int distance) {
         if(distance < 1)
             throw InvalidArgumentException("Param distance cannot be less then 1");
-        IpAddress address = *this;
-        for (int i = 0; i < distance; ++i) {
-            address=address.next_addr();
-            if (i == distance - 1)
-                return address;
-        }
 
-        throw OutOfAddressException("IpAddress::next(int) <- executin should never get here");
+        unsigned int currentAddr = this->getAddrForSocket();
+        unsigned int finalAddr = currentAddr + distance;
+        if(currentAddr > finalAddr) {
+            //overflow
+            throw OutOfAddressException("IpAddress::next(int) <- executin should never get here");
+        }
+        return IpAddress(htonl(finalAddr)); // small hack because this method works in wrong endian
     }
 
     bool IpAddress::isBroadcastAddr(){

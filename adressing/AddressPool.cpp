@@ -40,6 +40,9 @@ namespace addressing {
             AddressInfo pair(addr, isReserved ? RESERVED : FREE);
             this->_addresses.push_back(pair);
         }
+
+        unsigned long count = _addresses.size();
+        std::cout << "Allocated " << count << " addresses." << std::endl<< "Aproximate size of the pool: " << count * sizeof(IpAddress) << " bytes + " << sizeof(AddressPool) << " bytes of address pool" << std::endl;
     }
 
     void AddressPool::clean() {

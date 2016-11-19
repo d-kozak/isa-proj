@@ -205,12 +205,14 @@ vector<unsigned char> DhcpMessage::createMessageVector() const {
 
     if(this->messageType == NACK){
         // NACK messages do not need any other options
+        ret[index++] = end; // type
+        ret[index++] = end; // size
         return ret;
     }
 
     ret[index++] = subnetMaskID;
     ret[index++] = _size_subnet_mask;
-    getElemAsType(uint32_t,ret,index) = htonl(subnetMask.getAddrForSocket());
+    getElemAsType(uint32_t,ret,index) = subnetMask.getAddrForSocket(); // htonl is here on purpose because this address is generated in the network order
     index += _size_subnet_mask;
 
     ret[index++] = leaseTimeID;
