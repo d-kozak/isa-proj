@@ -117,7 +117,7 @@ namespace addressing {
                 return;
             }
         }
-        throw InvalidArgumentException("This address " + addr.toString() + "is not in the pool");
+        // if the address is not found, the operation is empty
     }
 
     void AddressPool::releaseAddress(MacAddress &mac){
