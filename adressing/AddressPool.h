@@ -73,6 +73,10 @@ namespace addressing {
 
         virtual string getLoggableName() const ;
 
+        /**
+         * cleans all dynamically allocated stuff
+         */
+        void clean();
         virtual ~AddressInfo();
     };
 
@@ -93,6 +97,10 @@ namespace addressing {
         void releaseAddress(MacAddress &mac);
         void addressExpired(IpAddress &addr);
 
+        /**
+         * cleans all dynamically allocated stuff
+         */
+        void clean();
 
         list<AddressInfo>& getAddresses(){
             return _addresses;

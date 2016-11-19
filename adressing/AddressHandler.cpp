@@ -78,6 +78,11 @@ namespace addressing {
         return _serverAddress;
     }
 
+    AddressHandler::~AddressHandler(){
+        this->_collector.interrupt();
+        this->_pool.clean();
+    }
+
     /////////////////////////////////////////////////////////
 
     AddressCollector::AddressCollector(AddressHandler *ha) : _handler(ha), _garbageCollector(), isInterrupted(false) {}

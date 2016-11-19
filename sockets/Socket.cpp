@@ -77,13 +77,15 @@ void Socket::initSocket() {
     }
 }
 
-void Socket::closeSocket() {
+void Socket::closeSocket() volatile {
     printf("closing socket\n");
-    if (close(_fd) == -1) {
-        perror("Socket");
-        throw SocketException("close() failed");
+    if(_fd != -1) {
+        if (close(_fd) == -1) {
+            perror("Socket");
+            throw SocketException("close() failed");
+        }
+        _fd = -1;
     }
-    _fd = -1;
 }
 
 void Socket::setBroadcastFlag() {

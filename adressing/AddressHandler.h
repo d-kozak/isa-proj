@@ -72,6 +72,8 @@ namespace addressing {
 
         const IpAddress &getServerAddress() const;
         const IpAddress &getSubnetMask() const;
+
+        ~AddressHandler();
     };
 }
 

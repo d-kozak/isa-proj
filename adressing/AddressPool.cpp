@@ -1,7 +1,6 @@
 //
 // Created by david on 5.10.16.
 //
-
 #include "AddressPool.h"
 #include "../exceptions/OutOfAddressException.h"
 #include "../exceptions/InvalidArgumentException.h"
@@ -38,6 +37,12 @@ namespace addressing {
             bool isReserved = find(this->_reserved.begin(),this->_reserved.end(),addr) != this->_reserved.end();
             AddressInfo pair(addr, isReserved ? DISABLED : FREE);
             this->_addresses.push_back(pair);
+        }
+    }
+
+    void AddressPool::clean(){
+        for(auto & addr : this->_addresses){
+            addr.clean();
         }
     }
 
@@ -189,7 +194,6 @@ namespace addressing {
         this->_mac = new MacAddress(mac.getPart(0),mac.getPart(1),mac.getPart(2),mac.getPart(3),mac.getPart(4),mac.getPart(5));
     }
 
-
     string AddressInfo::toString() const {
         stringstream ss;
         ss << this->_name << " -> (" << this->_address.toString() << ", ";
@@ -211,11 +215,19 @@ namespace addressing {
 
     string AddressInfo::getLoggableName() const { return this->_name; }
 
-    AddressInfo::~AddressInfo() {
-        if(_timestamp != NULL)
+    void AddressInfo::clean(){
+        if(_timestamp != NULL) {
             delete _timestamp;
-        if(_mac != NULL)
+            this->_timestamp = NULL;
+        }
+        if(_mac != NULL) {
             delete _mac;
+            this->_mac = NULL;
+        }
+    }
+
+    AddressInfo::~AddressInfo() {
+        this->clean();
     }
 
     MacAddress *AddressInfo::getMac() {

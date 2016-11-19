@@ -15,8 +15,22 @@
 #include <fstream>
 #include <iostream>
 #include <signal.h>
+#include <mutex>
 
 using namespace addressing;
+/**
+ * Mutex used for cooperation between signal handler and
+ * main loop of the server.
+ * The server has to acquire this lock right after he received a message and leaves it after sending the response.
+ * Signal handler has to acuire it before starting the cleaning process which ends up by deleting all dynamically  allocated objects
+ * and setting the interrupt flag to true.
+ * This means that the after receiving SIGINT, the server will handle its last request, unlocks lock
+ * and then the interrupt handler will start cleaning.
+ */
+static std::mutex mainLock;
+static volatile Socket* sock = NULL;
+static volatile int isInterrupted = 0;
+static volatile int retVal = 0;
 
 IpAddress parseNetworkInfo(char *net, int &prefix) {
     try {
@@ -120,30 +134,40 @@ void printHelp() {
     cout << txt;
 }
 
-static volatile int isInterrupted = 0;
-
 void intHandler(int dummy) {
     cout << "Interrupting" << endl;
+    mainLock.lock();
     isInterrupted = 1;
-    // TODO clean everything before exit
-    exit(0);
+    sock->closeSocket(); // closing socket at this point will probably cause exception in the main thread,
+    // that is why we first set isInterupted flag, so that the main thread knows the reason for the exception
+    mainLock.unlock();
 }
 
 void serverLoop(AddressHandler &handler) {
     signal(SIGINT, intHandler);
 
     Socket socket1(handler.getServerAddress());
+    sock = &socket1; // store pointer to the socket in global volatile variable, so that the interrupt handler can close the socket
+
     ProtocolParser parser;
     cout << "Starting" << endl;
     while (!isInterrupted) {
         try {
             vector<unsigned char> msg = socket1.getMessage();
+            std::lock_guard<std::mutex> guard(mainLock); //acquire the lock for the duration of request handling
             DhcpMessage dhcpMessage(msg);
-            AbstractRequest *req = parser.parseRequest(dhcpMessage);
+            AbstractRequest *req = parser.parseRequest(dhcpMessage); //dynamic allocation and dealocation is handled by protocol parser
             req->performTask(handler);
         } catch (SocketException &e) {
-            std::cerr << e.toString() << std::endl;
-            isInterrupted = true;
+            if(isInterrupted){
+                // if the flag was set already by interrupt handler, we return the retval zero (the exception was raised by handler closing the socket)
+                break;
+            } else {
+                // if this exception was raised because of some "real" socket error, we print err message, set retval and exit
+                std::cerr << e.toString() << std::endl;
+                retVal = ERR_SOCKET;
+                break;
+            }
         } catch (BaseException &e) {
             std::cerr << e.toString() << std::endl;
         }
@@ -185,5 +209,5 @@ int main(int argc, char **argv) {
 //
 //    std::string msg = "Hello, world";
 //    socket1.sendMessage(msg,address);
-    return 0;
+    return retVal;
 }

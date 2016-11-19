@@ -21,7 +21,6 @@ class Socket : public BaseObject{
     int _fd;
 
     void initSocket();
-    void closeSocket();
     struct sockaddr_in initsockaddr(uint32_t addr,bool forListening);
     struct sockaddr_in initsockaddr(string addr, bool bindImmediately);
 public:
@@ -29,6 +28,7 @@ public:
     vector<unsigned char> getMessage();
     void setBroadcastFlag();
     void sendMessage(vector<unsigned char> msg, IpAddress destination);
+    void closeSocket() volatile;
     ~Socket();
 
     virtual string getLoggableName() const ;

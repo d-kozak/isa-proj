@@ -1,4 +1,5 @@
 Simple DHCP server implementation in c/c++.
+ISA PROJECT 2016
 Author: David Kozak
 Contact: xkozak15@stud.fit.vutbr.cz
 
@@ -30,5 +31,6 @@ Project structure:
   -constants used throughout the project
 ./main.cpp
   -file containing main method and argument parsing
-
+./Makefile
+  -make file which builds this project
 For more details see documentation doc.pdf(warning - It is written in Czech)

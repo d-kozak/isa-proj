@@ -12,7 +12,8 @@
 
 enum retVals {
     EOK,
-    ERR_PARAMS
+    ERR_PARAMS,
+    ERR_SOCKET
 };
 
 const addressing::IpAddress NULL_IP(0,0,0,0);
