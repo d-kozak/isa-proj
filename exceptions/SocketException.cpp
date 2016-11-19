@@ -1,5 +1,5 @@
 //
-// Created by david on 8.10.16.
+// see header for comments
 //
 
 #include "SocketException.h"

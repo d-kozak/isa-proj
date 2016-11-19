@@ -39,7 +39,12 @@ namespace addressing {
         /**
          * interrupt flag
          */
-        volatile bool isInterrupted;
+        volatile bool _isInterrupted;
+
+        /**
+         * flag set in start and checked in the interrupt so that we do not try to interrupt something that is not running
+         */
+        bool _collectorStarted;
 
         /**
          * main working method of the thread, perodically treaverses the list and and changes addressInfo state if the lease expired
@@ -149,12 +154,12 @@ namespace addressing {
         /**
          * starts the address collector
          */
-        void start();
+        void startTheAddressCollector();
 
         /**
          * interrupts the address collector
          */
-        void interrupt();
+        void interruptTheAddressCollector();
 
         /**
          * @return returns prefix of the network

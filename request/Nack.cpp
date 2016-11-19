@@ -1,5 +1,5 @@
 //
-// Created by david on 11.11.16.
+// see header for comments
 //
 
 #include "Nack.h"
@@ -8,11 +8,12 @@
 void Nack::performTask(DhcpMessage & msg, IpAddress & addr,AddressHandler & handler){
     AbstractReply::performTask(msg,addr,handler);
 
-    IpAddress nullAdrr  = IpAddress(0,0,0,0);
-    msg.setCiaddr(nullAdrr);
-    msg.setGiaddr(nullAdrr);
-    msg.setSiaddr(nullAdrr);
-    msg.setYiaddr(nullAdrr);
+    IpAddress NULL_IP(0,0,0,0);
+    msg.setCiaddr(NULL_IP);
+    msg.setGiaddr(NULL_IP);
+    msg.setSiaddr(NULL_IP);
+    msg.setYiaddr(NULL_IP);
+    msg.setMeesageType(NACK);
 
     IpAddress broadcast = IpAddress::getBroadcastAddr();
     Socket socket(broadcast);

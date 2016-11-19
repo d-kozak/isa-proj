@@ -1,5 +1,5 @@
 //
-// Created by david on 20.10.16.
+// see header for details
 //
 
 #include "ThreadWrapper.h"

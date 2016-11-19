@@ -8,10 +8,17 @@
 
 #include "AbstractRequest.h"
 
+/**
+ * Class representing DHCP offer message
+ */
 class Offer : public AbstractReply {
     const string _name = "Offer";
 public:
     Offer(){}
+
+    /**
+     * offer sets yiaddr to the offered ip addres and thats it
+     */
     virtual void performTask(DhcpMessage & msg, IpAddress & addr,AddressHandler & handler);
 
     virtual string toString() const ;

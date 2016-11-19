@@ -3,13 +3,25 @@
 //
 
 #include "DhcpMessage.h"
+#include "../constants.h"
 #include <arpa/inet.h>
 
 
+/**
+ * extracts given data type from the vector of chars, starting at index index
+ */
 #define getDataTypeFromCharVec(dataType, charVec, index) (*((dataType *) (&charVec[index])))
+
+/**
+ * extracts given data type from the vector of chars, starting at index index
+ */
 #define getElemAsType(type, vec, index) *((type *)(&vec[index]))
 
 
+/**
+ * checks given option
+ * @throws ParseException if the size is invalid
+ */
 void check_size_of_option(unsigned char realSize, unsigned char expectedSize, unsigned long currentIndex,
                           unsigned long sizeOfMsg) {
     if (realSize != expectedSize) {
@@ -48,7 +60,6 @@ DhcpMessage::DhcpMessage(vector<unsigned char> &msg) : ciaddr(0, 0, 0, 0), yiadd
     this->secs = ntohs(getDataTypeFromCharVec(uint16_t, msg, _secs));
     this->flags = ntohs(getDataTypeFromCharVec(uint16_t, msg, _flags));
 
-    // todo check if this tranformation of ip address really works... :X
     this->ciaddr = addressing::IpAddress(msg.data() + _ciaddr);
     this->yiaddr = addressing::IpAddress(msg.data() + _yiaddr);
     this->siaddr = addressing::IpAddress(msg.data() + _siaddr);
@@ -186,7 +197,17 @@ vector<unsigned char> DhcpMessage::createMessageVector() const {
     ret[index++] = 99;
 
 
+
     // now options
+    ret[index++] = messageTypeID;
+    ret[index++] = _size_message_type;
+    ret[index++] = messageType;
+
+    if(this->messageType == NACK){
+        // NACK messages do not need any other options
+        return ret;
+    }
+
     ret[index++] = subnetMaskID;
     ret[index++] = _size_subnet_mask;
     getElemAsType(uint32_t,ret,index) = htonl(subnetMask.getAddrForSocket());
@@ -196,10 +217,6 @@ vector<unsigned char> DhcpMessage::createMessageVector() const {
     ret[index++] = _size_lease_time;
     getElemAsType(uint32_t,ret,index) = htonl(leaseTime);
     index += _size_lease_time;
-
-    ret[index++] = messageTypeID;
-    ret[index++] = _size_message_type;
-    ret[index++] = messageType;
 
     ret[index++] = serverIdentifierID;
     ret[index++] = _size_server_identifier;

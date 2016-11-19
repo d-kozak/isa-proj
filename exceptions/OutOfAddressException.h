@@ -1,7 +1,3 @@
-//
-// Created by david on 7.10.16.
-//
-
 #ifndef ISA_PROJ_OUTOFADDRESSEXCEPTION_H
 #define ISA_PROJ_OUTOFADDRESSEXCEPTION_H
 
@@ -10,6 +6,11 @@
 
 using namespace std;
 
+/**
+ * Exception raised when there are no available addresses in the address pool
+ * @see Discover
+ * @see AddressPool
+ */
 class OutOfAddressException : public BaseException{
 public:
     OutOfAddressException(string msg);

@@ -37,7 +37,7 @@
       </UML:Package>
       <UML:Interface visibility="public" isSpecification="false" isLeaf="false" isAbstract="true" name="AbstractRequest" stereotype="interface" namespace="Logical View" isRoot="false" xmi.id="1cyOObaqGK3Z">
        <UML:Namespace.ownedElement>
-        <UML:Enumeration visibility="public" isSpecification="false" isLeaf="false" isAbstract="false" name="RequestType" stereotype="enum" namespace="1cyOObaqGK3Z" isRoot="false" xmi.id="e1Qv3Wu8PHZk"/>
+        <UML:Enumeration visibility="public" isSpecification="false" isLeaf="false" isAbstract="false" name="REQUEST_TYPE" stereotype="enum" namespace="1cyOObaqGK3Z" isRoot="false" xmi.id="e1Qv3Wu8PHZk"/>
        </UML:Namespace.ownedElement>
       </UML:Interface>
       <UML:Class visibility="public" isSpecification="false" isLeaf="false" isAbstract="false" name="Request" namespace="Logical View" isRoot="false" xmi.id="q6Qo5MM6yISK"/>

@@ -16,6 +16,10 @@
 #include <iostream>
 #include <signal.h>
 #include <mutex>
+/**
+ * Main file of the project
+ * contains argument parsing and main method
+ */
 
 using namespace addressing;
 /**
@@ -28,10 +32,27 @@ using namespace addressing;
  * and then the interrupt handler will start cleaning.
  */
 static std::mutex mainLock;
-static volatile Socket* sock = NULL;
+
+/**
+ * reference to the socket so that it can be closed from the signal handler
+ */
+static volatile Socket *sock = NULL;
+
+/**
+ * Interrupt flag for maintrhead <=> signal handler communication
+ */
 static volatile int isInterrupted = 0;
+
+/**
+ * return value of the program
+ */
 static volatile int retVal = EOK;
 
+/**
+ * parses the ip address of the network and prefix
+ * @return the ip address of the network
+ * @throws InvalidArgumentException if the arguments are invalid
+ */
 IpAddress parseNetworkInfo(char *net, int &prefix) {
     try {
         char *lomitko = strchr(net, '/');
@@ -57,6 +78,12 @@ IpAddress parseNetworkInfo(char *net, int &prefix) {
     throw InvalidArgumentException("Wrong net/prefix format");
 }
 
+/**
+ * function parses reserved ip addresses from char* string1
+ * @param reserved list into which the ip addresses are saved
+ * @param string1 string contating the addresses
+ * @throws ParseException if the format is invalid
+ */
 void parseReservedAddress(list <IpAddress> &reserved, char *string1) {
     static const int MAX_ADDR_SIZE = 3 + 1 + 3 + 1 + 3 + 1 + 3;
     char *begin = string1, *end = NULL;
@@ -83,6 +110,12 @@ void parseReservedAddress(list <IpAddress> &reserved, char *string1) {
 }
 
 
+/**
+ * function parses static address assignment from file
+ * @param direct_mapping map where the result is saved
+ * @param file file concating the static assignments
+ * @throws InvalidArgumentException if the file does not exist
+ */
 void parseDirectMapping(map<MacAddress, IpAddress> &direct_mapping, char *file) {
     ifstream infile;
     infile.open(file);
@@ -100,6 +133,18 @@ void parseDirectMapping(map<MacAddress, IpAddress> &direct_mapping, char *file) 
     infile.close();
 }
 
+/**
+ * parses program arguments
+ * @param argc self explanatory
+ * @param argv selft explanatory
+ *
+ * output params:
+ * @param networkAddress address of the network
+ * @param prefix prefix of the network
+ * @param reserved list of reserved addresses
+ * @param direct_mapping map of static assignments
+ * @throws InvalidArgumentException if the format of the arguments is invalid
+ */
 void parseArguments(int argc, char **argv, IpAddress *networkAddress, int &prefix, list <IpAddress> &reserved,
                     map<MacAddress, IpAddress> &direct_mapping) {
     if (argc < 3)
@@ -127,6 +172,9 @@ void parseArguments(int argc, char **argv, IpAddress *networkAddress, int &prefi
     }
 }
 
+/**
+ * prints help
+ */
 void printHelp() {
     static const string txt = "Usage: ./dserver -p <netAddr>/<prefix> [-e <exluded1>,<exluded12>,...] [-d <file>]\n"
             "-e allow excluded addresses\n"
@@ -134,6 +182,11 @@ void printHelp() {
     cout << txt;
 }
 
+/**
+ * Hadler of the SIGINT signal
+ * interrupts the mainloop by setting interrupt flag and closing the socket
+ * @param dummy dummy param
+ */
 void intHandler(int dummy) {
     cout << "Interrupting" << endl;
     mainLock.lock();
@@ -143,23 +196,32 @@ void intHandler(int dummy) {
     mainLock.unlock();
 }
 
+
+/**
+ * main loop of the program
+ * listens on a socket, gets a message, parses it and replies, then waits again
+ * the loop is brokem from the SIGINT signal handler
+ * @param handler address handler
+ */
 void serverLoop(AddressHandler &handler) {
-    signal(SIGINT, intHandler);
+    signal(SIGINT, intHandler); //register the signal handler
 
     Socket socket1(handler.getServerAddress());
     sock = &socket1; // store pointer to the socket in global volatile variable, so that the interrupt handler can close the socket
 
     ProtocolParser parser;
     cout << "Starting" << endl;
+    handler.startTheAddressCollector();
     while (!isInterrupted) {
         try {
             vector<unsigned char> msg = socket1.getMessage();
             std::lock_guard<std::mutex> guard(mainLock); //acquire the lock for the duration of request handling
             DhcpMessage dhcpMessage(msg);
-            AbstractRequest *req = parser.parseRequest(dhcpMessage); //dynamic allocation and dealocation is handled by protocol parser
+            AbstractRequest *req = parser.parseRequest(
+                    dhcpMessage); //dynamic allocation and dealocation is handled by protocol parser
             req->performTask(handler);
         } catch (SocketException &e) {
-            if(isInterrupted){
+            if (isInterrupted) {
                 // if the flag was set already by interrupt handler, we return the retval zero (the exception was raised by handler closing the socket)
                 break;
             } else {
@@ -175,6 +237,12 @@ void serverLoop(AddressHandler &handler) {
     cout << "Finishing" << endl;
 }
 
+/**
+ * main function of the program
+ * parses the arguments, creates the address handler with underlying addressPool, then goes into the main serverloop
+ * @return one of the RET_VAL enum
+ * @see RET_VAL in constants.h
+ */
 int main(int argc, char **argv) {
     IpAddress networkAddress("0.0.0.0");
     int prefix;
@@ -193,21 +261,10 @@ int main(int argc, char **argv) {
         std::cerr << e.toString() << std::endl;
         printHelp();
         return ERR_PARAMS;
-    }
-    catch (SocketException &e) {
+    } catch (SocketException &e) {
         std::cerr << e.toString() << std::endl;
         printHelp();
-        return ERR_PARAMS;
+        return ERR_SOCKET;
     }
-//    AddressHandler handler(networkAddress, prefix, reserved, direct_mapping);
-//    std::cout << handler.toString() << std::endl;
-
-//    IpAddress address(127,0,0,1);
-//    Socket socket1(address);
-////    std::vector<char> ret = socket1.getMessage();
-////    std::cout << ret.data() << std::endl;
-//
-//    std::string msg = "Hello, world";
-//    socket1.sendMessage(msg,address);
     return retVal;
 }

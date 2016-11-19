@@ -18,7 +18,7 @@ TEST_CASE(address_handler_basic,
               list <IpAddress> reserved;
               AddressHandler handler(first, prefix, reserved, direct_mapping);
 
-              handler.start();
+              handler.startTheAddressCollector();
 
               MacAddress mac1(5, 5, 5, 5, 5, 5);
               MacAddress mac2(1, 1, 1, 1, 1, 1);
@@ -33,7 +33,7 @@ TEST_CASE(address_handler_basic,
               result3 = handler.getAddressFor(mac1);
 
 
-              handler.interrupt();
+              handler.interruptTheAddressCollector();
 
           } catch (InvalidArgumentException &e) {
               cerr << e.what() << endl;
@@ -51,7 +51,7 @@ TEST_CASE(address_handler_advanced,
               MacAddress mac(5, 5, 5, 5, 5, 5);
               MacAddress mac2(1, 1, 1, 1, 1, 1);
               // start the gc
-              handler.start();
+              handler.startTheAddressCollector();
 
               IpAddress result = handler.getAddressFor(mac);
               handler.confirmBindingFor(result,mac);
@@ -63,7 +63,7 @@ TEST_CASE(address_handler_advanced,
               handler.printCurrentState();
               sleep(2);
               handler.printCurrentState();
-              handler.interrupt();
+              handler.interruptTheAddressCollector();
               cout << "AFTER INTERRUPT" << endl;
               sleep(1);
               handler.printCurrentState();

@@ -1,7 +1,3 @@
-//
-// Created by david on 8.10.16.
-//
-
 #ifndef ISA_PROJ_DHCPMESSAGE_H
 #define ISA_PROJ_DHCPMESSAGE_H
 
@@ -18,10 +14,6 @@
 #include "../exceptions/ParseException.h"
 
 using namespace std;
-
-
-
-
 
 //    Bytes        Offset
 //    char op;                          // 1              0
@@ -42,6 +34,9 @@ using namespace std;
 
 
 
+/**
+ * Whole lot of constants about DHCP mesage format
+ */
 static const int _op = 0;
 static const int _htype = 1;
 static const int _hlen = 2;
@@ -57,6 +52,10 @@ static const int _chaddr = 28;
 static const int _sname = 44;
 static const int _file = 108;
 static const int _options = 236;
+
+/**
+ * size of elemtns
+ */
 
 static const int _size_xid = 4;
 static const int _size_secs = 2;
@@ -77,6 +76,9 @@ static const int _size_subnet_mask = 4;
 static const int _size_server_identifier = 4;
 static const int _size_end = 0;
 
+/**
+ * optinons that are currently supported, unknown options are simply skipped
+ */
 enum optionType {
     pad = 0,
     messageTypeID = 53,
@@ -86,6 +88,9 @@ enum optionType {
 };
 
 
+/**
+ * Class represents dhcp message, its input and ouput is in the form of vector<unsigned char>
+ */
 class DhcpMessage : public BaseObject {
     const string _name = "DHCP message";
 
@@ -117,14 +122,19 @@ class DhcpMessage : public BaseObject {
 
 public:
 
-    ////////METHODS/////////
 
-
-
+    /**
+     * Constructor, parses information from the message
+     * @throws Parse exception if the format is invalid
+     * @param msg message
+     */
     DhcpMessage(vector<unsigned char> &msg);
 
     DhcpMessage &operator=(DhcpMessage other);
 
+    /**
+     * @return vector representing current state of the message
+     */
     vector<unsigned char> createMessageVector() const ;
 
     virtual string toString() const ;
@@ -133,6 +143,9 @@ public:
         return this->_name;
     }
 
+
+    /////////////////////////////////////////////////////
+    ///                 getters and setters
 
     addressing::MacAddress &getChaddr() {
         return chaddr;

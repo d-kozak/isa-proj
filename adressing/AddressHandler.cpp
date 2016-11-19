@@ -62,11 +62,11 @@ namespace addressing {
     }
 
 
-    void AddressHandler::start() {
+    void AddressHandler::startTheAddressCollector() {
         this->_collector.start();
     }
 
-    void AddressHandler::interrupt() {
+    void AddressHandler::interruptTheAddressCollector() {
         this->_collector.interrupt();
     }
 
@@ -81,24 +81,26 @@ namespace addressing {
 
     /////////////////////////////////////////////////////////
 
-    AddressCollector::AddressCollector(AddressHandler *ha) : _handler(ha), _garbageCollector(), isInterrupted(false) {}
+    AddressCollector::AddressCollector(AddressHandler *ha) : _handler(ha), _garbageCollector(), _isInterrupted(false),_collectorStarted(false) {}
 
     void AddressCollector::start() {
+        this->_collectorStarted = true;
         this->_garbageCollector = thread(
                 [this] { this->run(); }
         );
     }
 
     void AddressCollector::interrupt() {
-        if(this->isInterrupted) // if the thread is already interrupted, just return
+        if(this->_isInterrupted || !this->_collectorStarted) // if the thread is already interrupted or was not started at all,just return
             return;
-        this->isInterrupted = true;
+        this->_isInterrupted = true;
+        this->_collectorStarted = false;
         this->_garbageCollector.join();
     }
 
     void AddressCollector::run() {
         cout << "COLLECTOR STARTED" << endl;
-        while (!isInterrupted) {
+        while (!_isInterrupted) {
             lock_guard<recursive_mutex>(this->_handler->_lock);
             // It is not possible to iterate a collection and delete its elemetns at once,
             // thats why we first get the list of items and delete it later
@@ -121,7 +123,7 @@ namespace addressing {
     string AddressCollector::toString() const {
         stringstream ss;
         ss << this->_name << " -> ";
-        if(isInterrupted)
+        if(_isInterrupted)
             ss << "interrupted";
         else
             ss << "running";

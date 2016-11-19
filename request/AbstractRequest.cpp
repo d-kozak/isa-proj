@@ -1,5 +1,5 @@
 //
-// Created by david on 6.10.16.
+// see header for comments
 //
 
 #include "AbstractRequest.h"
@@ -10,6 +10,7 @@
 #include "../constants.h"
 
 AbstractRequest * ProtocolParser::parseRequest(DhcpMessage & msg){
+    // creates an object representation of switch
     AbstractRequest * ret;
     unsigned char type = msg.getMeesageType();
     switch(type){

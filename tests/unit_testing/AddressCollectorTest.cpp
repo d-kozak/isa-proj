@@ -15,9 +15,9 @@ TEST_CASE(collector_basic,
                   int prefix = 30;
                   list<IpAddress> reserved;
     AddressHandler handler(first,prefix, reserved,direct_mapping);
-          handler.start();
+          handler.startTheAddressCollector();
           sleep(2);
-          handler.interrupt();
+          handler.interruptTheAddressCollector();
 );
 
 

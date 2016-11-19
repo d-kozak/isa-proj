@@ -1,5 +1,5 @@
 //
-// Created by david on 7.10.16.
+// see header for comments
 //
 
 #include "InvalidArgumentException.h"

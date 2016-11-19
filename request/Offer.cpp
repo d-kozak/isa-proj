@@ -1,11 +1,9 @@
 //
-// Created by david on 17.10.16.
+// see header for comments
 //
-
 #include "Offer.h"
 #include "../sockets/Socket.h"
 #include "../constants.h"
-#include "Nack.h"
 
 void Offer::performTask(DhcpMessage &_msg, IpAddress &_addr, AddressHandler &_handler) {
     AbstractReply::performTask(_msg, _addr, _handler);

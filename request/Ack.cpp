@@ -1,5 +1,5 @@
 //
-// Created by david on 11.11.16.
+// see header for comments
 //
 
 #include "Ack.h"
@@ -8,6 +8,7 @@
 void Ack::performTask(DhcpMessage & msg, IpAddress & addr,AddressHandler & handler){
     AbstractReply::performTask(msg,addr,handler);
     msg.setCiaddr(addr);
+    msg.setMeesageType(ACK);
 
     IpAddress broadcast = IpAddress::getBroadcastAddr();
     Socket socket1(broadcast);
