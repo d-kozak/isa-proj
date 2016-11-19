@@ -1,2 +1,6 @@
 **/.idea/*
 *.iml
+CMakeFiles/*
+/CMakeCache.txt
+/cmake_install.cmake
+/.~lock.DOC.odt#
