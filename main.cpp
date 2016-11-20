@@ -75,7 +75,8 @@ void checkArguments(IpAddress & netAddrObj,int prefix, list <IpAddress> &reserve
     //check static assignments
     for(auto & item : direct_mapping){
         uint32_t address = item.second.getAddrForSocket();
-        if(address & netMask != netAddressInt){
+        uint32_t subnetOfThisAddress = address & netMask;
+        if(subnetOfThisAddress != netAddressInt){
             stringstream ss;
             ss << "Address " << item.second.toString() << " is not in the subnet " << netAddrObj.toString() << "/" << prefix << endl;
             throw InvalidArgumentException(ss.str());

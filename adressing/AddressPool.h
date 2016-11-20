@@ -59,12 +59,17 @@ namespace addressing {
          */
         Timestamp *_timestamp = NULL;
 
+        /**
+         * true for items in the pool, false for locally created object used in direct mapping @see AddressPool::confirmBindingFor
+         */
+        bool _isSharedInstance;
+
     public:
         /**
          * constructor, creates new address with the state FREE
          * @param address ip address
          */
-        AddressInfo(IpAddress &address) : _address(address), _state(FREE) {}
+        AddressInfo(IpAddress &address) : _address(address), _state(FREE), _isSharedInstance(true),_timestamp(NULL),_mac(NULL) {}
 
         /**
          * constructor, creates new address
@@ -110,7 +115,7 @@ namespace addressing {
          * @warning the method passes the ownership of the object from client code to the pool, DO NOT MODIFY the object directly
          */
         void setMac(MacAddress *mac) {
-            if(this->_mac != NULL)
+            if (this->_mac != NULL)
                 delete this->_mac;
             this->_mac = mac;
         }
@@ -145,6 +150,14 @@ namespace addressing {
         virtual string toString() const;
 
         virtual string getLoggableName() const;
+
+        bool isSharedInstance() {
+            return _isSharedInstance;
+        }
+
+        void setIsSharedInstance(bool newVal) {
+            _isSharedInstance = newVal;
+        }
 
         /**
          * cleans all dynamically allocated stuff
@@ -205,7 +218,7 @@ namespace addressing {
          * @return info about the binded address
          * @throws InvalidArgumentException if this binding is not possible
          */
-        AddressInfo &confirmBindigFor(IpAddress &addr, MacAddress &mac);
+        AddressInfo confirmBindigFor(IpAddress &addr, MacAddress &mac);
 
         /**
          * Releases specified address, move its state to FREE

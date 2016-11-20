@@ -20,7 +20,7 @@ namespace addressing {
         return addr;
     }
 
-    AddressInfo &AddressHandler::confirmBindingFor(IpAddress &addr, MacAddress &mac) {
+    AddressInfo AddressHandler::confirmBindingFor(IpAddress &addr, MacAddress &mac) {
         lock_guard<recursive_mutex>(this->_lock);
         return this->_pool.confirmBindigFor(addr, mac);
     }

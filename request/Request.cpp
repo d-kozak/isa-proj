@@ -15,7 +15,7 @@ void Request::performTask(AddressHandler &handler) {
         IpAddress serverAddress = handler.getServerAddress();
         IpAddress serverIdentifier = _msg.getServerIdentifier(); // server idenfier = client specifies which server he wants to use
         if (serverAddress == serverIdentifier || serverIdentifier == NULL_IP) {
-            AddressInfo &info = handler.confirmBindingFor(requestedIpAddress != NULL_IP ? requestedIpAddress : ciaddr,
+            AddressInfo info = handler.confirmBindingFor(requestedIpAddress != NULL_IP ? requestedIpAddress : ciaddr,
                                                           mac);
             //<mac_adresa> <ip_addresa> <cas_prideleni_ip_adresy> <cas_vyprseni_prirazeni_adresy>
 
@@ -25,6 +25,10 @@ void Request::performTask(AddressHandler &handler) {
 
             Ack ack;
             ack.performTask(_msg, givenAddress, handler);
+
+            // if this was not a shared object, perfrom cleaning
+            if(!info.isSharedInstance())
+                info.clean();
         } else {
             if (DEBUG) {
                 std::stringstream ss;

@@ -28,17 +28,17 @@ namespace addressing {
         for (IpAddress addr = net_address.next_addr(); addr != lastAddr; addr = addr.next_addr()) {
             for (auto &item: direct_mapping) {
                 if (item.second == addr) {
-                    // we found direct mapping
-                    AddressInfo pair(addr, DIRECT_MAPPING);
-                    pair.setMac(new MacAddress(item.first));
-                    this->_addresses.push_back(pair);
+                    // do not need to store direct mapping in the pool
                     continue;
                 }
             }
 
             bool isReserved = find(this->_reserved.begin(), this->_reserved.end(), addr) != this->_reserved.end();
-            AddressInfo pair(addr, isReserved ? RESERVED : FREE);
-            this->_addresses.push_back(pair);
+            if (!isReserved) {
+                // only store addresses that are not reserved
+                AddressInfo pair(addr);
+                this->_addresses.push_back(pair);
+            }
         }
 
         if (DEBUG) {
@@ -89,7 +89,18 @@ namespace addressing {
         throw OutOfAddressException("No address is available");
     }
 
-    AddressInfo &AddressPool::confirmBindigFor(addressing::IpAddress &addr, addressing::MacAddress &mac) {
+    AddressInfo AddressPool::confirmBindigFor(addressing::IpAddress &addr, addressing::MacAddress &mac) {
+        //check static mapping first
+        auto direct = this->_directMapping.find(mac);
+        if (direct != this->_directMapping.end()) {
+            //if it is a direct mapping, simply create a new addressInfo object and return it
+            AddressInfo info((*direct).second, DIRECT_MAPPING);
+            info.createTimestamp();
+            info.setIsSharedInstance(false);
+            return info;
+        }
+
+
         //check whether ip was specified
         if (addr != NULL_IP) {
             // try to find given addressInfo
@@ -98,11 +109,8 @@ namespace addressing {
                     if (item.getState() == TO_BE_BINDED || item.getState() == BINDED || item.getState() == EXPIRED) {
                         item.bindTheAddress(mac);
                         return item;
-                    } else if (item.getState() == DIRECT_MAPPING) {
-                        item.createTimestamp();
-                        return item;
                     } else {
-                        throw InvalidArgumentException("Given address is in invalid state");
+                        throw InvalidArgumentException("1 Given address is in invalid state ");
                     }
                 }
             }
@@ -115,11 +123,8 @@ namespace addressing {
                     if (item.getState() == TO_BE_BINDED || item.getState() == BINDED || item.getState() == EXPIRED) {
                         item.bindTheAddress(mac);
                         return item;
-                    } else if (item.getState() == DIRECT_MAPPING) {
-                        item.createTimestamp();
-                        return item;
                     } else {
-                        throw InvalidArgumentException("Given address is in invalid state");
+                        throw InvalidArgumentException("2 Given address is in invalid state");
                     }
                 }
             }
@@ -263,7 +268,6 @@ namespace addressing {
     }
 
     AddressInfo::~AddressInfo() {
-        this->clean();
     }
 
     MacAddress *AddressInfo::getMac() {
