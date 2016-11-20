@@ -41,7 +41,7 @@ static volatile Socket *sock = NULL;
 /**
  * Interrupt flag for maintrhead <=> signal handler communication
  */
-static volatile int isInterrupted = 0;
+volatile int isInterrupted = 0;
 
 /**
  * return value of the program
@@ -188,7 +188,8 @@ void printHelp() {
  * @param dummy dummy param
  */
 void intHandler(int dummy) {
-    cout << "Interrupting" << endl;
+    if (DEBUG)
+        cout << "Interrupting" << endl;
     mainLock.lock();
     isInterrupted = 1;
     sock->closeSocket(); // closing socket at this point will probably cause exception in the main thread,
@@ -210,7 +211,8 @@ void serverLoop(AddressHandler &handler) {
     sock = &socket1; // store pointer to the socket in global volatile variable, so that the interrupt handler can close the socket
 
     ProtocolParser parser;
-    cout << "Starting" << endl;
+    if (DEBUG)
+        cout << "Starting" << endl;
     handler.startTheAddressCollector();
     while (!isInterrupted) {
         try {
@@ -234,7 +236,8 @@ void serverLoop(AddressHandler &handler) {
             std::cerr << e.toString() << std::endl;
         }
     }
-    cout << "Finishing" << endl;
+    if (DEBUG)
+        cout << "Finishing" << endl;
 }
 
 /**

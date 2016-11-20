@@ -203,8 +203,6 @@ namespace addressing {
 
     string IpAddress::toString() const {
         string ret;
-        ret.append(this->_name);
-        ret.append(" -> ");
         for (int i = 0; i < 4; ++i) {
             ret += std::to_string((int) this->_parts[i]);
             if (i != 3)

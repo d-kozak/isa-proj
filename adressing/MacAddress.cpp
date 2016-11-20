@@ -127,8 +127,6 @@ namespace addressing {
 
     string MacAddress::toString() const{
         string ret;
-        ret.append(this->_name);
-        ret.append(" -> ");
         for (int i = 0; i < MAC_SIZE; ++i) {
             std::stringstream sstream;
             sstream << std::hex << (int) this->_parts[i];

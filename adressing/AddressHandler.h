@@ -145,7 +145,7 @@ namespace addressing {
          * @throws InvalidArgumentException if the the server cannot give any address to the client
          * @return info about the successfully assigned address
          */
-        const AddressInfo & confirmBindingFor(IpAddress & addr,MacAddress & mac);
+        AddressInfo & confirmBindingFor(IpAddress & addr,MacAddress & mac);
 
 
         virtual string toString() const ;

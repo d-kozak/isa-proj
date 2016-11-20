@@ -14,13 +14,15 @@ void Request::performTask(AddressHandler &handler) {
         IpAddress serverAddress = handler.getServerAddress();
         IpAddress serverIdentifier = _msg.getServerIdentifier(); // server idenfier = client specifies which server he wants to use
         if (serverAddress ==  serverIdentifier || serverIdentifier == NULL_IP) {
-            const AddressInfo &info = handler.confirmBindingFor(ciaddr, mac);
+            AddressInfo &info = handler.confirmBindingFor(ciaddr, mac);
             //<mac_adresa> <ip_addresa> <cas_prideleni_ip_adresy> <cas_vyprseni_prirazeni_adresy>
-            std::cout << mac.toString() << " " << ciaddr.toString() << " ";
+
+            IpAddress givenAddress = info.getAddress();
+            std::cout << mac.toString() << " " << givenAddress.toString() << " ";
             info.getTimestamp()->printTimeInfo();
 
             Ack ack;
-            ack.performTask(_msg, ciaddr, handler);
+            ack.performTask(_msg, givenAddress, handler);
         } else {
             std::stringstream ss;
             std::string serverIdOption = _msg.getServerIdentifier().toString();

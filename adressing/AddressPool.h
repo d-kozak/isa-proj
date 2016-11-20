@@ -205,7 +205,7 @@ namespace addressing {
          * @return info about the binded address
          * @throws InvalidArgumentException if this binding is not possible
          */
-        const AddressInfo &confirmBindigFor(IpAddress &addr, MacAddress &mac);
+        AddressInfo &confirmBindigFor(IpAddress &addr, MacAddress &mac);
 
         /**
          * Releases specified address, move its state to FREE

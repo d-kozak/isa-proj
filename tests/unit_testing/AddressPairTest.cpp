@@ -10,9 +10,9 @@ using namespace addressing;
 TEST_CASE(AddressPairToString,
           IpAddress addr(192,168,0,1);
         AddressInfo pair(addr);
-                  MY_ASSERT(pair.toString() == "AddressInfo -> (IpAddress -> 192.168.0.1, FREE)","toStringfailed");
+                  MY_ASSERT(pair.toString() == "AddressInfo -> (192.168.0.1, FREE)","toStringfailed");
                   pair.setState(addressing::BINDED);
-                  MY_ASSERT(pair.toString() == "AddressInfo -> (IpAddress -> 192.168.0.1, BINDED)","toStringfailed2");
+                  MY_ASSERT(pair.toString() == "AddressInfo -> (192.168.0.1, BINDED)","toStringfailed2");
 );
 
 TestSuite getAddressPairTestsuite(){

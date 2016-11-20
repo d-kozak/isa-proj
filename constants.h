@@ -10,8 +10,11 @@
 /**
  * lengtgh of one lease
  */
-#define LEASE_TIME 6
+#define LEASE_TIME 1 * 60
+// one minute
 
+
+#define DEBUG 0
 
 /**
  * return values of the program

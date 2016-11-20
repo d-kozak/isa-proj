@@ -5,6 +5,8 @@
 #include "DhcpMessage.h"
 #include "../constants.h"
 #include <arpa/inet.h>
+#include <fstream>
+#include <iterator>
 
 
 /**
@@ -35,6 +37,45 @@ void check_size_of_option(unsigned char realSize, unsigned char expectedSize, un
         ss << "Wrong size of message " << realSize << " vs at least " << minimalPossibleSize;
         throw ParseException(ss.str());
     }
+}
+
+void saveDhcpMessage(vector<unsigned char> &vec, unsigned int xid, unsigned char type) {
+    if(!DEBUG)
+        return;
+
+    string tmp;
+    switch (type) {
+        case DISCOVER:
+            tmp = "DISCOVER";
+            break;
+        case OFFER:
+            tmp = "OFFER";
+            break;
+        case REQUEST:
+            tmp = "REQUEST";
+            break;
+        case RELEASE:
+            tmp = "RELEASE";
+            break;
+        case ACK:
+            tmp = "ACK";
+            break;
+        case NACK:
+            tmp = "NACK";
+            break;
+        default:
+            throw InvalidArgumentException("Default in type enum in save dhcp, this should never happen");
+
+    }
+    stringstream ss;
+    ss << tmp << "_" << xid << ".dhcp";
+    ofstream file(ss.str());
+    if(!file){
+        cerr << "Could not save message into file " + ss.str();
+        return;
+    }
+    copy(vec.begin(),vec.end(),ostream_iterator<unsigned char>(file));
+    file.close();
 }
 
 
@@ -112,7 +153,7 @@ DhcpMessage::DhcpMessage(vector<unsigned char> &msg) : ciaddr(0, 0, 0, 0), yiadd
             case leaseTimeID: {
                 check_size_of_option(msg[index + 1], _size_lease_time, index, msg.size());
                 index += 2;
-                this->leaseTime = ntohl(getDataTypeFromCharVec(uint32_t,msg,index));
+                this->leaseTime = ntohl(getDataTypeFromCharVec(uint32_t, msg, index));
                 index += _size_lease_time;
                 break;
             }
@@ -133,7 +174,7 @@ DhcpMessage::DhcpMessage(vector<unsigned char> &msg) : ciaddr(0, 0, 0, 0), yiadd
             default: {
                 stringstream ss;
                 ss << "Unknown option id: " << (int) opId;
-                index += 2 + msg[index+1]; // 2 for option
+                index += 2 + msg[index + 1]; // 2 for option
             }
         }
         if (index >= msg.size()) {
@@ -141,6 +182,7 @@ DhcpMessage::DhcpMessage(vector<unsigned char> &msg) : ciaddr(0, 0, 0, 0), yiadd
         }
     }
 
+    saveDhcpMessage(msg,xid,messageType);
 }
 
 DhcpMessage &DhcpMessage::operator=(DhcpMessage other) {
@@ -182,12 +224,12 @@ vector<unsigned char> DhcpMessage::createMessageVector() const {
     getElemAsType(uint32_t, ret, _giaddr) = htonl(giaddr.getAddrForSocket());
 
     // mac address
-    for(int i = 0 ; i < MAC_SIZE ; i++){
+    for (int i = 0; i < MAC_SIZE; i++) {
         ret[_chaddr + i] = this->chaddr.getPart(i);
     }
 
-    memcpy(ret.data() + _sname,sname,_size_sname);
-    memcpy(ret.data() + _file,file,_size_file);
+    memcpy(ret.data() + _sname, sname, _size_sname);
+    memcpy(ret.data() + _file, file, _size_file);
 
     int index = _options;
     // magic cookies
@@ -203,36 +245,42 @@ vector<unsigned char> DhcpMessage::createMessageVector() const {
     ret[index++] = _size_message_type;
     ret[index++] = messageType;
 
-    if(this->messageType == NACK){
+    if (this->messageType == NACK) {
         // NACK messages do not need any other options
         ret[index++] = end; // type
         ret[index++] = end; // size
+
+        saveDhcpMessage(ret,xid,messageType);
+
         return ret;
     }
 
     ret[index++] = subnetMaskID;
     ret[index++] = _size_subnet_mask;
-    getElemAsType(uint32_t,ret,index) = subnetMask.getAddrForSocket(); // htonl is here on purpose because this address is generated in the network order
+    getElemAsType(uint32_t, ret,
+                  index) = subnetMask.getAddrForSocket(); // htonl is here on purpose because this address is generated in the network order
     index += _size_subnet_mask;
 
     ret[index++] = leaseTimeID;
     ret[index++] = _size_lease_time;
-    getElemAsType(uint32_t,ret,index) = htonl(leaseTime);
+    getElemAsType(uint32_t, ret, index) = htonl(leaseTime);
     index += _size_lease_time;
 
     ret[index++] = serverIdentifierID;
     ret[index++] = _size_server_identifier;
-    getElemAsType(uint32_t,ret,index) = htonl(serverIdentifier.getAddrForSocket());
+    getElemAsType(uint32_t, ret, index) = htonl(serverIdentifier.getAddrForSocket());
     index += _size_server_identifier;
 
     ret[index++] = end; // type
     ret[index++] = end; // size  TODO probably not neccessary
 
+    saveDhcpMessage(ret,xid,messageType);
+
     return ret;
 }
 
 
-string DhcpMessage::toString()  const {
+string DhcpMessage::toString() const {
     stringstream ss;
     ss << this->_name + " -> " << "{" << endl;
     ss << this->createMessageVector().data() << endl;

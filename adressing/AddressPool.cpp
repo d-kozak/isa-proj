@@ -41,8 +41,12 @@ namespace addressing {
             this->_addresses.push_back(pair);
         }
 
-        unsigned long count = _addresses.size();
-        std::cout << "Allocated " << count << " addresses." << std::endl<< "Aproximate size of the pool: " << count * sizeof(IpAddress) << " bytes + " << sizeof(AddressPool) << " bytes of address pool" << std::endl;
+        if (DEBUG) {
+            unsigned long count = _addresses.size();
+            std::cout << "Allocated " << count << " addresses." << std::endl << "Aproximate size of the pool: "
+                      << count * sizeof(IpAddress) << " bytes + " << sizeof(AddressPool) << " bytes of address pool"
+                      << std::endl;
+        }
     }
 
     void AddressPool::clean() {
@@ -85,7 +89,7 @@ namespace addressing {
         throw OutOfAddressException("No address is available");
     }
 
-    const AddressInfo &AddressPool::confirmBindigFor(addressing::IpAddress &addr, addressing::MacAddress &mac) {
+    AddressInfo &AddressPool::confirmBindigFor(addressing::IpAddress &addr, addressing::MacAddress &mac) {
         //check whether ip was specified
         if (addr != NULL_IP) {
             // try to find given addressInfo
@@ -191,10 +195,11 @@ namespace addressing {
 
 
     void AddressInfo::bindTheAddress(MacAddress &mac) {
-        if(this->_mac == NULL)
+        if (this->_mac == NULL)
             throw InvalidArgumentException("Mac is null in bindTheAdress");
-        if(*this->_mac != mac){
-            throw InvalidArgumentException("Mac address set in the discover is diffrent the the on in the request, wierd internal error");
+        if (*this->_mac != mac) {
+            throw InvalidArgumentException(
+                    "Mac address set in the discover is diffrent the the on in the request, wierd internal error");
         }
 
         this->setState(BINDED);

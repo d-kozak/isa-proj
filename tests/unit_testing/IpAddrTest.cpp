@@ -32,13 +32,13 @@ TEST_CASE(ipPrintName,
 TEST_CASE(ipToString,
 
     IpAddress addr1(192,168,0,0);
-    MY_ASSERT(addr1.toString() == "IpAddress -> 192.168.0.0","toString comparison failed");
+    MY_ASSERT(addr1.toString() == "192.168.0.0","toString comparison failed");
 );
 
 TEST_CASE(ipnext,
     IpAddress addr(192,168,0,0);
     IpAddress addr2 = addr.next_addr();
-            MY_ASSERT(addr2.toString() == "IpAddress -> 192.168.0.1","next_addr(void) did not compute correct address");
+            MY_ASSERT(addr2.toString() == "192.168.0.1","next_addr(void) did not compute correct address");
 //            cout << "start" << endl;
 //            cout << addr.toString() << endl;
 //            using namespace std;
@@ -53,7 +53,7 @@ TEST_CASE(ipnext,
 TEST_CASE(ipnextint,
           IpAddress addr1(192,168,0,0);
           IpAddress addr2 = addr1.next_addr(5);
-          MY_ASSERT(addr2.toString() == "IpAddress -> 192.168.0.5","next_addr(int) did not compute correct address");
+          MY_ASSERT(addr2.toString() == "192.168.0.5","next_addr(int) did not compute correct address");
 );
 
 TEST_CASE(ipnextdist,

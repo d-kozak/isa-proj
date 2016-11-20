@@ -25,7 +25,7 @@ AbstractRequest * ProtocolParser::parseRequest(DhcpMessage & msg){
             break;
         default:
             string res = "Mesage type not recoqnized : ";
-            res += type;
+            res += (int) type;
             throw ParseException(res);
 
     }

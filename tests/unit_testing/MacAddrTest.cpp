@@ -32,7 +32,7 @@ TEST_CASE(macToString,
 
           MacAddress addr1(0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF);
                   std:: cout << addr1.toString() << std::endl;
-                  MY_ASSERT(addr1.toString() == "MacAddress -> ff:ff:ff:ff:ff:ff", "toString comparison failed");
+                  MY_ASSERT(addr1.toString() == "ff:ff:ff:ff:ff:ff", "toString comparison failed");
 );
 
 TestSuite getMacTestSuite(){

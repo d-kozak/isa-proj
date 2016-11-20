@@ -3,22 +3,19 @@
 //
 #include "Socket.h"
 #include "../exceptions/SocketException.h"
+#include "../constants.h"
 
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
 #include <arpa/inet.h>
-#include <ctype.h>
 #include <err.h>
-#include <netdb.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <vector>
 
 #define BUFFER_SIZE 1024
 
+/**
+ * flag from main to determine if the socket error was raised on purpose
+ */
+extern volatile int isInterrupted;
 
 Socket::Socket(const IpAddress &addr) : _addr(addr), _fd(-1) {}
 
@@ -36,13 +33,14 @@ vector<unsigned char> Socket::getMessage() {
 
     msg_size = recvfrom(_fd, data.data(), BUFFER_SIZE, 0, (struct sockaddr *) &client, &length);
     if (msg_size == -1) {
-        perror("Socket");
+        if (!isInterrupted)
+            perror("Socket");
         throw SocketException("recvfrom() failed");
     }
 
 
-    printf("Request received from %s, port %d\n", inet_ntoa(client.sin_addr), ntohs(client.sin_port));
-    cout << data.data() << endl;
+    if (DEBUG)
+        printf("Request received from %s, port %d\n", inet_ntoa(client.sin_addr), ntohs(client.sin_port));
     this->closeSocket();
     return data;
 }
@@ -56,10 +54,12 @@ struct sockaddr_in Socket::initsockaddr(uint32_t addr, bool forListening) {
     memset(&server, 0, sizeof(server));
     server.sin_family = AF_INET;                     // set IPv4 addressing
     server.sin_addr.s_addr = addr;           // the server listens to any interface
-    server.sin_port = htons(forListening ? DHCP_PORT_LISTEN : DHCP_PORT_SEND);              // the server listens on this port
+    server.sin_port = htons(
+            forListening ? DHCP_PORT_LISTEN : DHCP_PORT_SEND);              // the server listens on this port
 
     if (forListening) {
-        printf("binding to the port %d (%d)\n", DHCP_PORT_LISTEN, server.sin_port);
+        if (DEBUG)
+            printf("binding to the port %d (%d)\n", DHCP_PORT_LISTEN, server.sin_port);
         if (bind(this->_fd, (struct sockaddr *) &server, sizeof(server)) == -1) { // binding with the port
             perror("Socket");
             throw SocketException("bind() failed");
@@ -69,7 +69,8 @@ struct sockaddr_in Socket::initsockaddr(uint32_t addr, bool forListening) {
 }
 
 void Socket::initSocket() {
-    printf("opening UDP socket(...)\n");
+    if (DEBUG)
+        printf("opening UDP socket(...)\n");
     if ((_fd = socket(AF_INET, SOCK_DGRAM, 0)) == -1) {    // create the server UDP socket
         perror("Socket");
         throw SocketException("socket() failed");
@@ -77,8 +78,9 @@ void Socket::initSocket() {
 }
 
 void Socket::closeSocket() volatile {
-    printf("closing socket\n");
-    if(_fd != -1) {
+    if (DEBUG)
+        printf("closing socket\n");
+    if (_fd != -1) {
         if (close(_fd) == -1) {
             perror("Socket");
             throw SocketException("close() failed");
@@ -107,8 +109,7 @@ void Socket::sendMessage(vector<unsigned char> msg, IpAddress destination) {
     if (count == -1) {                      // check if data was sent correctly
         perror("Socket");
         throw SocketException("sendto() failed");
-    }
-    else if (count != msg.size()) {
+    } else if (count != msg.size()) {
         perror("Socket");
         throw SocketException("sendto(): buffer written partially");
     }
@@ -118,9 +119,9 @@ void Socket::sendMessage(vector<unsigned char> msg, IpAddress destination) {
 
 Socket::~Socket() {
     if (_fd != -1) {
-        try{
+        try {
             this->closeSocket();
-        } catch (SocketException & e) {
+        } catch (SocketException &e) {
             cerr << e.what();
         }
     }

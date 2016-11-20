@@ -10,8 +10,8 @@
 namespace addressing {
     AddressHandler::AddressHandler(IpAddress &net_address, int prefix, list <IpAddress> &reserved,
                                    map<MacAddress, IpAddress> &direct_mapping) :
-            _lock(), _pool(net_address, prefix, reserved,direct_mapping),
-            _collector(this),_prefix(prefix),_serverAddress(net_address) {}
+            _lock(), _pool(net_address, prefix, reserved, direct_mapping),
+            _collector(this), _prefix(prefix), _serverAddress(net_address) {}
 
 
     IpAddress AddressHandler::getAddressFor(MacAddress &mac) {
@@ -20,9 +20,9 @@ namespace addressing {
         return addr;
     }
 
-    const AddressInfo &  AddressHandler::confirmBindingFor(IpAddress & addr,MacAddress & mac){
+    AddressInfo &AddressHandler::confirmBindingFor(IpAddress &addr, MacAddress &mac) {
         lock_guard<recursive_mutex>(this->_lock);
-        return this->_pool.confirmBindigFor(addr,mac);
+        return this->_pool.confirmBindigFor(addr, mac);
     }
 
     void AddressHandler::releaseAddress(MacAddress &mac) {
@@ -44,7 +44,7 @@ namespace addressing {
      * the information may be stale
      * @return
      */
-    string AddressHandler::toString() const{
+    string AddressHandler::toString() const {
         //lock_guard<recursive_mutex>(this->_lock);
         //
         stringstream ss;
@@ -74,14 +74,15 @@ namespace addressing {
         return _serverAddress;
     }
 
-    AddressHandler::~AddressHandler(){
+    AddressHandler::~AddressHandler() {
         this->_collector.interrupt();
         this->_pool.clean();
     }
 
     /////////////////////////////////////////////////////////
 
-    AddressCollector::AddressCollector(AddressHandler *ha) : _handler(ha), _garbageCollector(), _isInterrupted(false),_collectorStarted(false) {}
+    AddressCollector::AddressCollector(AddressHandler *ha) : _handler(ha), _garbageCollector(), _isInterrupted(false),
+                                                             _collectorStarted(false) {}
 
     void AddressCollector::start() {
         this->_collectorStarted = true;
@@ -91,7 +92,8 @@ namespace addressing {
     }
 
     void AddressCollector::interrupt() {
-        if(this->_isInterrupted || !this->_collectorStarted) // if the thread is already interrupted or was not started at all,just return
+        if (this->_isInterrupted ||
+            !this->_collectorStarted) // if the thread is already interrupted or was not started at all,just return
             return;
         this->_isInterrupted = true;
         this->_collectorStarted = false;
@@ -99,7 +101,8 @@ namespace addressing {
     }
 
     void AddressCollector::run() {
-        cout << "COLLECTOR STARTED" << endl;
+        if (DEBUG)
+            cout << "COLLECTOR STARTED" << endl;
         while (!_isInterrupted) {
             lock_guard<recursive_mutex>(this->_handler->_lock);
             // It is not possible to iterate a collection and delete its elemetns at once,
@@ -107,30 +110,32 @@ namespace addressing {
             list <IpAddress> to_expire;
             for (auto &item : this->_handler->_pool.getAddresses()) {
                 if (item.getState() == BINDED) {
-                    if(item.getTimestamp()->isLeaseExpired()){
-                    cout << "COLLECTOR will removing reservation for " << item.getAddress().toString() << endl;
-                    to_expire.push_back(item.getAddress());
-                }}
+                    if (item.getTimestamp()->isLeaseExpired()) {
+                        cout << "COLLECTOR will removing reservation for " << item.getAddress().toString() << endl;
+                        to_expire.push_back(item.getAddress());
+                    }
+                }
             }
             for (auto &x: to_expire) {
                 this->_handler->_pool.addressExpired(x);
             }
             sleep(1);
         }
-        cout << "COLLECTOR FINISHED" << endl;
+        if (DEBUG)
+            cout << "COLLECTOR FINISHED" << endl;
     }
 
     string AddressCollector::toString() const {
         stringstream ss;
         ss << this->_name << " -> ";
-        if(_isInterrupted)
+        if (_isInterrupted)
             ss << "interrupted";
         else
             ss << "running";
         return ss.str();
     }
 
-    string AddressCollector::getLoggableName() const  {
+    string AddressCollector::getLoggableName() const {
         return this->_name;
     }
 }
