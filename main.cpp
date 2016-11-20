@@ -72,6 +72,9 @@ void checkArguments(IpAddress & netAddrObj,int prefix, list <IpAddress> &reserve
         }
     }
 
+    // the addressOfTheServer, cannot be used by static mapping
+    uint32_t serverAddress = netAddrObj.next_addr().getAddrForSocket();
+
     //check static assignments
     for(auto & item : direct_mapping){
         uint32_t address = item.second.getAddrForSocket();
@@ -81,7 +84,14 @@ void checkArguments(IpAddress & netAddrObj,int prefix, list <IpAddress> &reserve
             ss << "Address " << item.second.toString() << " is not in the subnet " << netAddrObj.toString() << "/" << prefix;
             throw InvalidArgumentException(ss.str());
         }
+
+        if(item.second.getAddrForSocket() == serverAddress ){
+            stringstream ss;
+            ss << "IP " << item.second.toString() << " is the first address in the subnet which belongs to the server";
+            throw InvalidArgumentException(ss.str());
+        }
     }
+
 
     // last control if the statically mapped ip is not reserved at the same time
     for(auto & item : direct_mapping){
