@@ -108,7 +108,7 @@ ${TEST_EXEC}: ${FILES_FULL_PATH} ./tests/unit_testing/testStarter.o ${TEST_FULL_
 	${CC} ${CPPFLAGS} ./exceptions/InvalidArgumentException.cpp ${OPT}  -c
 
 distrib:
-	tar -cvf xkozak15.tar ${ALL_FILES} Makefile README manual.pdf
+	tar -cvf xkozak15.tar ${ALL_FILES} Makefile README manual.pdf ./tests/msgs/*
 
 clean:
 	rm -f ${FILES} ${TEST_EXEC} ${TEST_FILES} ${EXEC_NAME} ${THREADING_FILES} main.o testStarter.o
