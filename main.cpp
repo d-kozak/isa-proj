@@ -303,7 +303,6 @@ int main(int argc, char **argv) {
         return ERR_PARAMS;
     } catch (SocketException &e) {
         std::cerr << e.toString() << std::endl;
-        printHelp();
         return ERR_SOCKET;
     }
     return retVal;
