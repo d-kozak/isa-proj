@@ -10,11 +10,13 @@
 void Request::performTask(AddressHandler &handler) {
     MacAddress &mac = _msg.getChaddr();
     IpAddress &ciaddr = _msg.getCiaddr();
+    IpAddress &requestedIpAddress = _msg.getRequestedIp();
     try {
         IpAddress serverAddress = handler.getServerAddress();
         IpAddress serverIdentifier = _msg.getServerIdentifier(); // server idenfier = client specifies which server he wants to use
         if (serverAddress == serverIdentifier || serverIdentifier == NULL_IP) {
-            AddressInfo &info = handler.confirmBindingFor(ciaddr, mac);
+            AddressInfo &info = handler.confirmBindingFor(requestedIpAddress != NULL_IP ? requestedIpAddress : ciaddr,
+                                                          mac);
             //<mac_adresa> <ip_addresa> <cas_prideleni_ip_adresy> <cas_vyprseni_prirazeni_adresy>
 
             IpAddress givenAddress = info.getAddress();

@@ -74,6 +74,7 @@ static const int _size_message_type = 1;
 static const int _size_lease_time = 4;
 static const int _size_subnet_mask = 4;
 static const int _size_server_identifier = 4;
+static const int _size_requested_ip_address = 4;
 static const int _size_end = 0;
 
 /**
@@ -81,6 +82,7 @@ static const int _size_end = 0;
  */
 enum optionType {
     pad = 0,
+    requestedIpAddressID = 50,
     messageTypeID = 53,
     leaseTimeID = 51,
     subnetMaskID = 1,
@@ -116,6 +118,7 @@ class DhcpMessage : public BaseObject {
     unsigned int leaseTime;
     addressing::IpAddress subnetMask;
     addressing::IpAddress serverIdentifier;
+    addressing::IpAddress requestedIpAddress;
     const unsigned char end = 255;
 
     ///////////////////////////////////////////////////////////////////////////////////
@@ -294,6 +297,14 @@ public:
 
     void setServerIdentifier(const addressing::IpAddress &serverIdentifier) {
         DhcpMessage::serverIdentifier = serverIdentifier;
+    }
+
+    addressing::IpAddress &getRequestedIp() {
+        return requestedIpAddress;
+    }
+
+    void setRequestedIp(addressing::IpAddress &requesttedIp) {
+        DhcpMessage::requestedIpAddress = requesttedIp;
     }
 
 };

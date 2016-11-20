@@ -58,13 +58,14 @@ static volatile int retVal = EOK;
  */
 void checkArguments(IpAddress & netAddrObj,int prefix, list <IpAddress> &reserved,
                     map<MacAddress, IpAddress> &direct_mapping){
+    uint32_t  netMask = ntohl(IpAddress::getNetMaskFor(prefix).getAddrForSocket());
     uint32_t netAddressInt = netAddrObj.getAddrForSocket();
-    uint32_t  netMask = IpAddress::getNetMaskFor(prefix).getAddrForSocket();
 
     // check reserved addresses
     for(auto & item : reserved){
         uint32_t address = item.getAddrForSocket();
-        if(address & netMask != netAddressInt){
+        uint32_t subnetOfThisAddress = address & netMask;
+        if(subnetOfThisAddress != netAddressInt){
             stringstream ss;
             ss << "Address " << item.toString() << " is not in the subnet " << netAddrObj.toString() << "/" << prefix << endl;
             throw InvalidArgumentException(ss.str());

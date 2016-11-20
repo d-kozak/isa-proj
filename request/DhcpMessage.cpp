@@ -82,7 +82,7 @@ void saveDhcpMessage(vector<unsigned char> &vec, unsigned int xid, unsigned char
 DhcpMessage::DhcpMessage(vector<unsigned char> &msg) : ciaddr(0, 0, 0, 0), yiaddr(0, 0, 0, 0), siaddr(0, 0, 0, 0),
                                                        giaddr(0, 0, 0, 0), chaddr(0, 0, 0, 0, 0, 0),
                                                        subnetMask(0, 0, 0, 0),
-                                                       serverIdentifier(0, 0, 0, 0) {
+                                                       serverIdentifier(0, 0, 0, 0),requestedIpAddress(0,0,0,0) {
 
     if (msg.size() < MSG_SIZE) {
         stringstream ss;
@@ -171,6 +171,12 @@ DhcpMessage::DhcpMessage(vector<unsigned char> &msg) : ciaddr(0, 0, 0, 0), yiadd
                 index += _size_server_identifier;
                 break;
             }
+            case requestedIpAddressID: {
+                check_size_of_option(msg[index+1],_size_requested_ip_address,index,msg.size());
+                index += 2;
+                this->requestedIpAddress = addressing::IpAddress(msg.data() + index);
+                index += _size_requested_ip_address;
+            }
             default: {
                 stringstream ss;
                 ss << "Unknown option id: " << (int) opId;
@@ -258,7 +264,7 @@ vector<unsigned char> DhcpMessage::createMessageVector() const {
     ret[index++] = subnetMaskID;
     ret[index++] = _size_subnet_mask;
     getElemAsType(uint32_t, ret,
-                  index) = subnetMask.getAddrForSocket(); // htonl is here on purpose because this address is generated in the network order
+                  index) = subnetMask.getAddrForSocket(); // htonl is not here on purpose because this address is generated in the network order
     index += _size_subnet_mask;
 
     ret[index++] = leaseTimeID;
