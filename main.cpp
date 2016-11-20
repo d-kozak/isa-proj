@@ -67,7 +67,7 @@ void checkArguments(IpAddress & netAddrObj,int prefix, list <IpAddress> &reserve
         uint32_t subnetOfThisAddress = address & netMask;
         if(subnetOfThisAddress != netAddressInt){
             stringstream ss;
-            ss << "Address " << item.toString() << " is not in the subnet " << netAddrObj.toString() << "/" << prefix << endl;
+            ss << "Address " << item.toString() << " is not in the subnet " << netAddrObj.toString() << "/" << prefix;
             throw InvalidArgumentException(ss.str());
         }
     }
@@ -78,8 +78,19 @@ void checkArguments(IpAddress & netAddrObj,int prefix, list <IpAddress> &reserve
         uint32_t subnetOfThisAddress = address & netMask;
         if(subnetOfThisAddress != netAddressInt){
             stringstream ss;
-            ss << "Address " << item.second.toString() << " is not in the subnet " << netAddrObj.toString() << "/" << prefix << endl;
+            ss << "Address " << item.second.toString() << " is not in the subnet " << netAddrObj.toString() << "/" << prefix;
             throw InvalidArgumentException(ss.str());
+        }
+    }
+
+    // last control if the statically mapped ip is not reserved at the same time
+    for(auto & item : direct_mapping){
+        for(auto & addr : reserved){
+            if(item.second == addr){
+                stringstream ss;
+                ss << "IP " <<addr.toString() << " is reserved and statically mapped at the same time, this does not make sense";
+                throw InvalidArgumentException(ss.str());
+            }
         }
     }
 }

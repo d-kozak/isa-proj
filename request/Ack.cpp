@@ -9,7 +9,7 @@ extern volatile Socket *sock;
 
 void Ack::performTask(DhcpMessage & msg, IpAddress & addr,AddressHandler & handler){
     AbstractReply::performTask(msg,addr,handler);
-    msg.setCiaddr(addr);
+    msg.setYiaddr(addr);
     msg.setMeesageType(ACK);
 
     vector<unsigned char> vec = msg.createMessageVector();

@@ -76,7 +76,7 @@ namespace addressing {
          * @param address ip address
          * @param state of the address
          */
-        AddressInfo(IpAddress &address, addressState state) : _address(address), _state(state) {}
+        AddressInfo(IpAddress &address, addressState state) : _address(address), _state(state),_isSharedInstance(true),_timestamp(NULL),_mac(NULL) {}
 
         /**
          * changes the state of address

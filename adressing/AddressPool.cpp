@@ -204,7 +204,7 @@ namespace addressing {
             throw InvalidArgumentException("Mac is null in bindTheAdress");
         if (*this->_mac != mac) {
             throw InvalidArgumentException(
-                    "Mac address set in the discover is diffrent the the on in the request, wierd internal error");
+                    "Mac address set in the discover is different the the on in the request, wierd internal error");
         }
 
         this->setState(BINDED);
