@@ -5,6 +5,8 @@
 #include "Nack.h"
 #include "../sockets/Socket.h"
 
+extern volatile Socket *sock;
+
 void Nack::performTask(DhcpMessage & msg, IpAddress & addr,AddressHandler & handler){
     AbstractReply::performTask(msg,addr,handler);
 
@@ -15,8 +17,8 @@ void Nack::performTask(DhcpMessage & msg, IpAddress & addr,AddressHandler & hand
     msg.setYiaddr(NULL_IP);
     msg.setMeesageType(NACK);
 
-    IpAddress broadcast = IpAddress::getBroadcastAddr();
-    Socket socket(broadcast);
+
+
     vector<unsigned char> vec = msg.createMessageVector();
-    socket.sendMessage(vec,broadcast);
+    sock->broadcastMessage(vec);
 }

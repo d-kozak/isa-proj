@@ -13,7 +13,9 @@
 #define LEASE_TIME 1 * 60
 // one minute
 
-
+/**
+ * global debugging flag
+ */
 #define DEBUG 0
 
 /**

@@ -6,7 +6,7 @@
 #include "ResponseThread.h"
 
 MainThread::MainThread(addressing::AddressHandler &handler, addressing::IpAddress &first) : _handler(handler),
-                                                                                            _socket(first), _parser() {}
+                                                                                            _socket(), _parser() {}
 
 void MainThread::printStatistics() {}
 

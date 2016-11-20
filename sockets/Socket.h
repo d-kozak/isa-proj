@@ -21,44 +21,49 @@ class Socket : public BaseObject{
     /**
      * port where dhcp should listen
      */
-    const int DHCP_PORT_LISTEN = 67;
+    const uint16_t DHCP_PORT_LISTEN = 67;
     /**
      * port to which the replies are sent
      */
-    const int DHCP_PORT_SEND = 68;
-    /*
-     * Ip address
-     */
-    IpAddress _addr;
+    const uint16_t  DHCP_PORT_SEND = 68;
 
     /**
-     * socket descriptor of current uderlying socket
+     * socket descriptor of socket listening at port 67
      */
-    int _fd;
+    int _listenSocketfd;
 
     /**
-     * prepares the socket, calls housekeeping functions
+     * listen address
      */
-    void initSocket();
+    sockaddr_in _listenAddr;
+
 
     /**
-     * inits the socket with specified address
-     * @param forListening specifies whether the socket should be binded
-     * @return
+     * socket descriptor of socket sending broadcast to port 68
      */
-    struct sockaddr_in initsockaddr(uint32_t addr,bool forListening);
+    int _answerSocketfd;
+
     /**
-     * inits the socket with specified address
-     * @param bindImmediately specifies whether the socket should be binded
-     * @return
+     * answer address
      */
-    struct sockaddr_in initsockaddr(string addr, bool bindImmediately);
+    sockaddr_in _answerAddr;
+
+
+    /**
+     * prepares the listening socket, calls housekeeping functions
+     */
+    void initListeningSocket();
+
+    /**
+     * prepares the answering socket, calls housekeeping functions
+     */
+    void initAnsweringSocket();
 public:
     /**
-     * create a socket
-     * @param addr ip address
+     * creates two sockets and calls all housekeeping functions on them
+     * @throws SocketException if the socket functions return wrong ret val
      */
-    Socket(const IpAddress & addr);
+    Socket();
 
     /**
      * reads the message from the socket
@@ -66,25 +71,20 @@ public:
      */
     vector<unsigned char> getMessage();
 
-    /**
-     * sets broadcast flag to true
-     */
-    void setBroadcastFlag();
 
     /**
-     * sends message msg to ip destination
+     * broadcasts the message
      * @param msg
-     * @param destination
      */
-    void sendMessage(vector<unsigned char> msg, IpAddress destination);
+    void broadcastMessage(vector<unsigned char> msg) volatile ;
 
     /**
      * closes the socket
      */
-    void closeSocket() volatile;
+    void closeSockets() volatile;
 
     /**
-     * destructor, tries to close the socket if it was opened before
+     * destructor, closes the socket if they were opened
      */
     ~Socket();
 

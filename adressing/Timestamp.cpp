@@ -53,8 +53,14 @@ namespace addressing {
         chrono::system_clock::time_point expireTimePoint = _startTime + std::chrono::seconds(LEASE_TIME);
         std::time_t expireTimeT = std::chrono::system_clock::to_time_t(expireTimePoint);
         std::tm expire_tm = *std::localtime(&expireTimeT);
+        
+        char foo[24];
+        if(0 < strftime(foo, sizeof(foo), TIME_FORMAT, &now_tm))
+            std::cout << foo << " ";
 
-        std::cout << std::put_time(&now_tm, TIME_FORMAT) << " " << std::put_time(&expire_tm, TIME_FORMAT) << std::endl;
+        if(0 < strftime(foo, sizeof(foo), TIME_FORMAT, &expire_tm))
+            std::cout << foo;
+        std::cout << endl;
     }
 
 }

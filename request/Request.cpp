@@ -13,7 +13,7 @@ void Request::performTask(AddressHandler &handler) {
     try {
         IpAddress serverAddress = handler.getServerAddress();
         IpAddress serverIdentifier = _msg.getServerIdentifier(); // server idenfier = client specifies which server he wants to use
-        if (serverAddress ==  serverIdentifier || serverIdentifier == NULL_IP) {
+        if (serverAddress == serverIdentifier || serverIdentifier == NULL_IP) {
             AddressInfo &info = handler.confirmBindingFor(ciaddr, mac);
             //<mac_adresa> <ip_addresa> <cas_prideleni_ip_adresy> <cas_vyprseni_prirazeni_adresy>
 
@@ -24,10 +24,12 @@ void Request::performTask(AddressHandler &handler) {
             Ack ack;
             ack.performTask(_msg, givenAddress, handler);
         } else {
-            std::stringstream ss;
-            std::string serverIdOption = _msg.getServerIdentifier().toString();
-            ss << "Request for somebody else " << serverIdOption << std::endl;
-            std:: cout << ss.str();
+            if (DEBUG) {
+                std::stringstream ss;
+                std::string serverIdOption = _msg.getServerIdentifier().toString();
+                ss << "Request for somebody else " << serverIdOption << std::endl;
+                std::cout << ss.str();
+            }
         }
     } catch (BaseException &e) {
         cerr << e.toString() << endl;

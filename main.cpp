@@ -36,7 +36,7 @@ static std::mutex mainLock;
 /**
  * reference to the socket so that it can be closed from the signal handler
  */
-static volatile Socket *sock = NULL;
+volatile Socket *sock = NULL;
 
 /**
  * Interrupt flag for maintrhead <=> signal handler communication
@@ -192,7 +192,7 @@ void intHandler(int dummy) {
         cout << "Interrupting" << endl;
     mainLock.lock();
     isInterrupted = 1;
-    sock->closeSocket(); // closing socket at this point will probably cause exception in the main thread,
+    sock->closeSockets(); // closing socket at this point will probably cause exception in the main thread,
     // that is why we first set isInterupted flag, so that the main thread knows the reason for the exception
     mainLock.unlock();
 }
@@ -207,7 +207,7 @@ void intHandler(int dummy) {
 void serverLoop(AddressHandler &handler) {
     signal(SIGINT, intHandler); //register the signal handler
 
-    Socket socket1(handler.getServerAddress());
+    Socket socket1;
     sock = &socket1; // store pointer to the socket in global volatile variable, so that the interrupt handler can close the socket
 
     ProtocolParser parser;
