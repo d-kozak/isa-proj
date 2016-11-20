@@ -25,10 +25,10 @@ bool pool_complex_tests() {
     pool.getAddress(mac1);
     IpAddress a3 = pool.getAddress(mac2);
     pool.getAddress(mac3);
-    MY_ASSERT(pool.getAddress(mac4).toString() == "IpAddress -> 192.168.0.5", "should be x.x.x.5");
+    MY_ASSERT(pool.getAddress(mac4).toString() == "192.168.0.5", "should be x.x.x.5");
 
     pool.releaseAddress(a3);
-    MY_ASSERT(pool.getAddress(mac5).toString() == "IpAddress -> 192.168.0.6", "should be x.x.x.6");
+    MY_ASSERT(pool.getAddress(mac5).toString() == "192.168.0.6", "should be x.x.x.6");
 
     return true; // !!!!
 }

@@ -10,6 +10,13 @@
 #include "AddressPoolTest.h"
 #include "AddressCollectorTest.h"
 #include "AddressHandlerTest.h"
+#include "../../sockets/Socket.h"
+
+/**
+ * Dependencies simulating real values... tests do not use them, the variables are just needed during build time
+ */
+volatile Socket *sock;
+volatile int isInterrupted =  false;
 
 int main(int argc, char **argv) {
     TestExecutor exec;

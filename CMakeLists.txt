@@ -63,7 +63,6 @@ set(TEST_FILES tests/unit_testing/cppUnit.cpp tests/unit_testing/cppUnit.h
         tests/unit_testing/MacAddrTest.cpp tests/unit_testing/mach.h
         tests/unit_testing/IpAddrTest.cpp tests/unit_testing/iph.h
         tests/unit_testing/TimestampTest.cpp tests/unit_testing/TimestampTest.h
-        tests/unit_testing/reservationTest.h
         tests/unit_testing/AddressPairTest.cpp tests/unit_testing/AddressPairTest.h
         tests/unit_testing/AddressPoolTest.cpp tests/unit_testing/AddressPoolTest.h
         tests/unit_testing/AddressCollectorTest.cpp tests/unit_testing/AddressCollectorTest.h
