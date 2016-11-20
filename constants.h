@@ -8,10 +8,9 @@
 #include "adressing/IpAddress.h"
 
 /**
- * lengtgh of one lease
+ * lengtgh of one lease - one hour
  */
-#define LEASE_TIME 1 * 60
-// one minute
+#define LEASE_TIME 1 * 60 * 60
 
 /**
  * global debugging flag

@@ -48,6 +48,40 @@ volatile int isInterrupted = 0;
  */
 static volatile int retVal = EOK;
 
+
+/**
+ * checks if the specified reserved addresses and static assignments are actualy from the specified pool
+ * @param netAddr address of the network
+ * @param prefix prefix
+ * @param reserved reserved ip address
+ * @param direct_mapping statically assigned ip addresses
+ */
+void checkArguments(IpAddress & netAddrObj,int prefix, list <IpAddress> &reserved,
+                    map<MacAddress, IpAddress> &direct_mapping){
+    uint32_t netAddressInt = netAddrObj.getAddrForSocket();
+    uint32_t  netMask = IpAddress::getNetMaskFor(prefix).getAddrForSocket();
+
+    // check reserved addresses
+    for(auto & item : reserved){
+        uint32_t address = item.getAddrForSocket();
+        if(address & netMask != netAddressInt){
+            stringstream ss;
+            ss << "Address " << item.toString() << " is not in the subnet " << netAddrObj.toString() << "/" << prefix << endl;
+            throw InvalidArgumentException(ss.str());
+        }
+    }
+
+    //check static assignments
+    for(auto & item : direct_mapping){
+        uint32_t address = item.second.getAddrForSocket();
+        if(address & netMask != netAddressInt){
+            stringstream ss;
+            ss << "Address " << item.second.toString() << " is not in the subnet " << netAddrObj.toString() << "/" << prefix << endl;
+            throw InvalidArgumentException(ss.str());
+        }
+    }
+}
+
 /**
  * parses the ip address of the network and prefix
  * @return the ip address of the network
@@ -172,6 +206,7 @@ void parseArguments(int argc, char **argv, IpAddress *networkAddress, int &prefi
     }
 }
 
+
 /**
  * prints help
  */
@@ -254,6 +289,7 @@ int main(int argc, char **argv) {
 
     try {
         parseArguments(argc, argv, &networkAddress, prefix, reserved, direct_mapping);
+        checkArguments(networkAddress,prefix,reserved,direct_mapping);
         AddressHandler handler(networkAddress, prefix, reserved, direct_mapping);
         serverLoop(handler);
     } catch (InvalidArgumentException &e) {

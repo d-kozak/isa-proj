@@ -45,10 +45,17 @@ namespace addressing {
         int index = 0;
         int item;
 
+        char* entptr;
 
         if(std::count(address.begin(), address.end(),'.') != 3){
             stringstream ss;
             ss << "This address " << address << " is  a not correct ip address";
+            throw ParseException(ss.str());
+        }
+
+        if(!isdigit(address[address.size()-1])){
+            stringstream ss;
+            ss << address << " is invalid, ip address must end with a digit";
             throw ParseException(ss.str());
         }
 
@@ -63,7 +70,10 @@ namespace addressing {
                         buf[j] = '\0';
                     }
 
-                    _parts[cell_index] = (unsigned char) atoi(buf);
+                    _parts[cell_index] = (unsigned char) strtol(buf,&entptr,10);
+                    if(*entptr != '\0'){
+                        throw ParseException("Invalid number format");
+                    }
                     cell_index++;
                     if (cell_index > 3) {
                         throw ParseException("Parse Error");
@@ -84,7 +94,10 @@ namespace addressing {
             buf[j] = '\0';
         }
 
-        _parts[cell_index] = (unsigned char) atoi(buf);
+        _parts[cell_index] = (unsigned char) strtol(buf,&entptr,10);
+        if(*entptr != '\0'){
+            throw ParseException("Invalid number format");
+        }
     }
 
     IpAddress::IpAddress(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {

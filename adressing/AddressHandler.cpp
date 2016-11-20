@@ -111,7 +111,8 @@ namespace addressing {
             for (auto &item : this->_handler->_pool.getAddresses()) {
                 if (item.getState() == BINDED) {
                     if (item.getTimestamp()->isLeaseExpired()) {
-                        cout << "COLLECTOR will removing reservation for " << item.getAddress().toString() << endl;
+                        if (DEBUG)
+                            cout << "COLLECTOR will removing reservation for " << item.getAddress().toString() << endl;
                         to_expire.push_back(item.getAddress());
                     }
                 }
